@@ -1,5 +1,5 @@
 Flask
 Flask-SQLAlchemy
 Flask-Security
-Flask-Cors
-Flask-Caching
+Flask-Restful
+

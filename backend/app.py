@@ -18,7 +18,6 @@ security.init_app(app,user_datastore)
 def hello_world():
     return "<h1>Hello Mad-2</h1>"
 
-
 def create_database():
     with app.app_context(): 
         db.create_all()
