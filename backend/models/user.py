@@ -15,6 +15,12 @@ class User(db.Model,UserMixin):
     
     roles=db.relationship("Role",secondary = roles_users , backref=db.backref("users",lazy="dynamic"))
     
+    patient = db.relationship("Patient" , backref="user", uselist=False)
+    
+    doctor = db.relationship("Doctor",backref="user",uselist=False)
+    
     def __repr__(self):
         return f"<User {self.email}>"
+    
+    
     
