@@ -4,6 +4,9 @@ from extensions import db , security
 from flask_security import SQLAlchemyUserDatastore 
 from models import User , Role
 from flask_security.utils import hash_password
+from flask_restful import Api
+from api import all_blueprints
+
 
 app=Flask(__name__)
 app.config.from_object(Config)
@@ -12,6 +15,11 @@ db.init_app(app)
 
 user_datastore = SQLAlchemyUserDatastore(db,User,Role)
 security.init_app(app,user_datastore)
+
+api=Api(app)
+
+for bp in all_blueprints:
+    app.register_blueprint(bp,url_prefix="/api")
 
 
 @app.route('/')

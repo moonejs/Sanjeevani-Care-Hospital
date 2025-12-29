@@ -17,10 +17,7 @@ class Doctor(db.Model):
     
     treatments = db.relationship("Treatment", backref="doctor", lazy=True)
 
-    department_id = db.Column(db.Integer,db.ForeignKey("departments.id")),
-    nullable=False
-    
-    
+    department_id = db.Column(db.Integer,db.ForeignKey("departments.id"),nullable=False)
     
     
     def __repr__(self):

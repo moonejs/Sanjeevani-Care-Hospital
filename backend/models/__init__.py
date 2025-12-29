@@ -8,4 +8,9 @@ roles_users = db.Table(
 
 from .user import User
 from .role import Role
+from .appointment import Appointment
+from .doctor import Doctor
+from .department import Department
+from .patient import Patient
+from .treatment import Treatment
 
