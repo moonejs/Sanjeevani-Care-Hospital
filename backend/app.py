@@ -7,11 +7,18 @@ from flask_security.utils import hash_password
 from flask_restful import Api
 from api import all_blueprints
 
+from flask_cors import CORS
 
 app=Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
+CORS(app,origins=["http://127.0.0.1:5000","http://localhost:5173"],supports_credentials=True,
+    allow_headers=[
+        "Content-Type",
+        "Authorization",
+        "Authentication-Token"
+    ])
 
 user_datastore = SQLAlchemyUserDatastore(db,User,Role)
 security.init_app(app,user_datastore)
