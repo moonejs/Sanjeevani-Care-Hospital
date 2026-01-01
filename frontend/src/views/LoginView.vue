@@ -1,6 +1,6 @@
 <script setup>
     import { ref } from 'vue';
-    import { loginApi } from '@/api/auth';
+    import { loginApi,currentUserApi } from '@/api/auth';
     import { useRouter } from 'vue-router';
 
     const email =ref("")
@@ -19,11 +19,17 @@
             console.log(res);
             const token = res.data.response.user.authentication_token
 
+            const user = await currentUserApi(token)
+            
+            console.log(user.data);
+            
+
             localStorage.setItem('token',token)
+
             router.replace('/dashboard')
         }
         catch(err){
-            console.log(err);
+            console.log(err.response.data.response.errors[0]);
         }
         finally{
             loading.value=false
