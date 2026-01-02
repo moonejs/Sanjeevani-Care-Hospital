@@ -1,39 +1,40 @@
 <script setup>
     import { ref } from 'vue';
-    import { loginApi,currentUserApi } from '@/api/auth';
     import { useRouter } from 'vue-router';
+    import { useAuthStore } from '@/stores/auth';
 
     const email =ref("")
     const password=ref("")
     const loading=ref(false)
     const router = useRouter()
+    const auth = useAuthStore()
 
     async function handleLogin(){
         loading.value=true
-        
-        try{
-            const res = await loginApi({
+        try {
+            await auth.login({
                 email : email.value,
                 password : password.value
             })
-            console.log(res);
-            const token = res.data.response.user.authentication_token
-
-            const user = await currentUserApi(token)
             
-            console.log(user.data);
+            if (auth.role ==='admin'){
+                router.replace('/dashboard')
+            }
+            if (auth.role ==='doctor'){
+                router.replace('/doctor')
+            }
             
-
-            localStorage.setItem('token',token)
-
-            router.replace('/dashboard')
-        }
-        catch(err){
+        } 
+        catch (err) {
             console.log(err.response.data.response.errors[0]);
-        }
-        finally{
+        }finally{
             loading.value=false
         }
+        
+
+        
+            
+        
 
     }
 </script>
