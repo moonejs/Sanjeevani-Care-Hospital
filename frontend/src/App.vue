@@ -8,7 +8,7 @@ const auth=useAuthStore();
 onMounted(async()=>{
   console.log("onMounted");
   
-  if(auth.isAuthenticated){
+  if(auth.token){
     try {
       await auth.fetchMe()
     } catch (error) {

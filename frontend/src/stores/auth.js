@@ -1,14 +1,14 @@
-import { ref, computed } from 'vue'
+import { ref, computed ,watch} from 'vue'
 import { defineStore } from 'pinia'
 import { loginApi,currentUserApi,logoutApi } from '@/api/auth'
-import { useRouter } from 'vue-router'
+
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token'))
   const user=ref(null)
   const role=ref(null)
 
-  const router=useRouter()
+
 
 
   async function login(data){
@@ -16,8 +16,6 @@ export const useAuthStore = defineStore('auth', () => {
       const res = await loginApi(data)
       console.log(res);
       token.value = res.data.response.user.authentication_token
-      console.log(token.value);
-      
 
       localStorage.setItem('token',token.value)
 
@@ -39,11 +37,18 @@ export const useAuthStore = defineStore('auth', () => {
     role.value = null
     
     localStorage.removeItem('token')
-    router.replace('/')
+    
     console.log("logout");
     
+  
   }
 
+   watch(token,(newToken)=>{
+    if(!newToken){
+      user.value=null
+      role.value=null
+    }
+  })
   const isAuthenticated = computed(()=> !!token.value)
 
   return{

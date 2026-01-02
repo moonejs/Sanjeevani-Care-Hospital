@@ -18,7 +18,7 @@
             })
             
             if (auth.role ==='admin'){
-                router.replace('/dashboard')
+                router.replace('/admin')
             }
             if (auth.role ==='doctor'){
                 router.replace('/doctor')
