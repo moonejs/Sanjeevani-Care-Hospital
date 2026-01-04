@@ -5,17 +5,17 @@ import { onMounted } from 'vue';
 
 const auth=useAuthStore();
 
-onMounted(async()=>{
-  console.log("onMounted");
+// onMounted(async()=>{
+//   console.log("onMounted");
   
-  if(auth.token){
-    try {
-      await auth.fetchMe()
-    } catch (error) {
-      auth.logout()
-    }
-  }
-})
+//   if(auth.token){
+//     try {
+//       await auth.fetchMe()
+//     } catch (error) {
+//       auth.logout()
+//     }
+//   }
+// })
 
 </script>
 

@@ -43,19 +43,23 @@ const router = createRouter({
 router.beforeEach(async(to,from)=>{
   const auth=useAuthStore()
 
+  
+
   if(to.name!=='login' && !auth.isAuthenticated){
     return { name: 'login' }
   }
 
    if (auth.isAuthenticated && !auth.role) {
-    console.log("heheehh");
-    
     try {
       await auth.fetchMe()
     } catch {
       auth.logout()
       return { name: 'login' }
     }
+  }
+  if(auth.isAuthenticated && to.name == 'login'){
+    if(auth.role=='doctor') return {name : 'doctor'}
+    if(auth.role=='admin') return {name : 'admin'}
   }
 
   if(to.meta.role && auth.role!==to.meta.role){
