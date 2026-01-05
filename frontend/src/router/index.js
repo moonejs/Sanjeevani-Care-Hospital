@@ -1,51 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LandingPage from '@/views/LandingPage.vue'
 import { useAuthStore } from '@/stores/auth'
+
+
+import publicRoutes from './public.routes'
+import authRoutes from './auth.routes'
+import adminRoutes from './admin.routes'
+import doctorRoutes from './doctor.routes'
+import patientRoutes from './patient.routes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/',
-      name: 'LandingPage',
-      component: LandingPage,
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component:()=> import('@/views/LoginView.vue')
-    },
-    {
-      path: '/register',
-      name:'register',
-      component:()=> import('@/views/RegisterPage.vue')
-    },
-    {
-      path:'/admin',
-      name:'admin',
-      component:()=> import('@/views/AdminDashboardPage.vue'),
-      meta: { role: 'admin' }
-    }
-    ,{
-      path:'/doctor',
-      name:'doctor',
-      component:()=> import('@/views/DoctorDashboardPage.vue'),
-       meta: {role: 'doctor' }
-    },
-    {
-      path:'/:pathMatch(.*)*',
-      name:'NotFound',
-      component:()=> import('@/views/NotFoundPage.vue')
-    }
+    ...publicRoutes,
+    ...authRoutes,
+    ...adminRoutes,
+    ...doctorRoutes,
+    ...patientRoutes
   ],
 })
 
 router.beforeEach(async(to,from)=>{
   const auth=useAuthStore()
 
-  
-
-  if(to.name!=='login' && !auth.isAuthenticated){
+  if(!['login', 'register'].includes(to.name) && !auth.isAuthenticated && to.name!=='register'){
     return { name: 'login' }
   }
 
@@ -57,15 +34,19 @@ router.beforeEach(async(to,from)=>{
       return { name: 'login' }
     }
   }
+
   if(auth.isAuthenticated && to.name == 'login'){
     if(auth.role=='doctor') return {name : 'doctor'}
     if(auth.role=='admin') return {name : 'admin'}
+    if(auth.role=='patient') return {name : 'patient'}
   }
 
   if(to.meta.role && auth.role!==to.meta.role){
     if(auth.role=='doctor') return {name : 'doctor'}
     if(auth.role=='admin') return {name : 'admin'}
+    if(auth.role=='patient') return {name : 'patient'}
   }
+
 
 })
 

@@ -3,5 +3,5 @@
 </script>
 
 <template>
-    <h1>Register Page</h1>
+    <h1>hello pateint</h1>
 </template>

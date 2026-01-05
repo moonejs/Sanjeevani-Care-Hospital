@@ -23,6 +23,9 @@
             if (auth.role ==='doctor'){
                 router.replace('/doctor')
             }
+            if (auth.role ==='patient'){
+                router.replace('/patient')
+            }
             
         } 
         catch (err) {
@@ -55,7 +58,7 @@
                             <label for="exampleInputEmailCard1">Your Email</label>
                             <div class="input-group">
                                 <span class="input-group-text" id="basic-addon1"><span class="fas fa-envelope"></span></span>
-                                <input type="email" class="form-control" placeholder="example@company.com" v-model="email"
+                                <input type="email" class="form-control" placeholder="example@company.com" v-model.trim="email"
                                 required id="exampleInputEmailCard1" aria-describedby="exampleInputEmailCard1"  >
                             </div>
                         </div>
@@ -64,7 +67,7 @@
                             <div class="input-group">
                                 <span class="input-group-text" id="basic-addon2"><span class="fas fa-unlock-alt"></span></span>
                                 <input required type="password" 
-                                v-model="password"
+                                v-model.trim="password"
                                 placeholder="Password" class="form-control" id="exampleInputPasswordCard1" aria-describedby="exampleInputPasswordCard1"/>
                             </div>
                         </div>

@@ -11,3 +11,6 @@ export const logoutApi=()=>{
     return api.post("/logout")
 }
 
+export const registerApi=(data)=>{
+    return api.post("/api/patient/register",data)
+}

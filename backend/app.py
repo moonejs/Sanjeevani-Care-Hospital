@@ -1,12 +1,15 @@
 from flask import Flask
 from config import Config
-from extensions import db , security ,user_datastore
+from extensions import db , security 
 
 from flask_security.utils import hash_password
 from flask_restful import Api
 from api import all_blueprints
-
+from models import User, Role
 from flask_cors import CORS
+from flask_security import SQLAlchemyUserDatastore
+import extensions
+
 
 app=Flask(__name__)
 app.config.from_object(Config)
@@ -19,8 +22,10 @@ CORS(app,origins=["http://127.0.0.1:5000","http://localhost:5173"],supports_cred
         "Authentication-Token"
     ])
 
+extensions.user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security.init_app(app,extensions.user_datastore)
 
-security.init_app(app,user_datastore)
+user_datastore=extensions.user_datastore
 
 api=Api(app)
 
