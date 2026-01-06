@@ -5,7 +5,7 @@
 
     const email =ref("")
     const password=ref("")
-    const confirmPassword=ref()
+    const confirmPassword=ref("")
     const loading=ref(false)
     const router = useRouter()
     
@@ -34,17 +34,13 @@ const passwordMatched = computed(()=>{
 })
 
 const disabled = computed(()=>{
-    return !passwordMatched.value || !email.value
+    return !passwordMatched.value || !email.value || loading.value
 })
 
 function canRegister(){
-    if(passwordMatched){
-        handleRegister()
-    }
-    else{
-        console.log("not able to register");
-        
-    }
+    if (!passwordMatched.value) return;
+    handleRegister();
+    
 }
 
 
@@ -85,18 +81,23 @@ function canRegister(){
                                 <span class="input-group-text" id="basic-addon2"><span class="fas fa-unlock-alt"></span></span>
                                 <input required type="password" 
                                 v-model.trim="confirmPassword"
-                                placeholder="Confirm Password" class="form-control" id="exampleInputPasswordCard2" aria-describedby="exampleInputPasswordCard1"/>
-                                
-                            </div>
-                            <div v-if="confirmPassword">
-
-                                <div v-if="passwordMatched" class="text-success">
+                                placeholder="Confirm Password" class="form-control" :class="{ 'is-valid':confirmPassword && passwordMatched,'is-invalid':confirmPassword && !passwordMatched}" id="exampleInputPasswordCard2" aria-describedby="exampleInputPasswordCard1"/>
+                                <div class="valid-feedback">
                                     Passwords match
                                 </div>
-                                <div v-else class="text-danger">
+                                <div class="invalid-feedback">
                                     Passwords do not match
                                 </div>
                             </div>
+                            <!-- <div v-if="confirmPassword">
+
+                                <div v-if="passwordMatched" class=" valid-feedback">
+                                    Passwords match
+                                </div>
+                                <div v-else class=" invalid-feedback">
+                                    Passwords do not match
+                                </div>
+                            </div> -->
                         </div>
                         <div class="d-grid">
                             <button type="submit"  :disabled="disabled" class="btn btn-primary">

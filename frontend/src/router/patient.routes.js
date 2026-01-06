@@ -1,8 +1,19 @@
 export default [
   {
     path: '/patient',
-    name: 'patient',
-    component: () => import('@/views/patient/patientLayoutPage.vue'),
-    meta: { role: 'patient' }
+    component: () => import('@/views/patient/PatientLayoutPage.vue'),
+    meta: { role: 'patient' },
+    children:[
+      {
+        path:'profile',
+        name:'patient-profile',
+        component:() => import('@/views/patient/ProfilePage.vue')
+      },
+      {
+        path:'dashboard',
+        name:'patient-dashboard',
+        component:()=> import('@/views/patient/DashboardPage.vue')
+      }
+    ]
   }
 ]

@@ -20,7 +20,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async(to,from)=>{
-  const auth=useAuthStore()
+  const auth=useAuthStore() 
 
   if(!['login', 'register'].includes(to.name) && !auth.isAuthenticated && to.name!=='register'){
     return { name: 'login' }
@@ -47,6 +47,16 @@ router.beforeEach(async(to,from)=>{
     if(auth.role=='patient') return {name : 'patient'}
   }
 
+
+  // patients
+
+  if(auth.role=='patient' && !auth.profileCompleted){
+    console.log("dd"+auth.profileCompleted);
+    
+    if(to.name !='patient-profile'){
+      return {name:'patient-profile'}
+    }
+  }
 
 })
 

@@ -24,7 +24,7 @@
                 router.replace('/doctor')
             }
             if (auth.role ==='patient'){
-                router.replace('/patient')
+                router.replace('/patient/dashboard')
             }
             
         } 

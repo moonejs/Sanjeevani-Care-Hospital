@@ -7,9 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token'))
   const user=ref(null)
   const role=ref(null)
-
-
-
+  const profileCompleted=ref(false)
 
   async function login(data){
     
@@ -28,6 +26,8 @@ export const useAuthStore = defineStore('auth', () => {
     const userData = await currentUserApi()
     user.value=userData.data;
     role.value=user.value.roles[0];
+    profileCompleted.value=user.value.profile_completed
+
   }
 
   async function logout(){
@@ -58,6 +58,7 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     isAuthenticated,
     logout,
-    fetchMe
+    fetchMe,
+    profileCompleted
   }
 })
