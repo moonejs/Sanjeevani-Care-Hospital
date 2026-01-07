@@ -37,21 +37,21 @@ router.beforeEach(async(to,from)=>{
 
   if(auth.isAuthenticated && to.name == 'login'){
     if(auth.role=='doctor') return {name : 'doctor'}
-    if(auth.role=='admin') return {name : 'admin'}
-    if(auth.role=='patient') return {name : 'patient'}
+    if(auth.role=='admin') return {name : 'admin-dashboard'}
+    if(auth.role=='patient') return {name : 'patient-dashboard'}
   }
 
   if(to.meta.role && auth.role!==to.meta.role){
     if(auth.role=='doctor') return {name : 'doctor'}
-    if(auth.role=='admin') return {name : 'admin'}
-    if(auth.role=='patient') return {name : 'patient'}
+    if(auth.role=='admin') return {name : 'admin-dashboard'}
+    if(auth.role=='patient') return {name : 'patient-dashboard'}
   }
 
 
   // patients
 
   if(auth.role=='patient' && !auth.profileCompleted){
-    console.log("dd"+auth.profileCompleted);
+
     
     if(to.name !='patient-profile'){
       return {name:'patient-profile'}

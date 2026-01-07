@@ -8,8 +8,19 @@ import extensions
 
 class PatientRegister(Resource):
     def post(self):
-        data = request.json
+        data = request.json(silent=True)
         
+        field_required=["email","password"]
+        
+        for field in field_required:
+            if field not in data:
+                return {"message":f"{field} is required."},400
+        
+        if extensions.user_datastore.find_user(email=data["email"]):
+            return {"message":"User with email id already exist"},409
+        
+        if len(data["password"]) <6:
+            return{"message":"Password must be at least 6 characters"},400
         user = extensions.user_datastore.create_user(
             email=data["email"],
             password=hash_password(data["password"]),

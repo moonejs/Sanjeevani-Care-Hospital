@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask_security import auth_required , roles_required,roles_accepted
 from extensions import db
-from models import Patient
+from models import Patient  
 from flask import request
 from flask_login import current_user
 class PatientList(Resource):
