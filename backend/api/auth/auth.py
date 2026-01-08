@@ -14,5 +14,10 @@ class Me(Resource):
         
         if user.patient:
             response["profile_completed"] = user.patient.profile_completed
+            response["name"] = user.patient.name
+            response["age"] = user.patient.age
+            response["gender"] = user.patient.gender
+            response["contact"] = user.patient.contact
+            response["address"] = user.patient.address
         
         return response

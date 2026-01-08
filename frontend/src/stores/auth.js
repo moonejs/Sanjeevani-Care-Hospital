@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
     user.value=userData.data;
     role.value=user.value.roles[0];
     profileCompleted.value=user.value.profile_completed
-
+    
   }
 
   async function logout(){

@@ -8,7 +8,7 @@ import extensions
 
 class PatientRegister(Resource):
     def post(self):
-        data = request.json(silent=True)
+        data = request.json
         
         field_required=["email","password"]
         
