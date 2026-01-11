@@ -20,13 +20,35 @@ export default [
       },
       {
         path:'departments',
-        name:'patient-departments',
-        component:()=> import('@/views/patient/DepartmentsPage.vue')
+        children:[
+          {
+            path:"",
+            name:'departments-patient',
+            component:()=> import('@/views/patient/Department/DepartmentsPage.vue'),
+          },
+          {
+            path:":id",
+            name:"departmentDetail-patient",
+            component:()=> import('@/views/patient/Department/DepartmentDetailPage.vue'),
+            props:true
+          }
+        ]
       },
       {
         path:'doctors',
-        name:'patient-doctors',
-        component:()=> import('@/views/patient/DoctorsPage.vue')
+        
+        children:[
+          {
+            path:"",
+            name:'doctors-patient',
+            component:()=> import('@/views/patient/Doctor/DoctorsPage.vue'),
+          },
+          {
+            path:":id",
+            name:'doctorProfile-patient',
+            component:()=>import('@/views/patient/Doctor/DoctorProfilePage.vue')
+          }
+        ]
       },
       {
         path:'appointments',

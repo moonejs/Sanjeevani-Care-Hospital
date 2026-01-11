@@ -3,5 +3,5 @@
 </script>
 
 <template>
-    <h1>Doctors</h1>
+    <h1>Appointments</h1>
 </template>

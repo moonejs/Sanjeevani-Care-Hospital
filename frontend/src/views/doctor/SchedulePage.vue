@@ -3,5 +3,5 @@
 </script>
 
 <template>
-    <h1>Departments</h1>
+    <h1>Schedule</h1>
 </template>

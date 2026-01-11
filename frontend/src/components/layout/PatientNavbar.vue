@@ -1,7 +1,7 @@
 <script setup>
     import { ref } from 'vue';
     import NavLink from '../common/NavLink.vue';
-    import Profile from '../common/NavProfile.vue';
+    import NavProfile from '../common/NavProfile.vue';
 </script>
 
 <template>
@@ -50,7 +50,7 @@
                 
             </div>
             <div>
-                <Profile/>
+                <NavProfile/>
             </div>
         </div>
     </nav>

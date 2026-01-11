@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth.store'
 
 
 import publicRoutes from './public.routes'
@@ -36,13 +36,13 @@ router.beforeEach(async(to,from)=>{
   }
 
   if(auth.isAuthenticated && to.name == 'login'){
-    if(auth.role=='doctor') return {name : 'doctor'}
+    if(auth.role=='doctor') return {name : 'dashboard-doctor'}
     if(auth.role=='admin') return {name : 'admin-dashboard'}
     if(auth.role=='patient') return {name : 'patient-dashboard'}
   }
 
   if(to.meta.role && auth.role!==to.meta.role){
-    if(auth.role=='doctor') return {name : 'doctor'}
+    if(auth.role=='doctor') return {name : 'dashboard-doctor'}
     if(auth.role=='admin') return {name : 'admin-dashboard'}
     if(auth.role=='patient') return {name : 'patient-dashboard'}
   }

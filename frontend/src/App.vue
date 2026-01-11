@@ -1,6 +1,6 @@
 <script setup>
 import {RouterView } from 'vue-router';
-import { useAuthStore } from './stores/auth';
+import { useAuthStore } from './stores/auth.store';
 import { onMounted } from 'vue';
 
 const auth=useAuthStore();

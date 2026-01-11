@@ -1,5 +1,5 @@
 <script setup>
-    import { useAuthStore } from '@/stores/auth';
+    import { useAuthStore } from '@/stores/auth.store';
     import NavLink from './NavLink.vue';
     import { useRouter } from 'vue-router';
     import { computed } from 'vue';
@@ -8,9 +8,17 @@
     const route=useRouter()
     
     const name = computed(()=>{
-        return auth.user.name 
-        ? auth.user.name.charAt(0).toUpperCase() + auth.user.name.slice(1).toLowerCase() 
-        : "Patient"
+        const nm= auth.user.name ? auth.user.name.charAt(0).toUpperCase() + auth.user.name.slice(1).toLowerCase() 
+        : "New user"  
+        console.log(auth.role);
+        console.log(auth.user);
+        
+        if(auth.role ==='doctor'){
+            return "Dr. " + nm
+        }
+        else{
+            return nm
+        }
     })
 
 

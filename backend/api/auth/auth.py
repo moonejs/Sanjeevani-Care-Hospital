@@ -20,4 +20,9 @@ class Me(Resource):
             response["contact"] = user.patient.contact
             response["address"] = user.patient.address
         
+        if user.doctor:
+            response["name"]=user.doctor.name
+            response["specialization"]=user.doctor.specialization
+            response["contact"]=user.doctor.contact
+            response["department"]=user.doctor.department.name
         return response

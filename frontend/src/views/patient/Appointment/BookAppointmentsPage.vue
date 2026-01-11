@@ -3,5 +3,16 @@
 </script>
 
 <template>
-    <h1>Book Appointments</h1>
+    <div class="">
+
+        <div class="search-box bg-success">
+            
+        </div>
+        <div class="date-section bg-warning">
+            
+        </div>
+        <div class="appointment-section bg-info">
+            
+        </div>
+    </div>
 </template>

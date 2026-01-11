@@ -1,7 +1,7 @@
 <script setup>
     import { ref, watch } from 'vue';
-    import { addDoctorApi ,departmentDetailsApi } from '@/api/admin';
-    
+    import { addDoctorApi} from '@/api/doctor';
+    import { departmentDetailsApi } from '@/api/department';
 
     const email = ref("")
     const password = ref("")

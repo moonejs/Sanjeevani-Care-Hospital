@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue';
 import { patientProfile } from '@/api/patient';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 
 const name=ref("")
 const age=ref("")

@@ -1,0 +1,68 @@
+.round{
+    border-radius: 6px;
+}
+
+
+.patient-header{
+    height: 25vh;
+}
+
+.custom-card{
+    height: 20vh;
+    width: 15vw;
+    cursor: pointer;
+}
+.custom-card i{
+    font-size: 5rem;
+}
+
+.empty-state{
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.departmentDetail-page-left{
+    height: 89vh;
+    width: 40vw;
+}
+.departmentDetail-page-left .upper{
+    height: 50%;
+    width: 100%;
+}
+.departmentDetail-page-right{
+    height:89vh;
+    width: 60vw;
+}
+
+.doctor-profile-card{
+    height: 15vh;
+    width: 10vw;
+}
+
+
+.doctorDetail-page-left{
+    height: 70vh;
+    width: 40vw;
+}
+
+.doctorDetail-page-right{
+    height: 70vh;
+    width: 60vw;
+}
+
+.search-box{
+    height: 20vh;
+    width: 100vw;
+}
+
+.date-section{
+    height: 30vh;
+    width: 100vw;
+}
+
+.appointment-section{
+    height: 50vh;
+    width: 100vw;
+}
