@@ -14,7 +14,7 @@ class Patient(db.Model):
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
     
     profile_completed = db.Column(db.Boolean, default=False)
-    appointments = db.relationship("Appointment", backref="patient", lazy=True)
+    appointments = db.relationship("Appointment",back_populates="patient",cascade="all, delete-orphan")
     
     treatments = db.relationship("Treatment", backref="patient", lazy=True)
     

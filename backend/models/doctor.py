@@ -13,9 +13,11 @@ class Doctor(db.Model):
     
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
     
-    appointments = db.relationship("Appointment", backref="doctor", lazy=True)
-    
-    treatments = db.relationship("Treatment", backref="doctor", lazy=True)
+    appointments = db.relationship("Appointment",back_populates="doctor",cascade="all, delete-orphan")
+
+    availabilities = db.relationship("Availability",back_populates="doctor",cascade="all, delete-orphan")
+
+    day_statuses = db.relationship("DoctorDayStatus",back_populates="doctor",cascade="all, delete-orphan")
 
     department_id = db.Column(db.Integer,db.ForeignKey("departments.id"),nullable=False)
     

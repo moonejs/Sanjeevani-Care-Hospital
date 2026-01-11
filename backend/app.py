@@ -38,7 +38,8 @@ def hello_world():
     return "<h1>Hello Mad-2</h1>"
 
 def create_database():
-    with app.app_context(): 
+    with app.app_context():
+        db.drop_all() 
         db.create_all()
         
         patient_role = user_datastore.find_or_create_role(
