@@ -14,4 +14,4 @@ from .department import Department
 from .patient import Patient
 from .treatment import Treatment
 from .availability import Availability
-from .doctor_day_status import DoctorDayStatus
+

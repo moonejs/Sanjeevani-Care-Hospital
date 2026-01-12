@@ -17,7 +17,6 @@ class Doctor(db.Model):
 
     availabilities = db.relationship("Availability",back_populates="doctor",cascade="all, delete-orphan")
 
-    day_statuses = db.relationship("DoctorDayStatus",back_populates="doctor",cascade="all, delete-orphan")
 
     department_id = db.Column(db.Integer,db.ForeignKey("departments.id"),nullable=False)
     

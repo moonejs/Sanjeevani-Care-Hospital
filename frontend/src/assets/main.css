@@ -66,3 +66,26 @@
     height: 50vh;
     width: 100vw;
 }
+
+
+/* schedule */
+.schedule-page-dates{
+    height: 10vh;
+   
+}
+.schedule-div{
+    height: 65vh;
+}
+
+.schedule-page-btm{
+    height: 8.3vh;
+}
+.table-top-box{
+    height: 5rem;
+    width: 8rem;
+    cursor: pointer;
+}
+
+.session-box-session-label{
+    font-size: 2rem;
+}
