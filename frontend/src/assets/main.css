@@ -89,3 +89,11 @@
 .session-box-session-label{
     font-size: 2rem;
 }
+
+
+.date-box{
+    height: 4rem;
+    width: 4rem;
+    background-color: rgb(234, 65, 229);
+    cursor: pointer;
+}

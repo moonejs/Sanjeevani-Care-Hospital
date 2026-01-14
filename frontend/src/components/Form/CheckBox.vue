@@ -1,16 +1,11 @@
 <script setup>
     defineProps({
-        name:{
-            type:String,
-            required:true
-        },
-        id:{
-            type:String,
-            required:true
-        }
+        id:String,
+        disabled:Boolean
     })
+    const model=defineModel()
 </script> 
 
 <template >
-    <input class="form-check-input" type="checkbox" :name="name" :id="id">
+    <input class="form-check-input" type="checkbox" v-model="model" :id="id" :disabled="disabled">
 </template>

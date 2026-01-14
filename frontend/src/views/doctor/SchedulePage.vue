@@ -2,20 +2,117 @@
     import TableTopBox from '@/components/Doctor/TableTopBox.vue';
     import ScheduleForm from '@/components/Doctor/ScheduleForm.vue';
     import Btn from '@/components/common/Btn.vue';
+    import { useAppointmentStore } from '@/stores/appointment.store';
+
+    import { ref,onMounted, watch } from 'vue';
+
+ 
+
+    function getToday() {
+    return new Date().toISOString().split('T')[0]
+    }
+
+    const appointment=useAppointmentStore()
+    const currentTabDate=ref("")
+    
+    onMounted(() => {
+        currentTabDate.value = getToday()
+    }) 
+
+    const availability = ref({
+        date: getToday(),
+        onlineBooking: false,
+
+        morning: {
+            enabled: false,
+            startTime: null,
+            endTime: null,
+            slotDuration: 15,
+            maxPatients: 1
+        },
+
+        afternoon: {
+            enabled: false,
+            startTime: null,
+            endTime: null,
+            slotDuration: 15,
+            maxPatients: 1
+        },
+
+        evening: {
+            enabled: false,
+            startTime: null,
+            endTime: null,
+            slotDuration: 15,
+            maxPatients: 1
+        }
+    })
+
+    async function save(){
+         console.log(availability.value);
+         await appointment.saveDoctorAvailability(availability.value)
+         
+    }
+    function validateSession(session) {
+        return (
+            session.enabled &&
+            session.startTime &&
+            session.endTime &&
+            session.slotDuration != null &&
+            session.maxPatients != null
+        );
+    }
+
+    function canSave(){
+        if(!availability.value.onlineBooking){
+            save()
+            return
+        }
+        const sessions=["morning","afternoon","evening"]
+        for (const s of sessions){
+            const session=availability.value[s]
+            if(session.enabled){
+                if(!validateSession(session)){
+                    console.log(`All fields required for the ${s} session`);
+                    return
+                    
+                }
+            }
+        }
+        save()
+    }
+    function onDateSelected(date){
+        currentTabDate.value=date
+        availability.value.date=date
+    }
+
+    async function fetchCurrentAvailability(date){
+        const data=await appointment.fetchDoctorAvailability(date)
+        availability.value=data
+    }
+
+    watch(()=>currentTabDate.value,(d)=>{
+        console.log(d);
+        
+        fetchCurrentAvailability(d)    
+    })
+
+    
 </script>
 
 <template>
     <div>
         <div class="pt-5 px-8">
             <div class="schedule-page-dates container-fluid bg-success-subtle">
-                <TableTopBox label="Today"/>
+                <TableTopBox label="Today" @selected-date="onDateSelected"/>
+                
             </div>
             <div class="schedule-div container-fluid bg-warning">
-                <ScheduleForm/>
+                <ScheduleForm  v-model="availability" />
             </div>
         </div>
         <div class="schedule-page-btm bg-danger d-flex justify-content-end px-3">
-            <Btn label="Save"/>
+            <Btn @click="canSave" label="Save"/>
         </div>
     </div>
 </template> 

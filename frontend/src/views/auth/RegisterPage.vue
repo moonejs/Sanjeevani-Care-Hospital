@@ -1,5 +1,5 @@
 <script setup>
-    import { ref,watch,computed } from 'vue';
+    import { ref,computed } from 'vue';
     import { useRouter } from 'vue-router';
     import { registerApi } from '@/api/auth';
 

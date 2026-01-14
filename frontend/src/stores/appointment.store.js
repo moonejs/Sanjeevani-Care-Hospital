@@ -1,0 +1,105 @@
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi } from '@/api/appointment'
+
+
+
+export const useAppointmentStore=defineStore('appointment',()=>{
+    const loading=ref(false)
+    const error=ref(null)
+    const days=ref([])
+    const today=new Date()
+
+    function formatDate(date) {
+        return date.toISOString().split('T')[0]
+    }
+
+    for(let i=1;i<=7;i++){
+        const d=new Date(today)
+        d.setDate(today.getDate()+i)
+
+        days.value.push({
+            day:d.toLocaleDateString('en-gb',{weekday: 'short',}),
+            date:d.getDate(),
+            fullDate: formatDate(d) 
+        })
+    }
+
+    async function saveDoctorAvailability(data){
+        loading.value=true
+        error.value=null
+
+        try {
+
+            const payload={
+                date:data.date,
+                online_booking:data.onlineBooking,
+                
+                morning_enabled:data.morning.enabled,
+                morning: {
+                    from: data.morning.startTime,
+                    to: data.morning.endTime,
+                    slot_duration:data.morning.slotDuration,
+                    max_patients:data.morning.maxPatients
+                },
+                afternoon_enabled: data.afternoon.enabled,
+                afternoon: {
+                    from: data.afternoon.startTime,
+                    to: data.afternoon.endTime,
+                    slot_duration:data.afternoon.slotDuration,
+                    max_patients:data.afternoon.maxPatients
+                },
+
+                evening_enabled: data.evening.enabled,
+                evening: {
+                    from: data.evening.startTime,
+                    to: data.evening.endTime,
+                    slot_duration:data.evening.slotDuration,
+                    max_patients:data.evening.maxPatients
+                },
+        
+            }
+
+
+            const res=await saveDoctorAvailabilityApi(payload)
+            console.log(res);
+            
+            
+        } catch (error) {
+            error.value=error
+            console.log(error);
+            
+        }finally{
+            loading.value=false
+        }
+    }
+
+    async function fetchDoctorAvailability(date) {
+        loading.value=true
+        error.value=null
+        try {
+            console.log(date);
+            
+            const res = await fetchDoctorAvailabilityApi(date)
+            console.log(res);
+            return res.data
+            
+        } catch (err) {
+            error.value=err
+            console.log(err);
+            
+        }finally{
+            loading.value=false
+        }
+    }
+
+    return{
+        saveDoctorAvailability,
+        loading,
+        error,
+        fetchDoctorAvailability,
+        days,
+        today,
+        formatDate
+    }
+})

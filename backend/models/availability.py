@@ -15,18 +15,21 @@ class Availability(db.Model):
     morning_enabled = db.Column(db.Boolean, default=False)
     morning_start = db.Column(db.Time)
     morning_end = db.Column(db.Time)
-
+    morning_slot_duration=db.Column(db.Integer, default=15)
+    morning_max_patients=db.Column(db.Integer, default=1)
+    
     afternoon_enabled = db.Column(db.Boolean, default=False)
     afternoon_start = db.Column(db.Time)
     afternoon_end = db.Column(db.Time)
-
+    afternoon_slot_duration=db.Column(db.Integer, default=15)
+    afternoon_max_patients=db.Column(db.Integer, default=1)
 
     evening_enabled = db.Column(db.Boolean, default=False)
     evening_start = db.Column(db.Time)
     evening_end = db.Column(db.Time)
+    evening_slot_duration=db.Column(db.Integer, default=15)
+    evening_max_patients=db.Column(db.Integer, default=1)
 
-    slot_duration = db.Column(db.Integer, default=15)
-    max_patients = db.Column(db.Integer, default=1)
 
     doctor = db.relationship("Doctor", back_populates="availabilities")
 

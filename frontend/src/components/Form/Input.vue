@@ -1,10 +1,12 @@
 <script setup>
     defineProps({
-        name:String,
         id:String,
-        type:String
+        type:String,
+        placeholder:String,
+        disabled:Boolean
     })
+    const model=defineModel()
 </script>
 <template>
-    <input :type="type" :name="name"  :id="id"class="form-control">
+    <input :type="type" v-model="model" :placeholder="placeholder" :id="id"class="form-control" :disabled="disabled">
 </template>
