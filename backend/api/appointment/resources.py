@@ -5,7 +5,7 @@ from extensions import db
 from flask import request
 from models import Availability
 from datetime import datetime
-
+from models import Doctor
 
 def parse_time(time):
     return None if not time else datetime.strptime(time,"%H:%M").time()
@@ -83,12 +83,6 @@ class DoctorAvailability(Resource):
         }, 200    
             
         
-        
-        
-        
-    
-    
-    
     @auth_required("token")
     @roles_required("doctor")
     def post(self):
@@ -136,5 +130,88 @@ class DoctorAvailability(Resource):
         db.session.commit()
         
         return {"message":"Availability saved successfully"},201
+    
+    
+
+class PatientDoctorsAvailability(Resource):
+
+    @auth_required("token")
+    @roles_accepted("patient")
+    def get(self):
+        date_str = request.args.get("date")
+
+        if not date_str:
+            return {"message": "date is required"}, 400
+
+        date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+        doctors = Doctor.query.all()
+        response = []
+
+        for doctor in doctors:
+            availability = Availability.query.filter_by(
+                doctor_id=doctor.id,
+                date=date
+            ).first()
+
+            if availability and availability.online_booking:
+                doctor_data = {
+                    "doctor": {
+                        "id": doctor.id,
+                        "name": doctor.name,
+                        "department": doctor.department.name if doctor.department else None
+                    },
+                    "onlineBooking": True,
+                    "sessions": {
+                        "morning": {
+                            "enabled": availability.morning_enabled,
+                            "startTime": availability.morning_start.strftime("%H:%M") if availability.morning_start else None,
+                            "endTime": availability.morning_end.strftime("%H:%M") if availability.morning_end else None,
+                            "slotDuration": availability.morning_slot_duration,
+                            "maxPatients": availability.morning_max_patients
+                        },
+                        "afternoon": {
+                            "enabled": availability.afternoon_enabled,
+                            "startTime": availability.afternoon_start.strftime("%H:%M") if availability.afternoon_start else None,
+                            "endTime": availability.afternoon_end.strftime("%H:%M") if availability.afternoon_end else None,
+                            "slotDuration": availability.afternoon_slot_duration,
+                            "maxPatients": availability.afternoon_max_patients
+                        },
+                        "evening": {
+                            "enabled": availability.evening_enabled,
+                            "startTime": availability.evening_start.strftime("%H:%M") if availability.evening_start else None,
+                            "endTime": availability.evening_end.strftime("%H:%M") if availability.evening_end else None,
+                            "slotDuration": availability.evening_slot_duration,
+                            "maxPatients": availability.evening_max_patients
+                        }
+                    }
+                }
+            else:
+                
+                doctor_data = {
+                    "doctor": {
+                        "id": doctor.id,
+                        "name": doctor.name,
+                        "department": doctor.department.name if doctor.department else None
+                    },
+                    "onlineBooking": False,
+                    "sessions": {
+                        "morning": { "enabled": False },
+                        "afternoon": { "enabled": False },
+                        "evening": { "enabled": False }
+                    }
+                }
+
+            response.append(doctor_data)
+
+        return {
+            "date": date_str,
+            "doctors": response
+        }, 200
+
+    
         
+        
+
+
         

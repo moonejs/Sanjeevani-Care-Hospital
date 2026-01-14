@@ -54,17 +54,17 @@
 
 .search-box{
     height: 20vh;
-    width: 100vw;
+        
 }
 
 .date-section{
-    height: 30vh;
-    width: 100vw;
+    height: 20vh;
+    
 }
 
 .appointment-section{
-    height: 50vh;
-    width: 100vw;
+    height: 60vh;
+    
 }
 
 
@@ -96,4 +96,9 @@
     width: 4rem;
     background-color: rgb(234, 65, 229);
     cursor: pointer;
+}
+
+.doctor-appoint-card{
+    
+    width: 100%;
 }
