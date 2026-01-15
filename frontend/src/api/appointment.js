@@ -16,3 +16,7 @@ export const fetchAllDoctorsAvailabilityApi=(date)=>{
         params:{"date":date}
     })
 }
+
+export const bookAppointmentApi=(data)=>{
+    return api.post("api/appointments/book",data)
+}

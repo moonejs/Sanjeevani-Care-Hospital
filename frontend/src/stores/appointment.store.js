@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi } from '@/api/appointment'
+import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi } from '@/api/appointment'
 
 
 
@@ -10,7 +10,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     const days=ref([])
     const today=new Date()
     const doctorsAvailability = ref([])
-
+    const selectedDate=ref("")
     function formatDate(date) {
         return date.toISOString().split('T')[0]
     }
@@ -112,6 +112,22 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         }
     }
 
+    async function bookAppointment(data){
+        loading.value=true
+        error.value=null
+        try {
+            const res=await bookAppointmentApi(data)
+            console.log(res);
+            
+        } catch (error) {
+            error.value=error
+            console.log(error);
+            
+        }finally{
+            loading.value=false
+        }
+    }
+
     return{
         saveDoctorAvailability,
         loading,
@@ -121,6 +137,8 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         today,
         formatDate,
         fetchAllDoctorsAvailability,
-        doctorsAvailability
+        doctorsAvailability,
+        selectedDate,
+        bookAppointment
     }
 })

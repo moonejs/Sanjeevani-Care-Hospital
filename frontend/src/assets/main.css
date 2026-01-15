@@ -102,3 +102,7 @@
     
     width: 100%;
 }
+
+.booking-badge{
+    cursor: pointer;
+}

@@ -3,6 +3,15 @@
     const props=defineProps({
         doctor:Object
     })
+    const emit = defineEmits(['slotSelected'])
+
+    function slotSelected(slot) {
+        emit('slotSelected', {
+            doctor:props.doctor,
+            slot:slot
+        })
+    }
+
 </script>
 <template>
     <div class="bg-danger doctor-appoint-card container py-3">
@@ -12,13 +21,13 @@
         </div>
         <hr>
         <div>
-            <SlotBox session="Morning" :session-info="doctor.sessions.morning"/>
+            <SlotBox session="Morning" :session-info="doctor.sessions.morning" @slotSelected="slotSelected"/>
         </div>
         <div>
-            <SlotBox session="Afternoon" :session-info="doctor.sessions.afternoon"/>
+            <SlotBox session="Afternoon" :session-info="doctor.sessions.afternoon" @slotSelected="slotSelected"/>
         </div>
         <div>
-            <SlotBox session="Evening" :session-info="doctor.sessions.evening"/>
+            <SlotBox session="Evening" :session-info="doctor.sessions.evening" @slotSelected="slotSelected"/>
         </div>
     
     </div>

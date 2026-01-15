@@ -25,7 +25,7 @@ class Appointment(db.Model):
     doctor = db.relationship("Doctor", back_populates="appointments")
     patient = db.relationship("Patient",back_populates="appointments")
 
-    __table_args__ = (db.UniqueConstraint("doctor_id","appointment_date","start_time",name="unique_doctor_slot"),)
+
 
     def __repr__(self):
         return f"<Appointment {self.appointment_date} {self.start_time}>"

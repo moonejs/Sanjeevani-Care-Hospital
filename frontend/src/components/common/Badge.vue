@@ -6,5 +6,5 @@
 </script>
 
 <template>
-    <span class="badge" :class="`text-bg-${color}`">{{ label }}</span>
+    <span class="badge" :class="`text-bg-${color}`" >{{ label }}</span>
 </template>
