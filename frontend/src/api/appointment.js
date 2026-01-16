@@ -26,3 +26,10 @@ export const fetchAppointmentsByDoctorApi=(date)=>{
         params:{"date":date}
     })
 }
+
+
+export const updateAppointmentStatusApi=(appointment_id,status)=>{
+    return api.patch(`api/doctors/appointments/${appointment_id}/status`,{
+        "status":status
+    })
+}

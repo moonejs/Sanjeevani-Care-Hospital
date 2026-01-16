@@ -1,9 +1,21 @@
 <script setup>
   import Btn from '../common/Btn.vue';
-    defineProps({
+    const props=defineProps({
       appointment: Object,
       index:Number
     })
+    const emit=defineEmits(['confirm','cancel','complete'])
+
+    function confirm(){
+      emit('confirm',props.appointment)
+    }
+    function cancel(){
+      emit('cancel',props.appointment)
+    }
+    function complete(){
+      emit('complete',props.appointment)
+    }
+    
 </script>
 
 <template>
@@ -25,7 +37,9 @@
     </td>
     <td>{{ appointment.type }}</td>
     <td>
-      <Btn class="btn-outline-success btn-sm" label="Confirm"/>
+      <Btn v-if="appointment.status=='pending'" class="btn-outline-success btn-sm me-2" label="Confirm" @click="confirm"/>
+      <Btn v-if="appointment.status=='confirmed'" class="btn-outline-primary btn-sm me-2" label="Complete" @click="complete"/>
+      <Btn v-if="appointment.status=='pending'" class="btn-outline-danger btn-sm " label="Cancel" @click="cancel"/>
     </td>
   </tr>
 </template>

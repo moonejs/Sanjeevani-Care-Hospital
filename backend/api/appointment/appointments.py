@@ -201,21 +201,35 @@ class PatientAppointmentBooking(Resource):
 
         end_time = (datetime.combine(datetime.today(),start_time)+timedelta(minutes=int(slot_duration))).time()
 
-        booked_count = Appointment.query.filter_by(
-            doctor_id=doctor_id,
-            appointment_date=appointment_date,
-            start_time=start_time,
-            status="confirmed"
+        booked_count = Appointment.query.filter(
+            Appointment.doctor_id == doctor_id,
+            Appointment.appointment_date == appointment_date,
+            Appointment.start_time == start_time,
+            Appointment.status.in_(["pending", "confirmed"])
         ).count()
+
 
         if booked_count >= max_patients:
             return {"message": "Slot already fully booked"}, 409
         
-        existing = Appointment.query.filter_by(
-            doctor_id=doctor_id,
-            patient_id=patient_id,
-            appointment_date=appointment_date,
-            start_time=start_time
+        existing_day_booking = Appointment.query.filter(
+            Appointment.doctor_id == doctor_id,
+            Appointment.patient_id == patient_id,
+            Appointment.appointment_date == appointment_date,
+            Appointment.status.in_(["pending", "confirmed"])
+        ).first()
+
+        if existing_day_booking:
+            return {
+                "message": "You already have an active appointment with this doctor today"
+            }, 409  
+
+        existing = Appointment.query.filter(
+            Appointment.doctor_id == doctor_id,
+            Appointment.patient_id == patient_id,
+            Appointment.appointment_date == appointment_date,
+            Appointment.start_time == start_time,
+            Appointment.status.in_(["pending", "confirmed"])
         ).first()
 
         if existing:

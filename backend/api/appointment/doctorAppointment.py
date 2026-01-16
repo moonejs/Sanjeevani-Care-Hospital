@@ -62,5 +62,48 @@ class AppointmentDetailsByDoctor(Resource):
             "appointments": result
         }, 200
         
+
+class UpdateAppointmentStatus(Resource):
+
+    @auth_required("token")
+    @roles_required("doctor")
+    def patch(self, appointment_id):
+        data = request.json
+        if not data or "status" not in data:
+            return {"message": "status is required"}, 400
+
+        new_status = data["status"]
+        allowed_status = ["confirmed", "cancelled", "completed"]
+
+        if new_status not in allowed_status:
+            return {"message": "Invalid status"}, 400
+
+        appointment = Appointment.query.get(appointment_id)
+
+        if not appointment:
+            return {"message": "Appointment not found"}, 404
+
         
+        if appointment.doctor_id != current_user.doctor.id:
+            return {"message": "Unauthorized"}, 403
+
+       
+        if appointment.status == "completed":
+            return {"message": "Appointment already completed"}, 409
+
+        if appointment.status == "cancelled":
+            return {"message": "Appointment already cancelled"}, 409
+
+        if appointment.status == "pending" and new_status == "completed":
+            return {"message": "Confirm appointment first"}, 409
+
+        appointment.status = new_status
+        db.session.commit()
+
+        return {
+            "message": f"Appointment {new_status}",
+            "appointment_id": appointment.id,
+            "status": appointment.status
+        }, 200
+      
 

@@ -5,6 +5,7 @@
     import BaseTableHead from '../layout/BaseTableHead.vue'
     import DoctorAppointmentRow from './DoctorAppointmentRow.vue'
     import BaseTable from '../layout/BaseTable.vue'
+
     const appointment = useAppointmentStore()
 
 
@@ -16,6 +17,11 @@
       appointment.selectedDate = today
       await appointment.fetchAppointmentsByDoctor(today)
     })
+
+    async function updateStatus(app,status){
+      await appointment.updateAppointmentStatus(app.appointment_id,status)
+      await appointment.fetchAppointmentsByDoctor(appointment.selectedDate)
+    }
 </script>
 
 <template>
@@ -33,7 +39,11 @@
       <DoctorAppointmentRow 
       v-for="(app,index) in appointment.appointmentListByDoctor"
       :key="app.appointment_id"
-      :appointment="app" :index="index"/>
+      :appointment="app" :index="index"
+      @confirm="updateStatus(app,'confirmed')"
+      @complete="updateStatus(app,'completed')"
+      @cancel="updateStatus(app,'cancelled')"
+      />
     </template>
     
   </BaseTable>

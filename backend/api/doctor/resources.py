@@ -87,3 +87,5 @@ class DoctorResource(Resource):
             "specialization":doctor.specialization,
             "contact":doctor.contact,
         },200
+        
+        
