@@ -29,7 +29,8 @@
         :class="{
           'text-bg-success': appointment.status === 'confirmed',
           'text-bg-warning': appointment.status === 'pending',
-          'text-bg-danger': appointment.status === 'cancelled'
+          'text-bg-danger': appointment.status === 'cancelled',
+          'text-bg-primary': appointment.status === 'completed'
         }"
       >
         {{ appointment.status }}
