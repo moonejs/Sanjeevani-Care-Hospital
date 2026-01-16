@@ -103,3 +103,10 @@
 .booking-badge{
     cursor: pointer;
 }
+
+
+/* Tables */
+
+.doctor-dashboard-table-1{
+    width: 50%;
+}

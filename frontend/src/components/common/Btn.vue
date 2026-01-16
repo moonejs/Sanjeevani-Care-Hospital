@@ -6,5 +6,5 @@
     const emit=defineEmits(['click'])
 </script>
 <template>
-    <button  class="btn btn-tertiary" :type="type" @click="emit('click')">{{ label }}</button>
+    <button  class="btn " :type="type" @click="emit('click')">{{ label }}</button>
 </template>
