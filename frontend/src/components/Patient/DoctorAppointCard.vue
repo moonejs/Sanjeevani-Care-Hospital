@@ -14,7 +14,7 @@
 
 </script>
 <template>
-    <div class="bg-danger doctor-appoint-card container py-3">
+    <div class="bg-danger doctor-appoint-card container mb-3 py-3">
         <div>
             <h2>Dr.{{ doctor.doctor.name }}</h2>
              <h5>{{ doctor.doctor.department }}</h5>

@@ -58,12 +58,12 @@ class PatientDoctorsAvailability(Resource):
                 slots = generate_slots(availability.morning_start,availability.morning_end,availability.morning_slot_duration)
 
                 for slot in slots:
-                    booked = Appointment.query.filter_by(
-                        doctor_id=doctor.id,
-                        appointment_date=date,
-                        start_time=slot,
-                        status="confirmed"
-                    ).count()
+                    booked = Appointment.query.filter(
+                                Appointment.doctor_id == doctor.id,
+                                Appointment.appointment_date == date,
+                                Appointment.start_time == slot,
+                                Appointment.status.in_(["pending", "confirmed"])
+                            ).count()
 
                     status = (
                         "available" if booked == 0 else
@@ -83,12 +83,12 @@ class PatientDoctorsAvailability(Resource):
                 slots = generate_slots(availability.afternoon_start,availability.afternoon_end,availability.afternoon_slot_duration)
 
                 for slot in slots:
-                    booked = Appointment.query.filter_by(
-                        doctor_id=doctor.id,
-                        appointment_date=date,
-                        start_time=slot,
-                        status="confirmed"
-                    ).count()
+                    booked = Appointment.query.filter(
+                                Appointment.doctor_id == doctor.id,
+                                Appointment.appointment_date == date,
+                                Appointment.start_time == slot,
+                                Appointment.status.in_(["pending", "confirmed"])
+                            ).count()
 
                     status = (
                         "available" if booked == 0 else
@@ -108,12 +108,12 @@ class PatientDoctorsAvailability(Resource):
                 slots = generate_slots(availability.evening_start,availability.evening_end,availability.evening_slot_duration)
 
                 for slot in slots:
-                    booked = Appointment.query.filter_by(
-                        doctor_id=doctor.id,
-                        appointment_date=date,
-                        start_time=slot,
-                        status="confirmed"
-                    ).count()
+                    booked = Appointment.query.filter(
+                                Appointment.doctor_id == doctor.id,
+                                Appointment.appointment_date == date,
+                                Appointment.start_time == slot,
+                                Appointment.status.in_(["pending", "confirmed"])
+                            ).count()
 
                     status = (
                         "available" if booked == 0 else

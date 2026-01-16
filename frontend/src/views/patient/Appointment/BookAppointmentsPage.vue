@@ -61,7 +61,7 @@
         <div class="date-section bg-warning">
             <TableTopBox label="Today" @selected-date="onDateSelected"/>
         </div>
-        <div class="appointment-section bg-info">
+        <div class="appointment-section py-2 bg-info">
             <h2 v-if="!appointment.doctorsAvailability.length">No Doctor Available</h2>
             <DoctorAppointCard v-for="doc in appointment.doctorsAvailability" :key="doc.doctor.id" :doctor="doc" @slot-selected="openBookingModal"/>
         </div>
