@@ -110,3 +110,11 @@
 .doctor-dashboard-table-1{
     width: 50%;
 }
+
+
+.time{
+    height: 10%;
+    width: 20%;
+    position: absolute;
+    right: 8rem;
+}
