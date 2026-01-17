@@ -20,6 +20,8 @@ class Doctor(db.Model):
 
     department_id = db.Column(db.Integer,db.ForeignKey("departments.id"),nullable=False)
     
+    treatments = db.relationship( "Treatment", back_populates="doctor", cascade="all, delete-orphan"
+    )
     
     def __repr__(self):
         return f"<doctor {self.name}>"

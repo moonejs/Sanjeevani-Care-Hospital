@@ -33,3 +33,7 @@ export const updateAppointmentStatusApi=(appointment_id,status)=>{
         "status":status
     })
 }
+
+export const completeAppointmentApi=(appointment_id,data)=>{
+    return api.get(`api/doctors/appointments/${appointment_id}/complete`,data)
+}

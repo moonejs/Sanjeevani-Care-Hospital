@@ -8,14 +8,19 @@ class Treatment(db.Model):
     
     patient_id = db.Column(db.Integer,db.ForeignKey("patients.id"),nullable=False)
     
-    doctor_id = db.Column(
-        db.Integer,
-        db.ForeignKey("doctors.id"),
-        nullable=False
-    )
+    doctor_id = db.Column(db.Integer,db.ForeignKey("doctors.id"),nullable=False)
     
-    description = db.Column(db.String(255),nullable=False)
-    treatment_date = db.Column(db.DateTime,default=datetime.utcnow)
+    appointment_id=db.Column(db.Integer,db.ForeignKey("appointments.id"),nullable=False,unique=True)
+    
+    diagnosis = db.Column(db.String(100),nullable=False)
+    notes=db.Column(db.String(255))
+    
+    medicines =db.Column(db.JSON)
+    follow_up_date=db.Column(db.Date)
+    
+    appointment = db.relationship("Appointment", back_populates="treatment")
+    doctor = db.relationship("Doctor", back_populates="treatments")
+    patient = db.relationship("Patient", back_populates="treatments")
     
     def __repr__(self):
         return f"<Treatment {self.id}>"

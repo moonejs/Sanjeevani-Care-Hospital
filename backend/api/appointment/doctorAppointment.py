@@ -4,7 +4,7 @@ from flask_login import current_user
 from extensions import db
 from flask import request
 from datetime import datetime, timedelta
-from models import Doctor,Appointment,Availability
+from models import Doctor,Appointment,Availability,Treatment
 
 
 class AppointmentDetailsByDoctor(Resource):
@@ -73,7 +73,7 @@ class UpdateAppointmentStatus(Resource):
             return {"message": "status is required"}, 400
 
         new_status = data["status"]
-        allowed_status = ["confirmed", "cancelled", "completed"]
+        allowed_status = ["confirmed", "cancelled",]
 
         if new_status not in allowed_status:
             return {"message": "Invalid status"}, 400
@@ -87,15 +87,9 @@ class UpdateAppointmentStatus(Resource):
         if appointment.doctor_id != current_user.doctor.id:
             return {"message": "Unauthorized"}, 403
 
-       
-        if appointment.status == "completed":
-            return {"message": "Appointment already completed"}, 409
-
+        
         if appointment.status == "cancelled":
-            return {"message": "Appointment already cancelled"}, 409
-
-        if appointment.status == "pending" and new_status == "completed":
-            return {"message": "Confirm appointment first"}, 409
+            return {"message": "Cancelled appointments cannot be updated"}, 409
 
         appointment.status = new_status
         db.session.commit()
@@ -106,4 +100,49 @@ class UpdateAppointmentStatus(Resource):
             "status": appointment.status
         }, 200
       
+class CompleteAppointment(Resource):
+
+    @auth_required("token")
+    @roles_required("doctor")
+    def post(self, appointment_id):
+
+        appointment = Appointment.query.get_or_404(appointment_id)
+
+        if appointment.doctor_id != current_user.doctor.id:
+            return {"message": "Unauthorized"}, 403
+
+        if appointment.status != "confirmed":
+            return {"message": "Only confirmed appointments can be completed"}, 409
+
+        if appointment.treatment:
+            return {"message": "Visit already completed"}, 409
+
+        data = request.json
+        field_required=["diagnosis","notes","medicines","follow_up_date"]
+        
+        for field in field_required:
+            if not field in data:
+                return {"message":f"{field} is required"},400
+        if not data:
+            return {"message": "Visit data required"}, 400
+
+        treatment = Treatment(
+            appointment_id=appointment.id,
+            doctor_id=appointment.doctor_id,
+            patient_id=appointment.patient_id,
+            diagnosis=data.get("diagnosis"),
+            notes=data.get("notes"),
+            medicines=data.get("medicines"),
+            follow_up_date=data.get("follow_up_date")
+        )
+
+        appointment.status = "completed"
+
+        db.session.add(treatment)
+        db.session.commit()
+
+        return {
+            "message": "Visit completed successfully",
+            "appointment_id": appointment.id
+        }, 201
 

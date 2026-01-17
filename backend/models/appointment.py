@@ -24,8 +24,7 @@ class Appointment(db.Model):
     
     doctor = db.relationship("Doctor", back_populates="appointments")
     patient = db.relationship("Patient",back_populates="appointments")
-
-
+    treatment = db.relationship( "Treatment", back_populates="appointment", uselist=False, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Appointment {self.appointment_date} {self.start_time}>"

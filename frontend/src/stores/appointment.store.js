@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi } from '@/api/appointment'
+import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi,completeAppointmentApi } from '@/api/appointment'
 
 
 
@@ -159,6 +159,19 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         }
     }
 
+    async function completeAppointment(data){
+        loading.value=true
+        error.value=null
+        try {
+            const res=completeAppointmentApi(data)
+            console.log(res);
+        } catch (err) {
+            error.value=err
+            console.log(err);
+        }finally{
+            loading.value=false
+        }
+    }
     return{
         saveDoctorAvailability,
         loading,
@@ -173,6 +186,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         bookAppointment,
         fetchAppointmentsByDoctor,
         appointmentListByDoctor,
-        updateAppointmentStatus
+        updateAppointmentStatus,
+        completeAppointment
     }
 })

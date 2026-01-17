@@ -16,9 +16,13 @@
     { "Total Patients": doctor.totalAssignedPatients }
     ])
     onMounted(async ()=>{
+        await refreshAssignedPatients()
+    })
+    async function refreshAssignedPatients() {
         const today = appointment.formatDate(appointment.today)
         await doctor.fetchAssignedTodayPatientsDetails(today)
-    })
+    }
+
 
 </script>
 <template>
@@ -33,7 +37,7 @@
 
         <template #body>
             <AssignedPatientRows 
-            v-for="(patient,index) in doctor.assignedPatientsList" :key="index"
+            v-for="(patient,index) in doctor.assignedPatientsList" :key="patient.patient_id "
             :patient="patient" :index="index"
             />
         </template>
