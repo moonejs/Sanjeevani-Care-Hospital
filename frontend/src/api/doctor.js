@@ -12,3 +12,11 @@ export const doctorDetailsApi=()=>{
 export const doctorDetailsByIdApi=(id)=>{
     return api.get(`api/doctors/${id}`)
 }
+
+export const fetchAssignedTodayPatientsDetailsApi=(date)=>{
+    return api.get("api/doctors/patients/today",{
+        params:{
+            date:date
+        }
+    })
+}

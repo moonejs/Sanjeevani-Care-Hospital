@@ -20,10 +20,10 @@
 
 <template>
     <div class="container-fluid bg-danger-subtle d-flex">
-        <div class=" bg-success doctor-dashboard-table-1">
+        <div class=" bg-success-subtle doctor-dashboard-table-1">
             <DoctorAppointmentsTable/>
         </div>
-        <div class="bg-warning position-absolute doctor-dashboard-table-2">
+        <div class="bg-warning-subtle position-absolute doctor-dashboard-table-2">
             <AssignedPatientTable/>
         </div>
     </div>
