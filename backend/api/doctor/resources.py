@@ -1,10 +1,12 @@
 from flask_restful import Resource
 from flask_security import auth_required,roles_required,roles_accepted
-from models import Doctor,Department
+from models import Doctor,Department,Appointment
 from flask_security.utils import hash_password
 from flask import request
 import extensions
 from extensions import db
+from datetime import datetime, timedelta
+from flask_login import current_user
 
 class DoctorDetails(Resource):
     
@@ -88,4 +90,66 @@ class DoctorResource(Resource):
             "contact":doctor.contact,
         },200
         
+        
+class PatientAssignedToday(Resource):
+    @auth_required("token")
+    @roles_required("doctor")
+    def get(self):
+        date_str=request.args.get("date")
+        if not date_str:
+            return {"message":"Date is required"},400
+        
+        appointment_date=datetime.strptime(date_str,"%Y-%m-%d").date()
+        
+        doctor_id=current_user.doctor.id
+        
+        appointments= Appointment.query.filter(
+            Appointment.doctor_id==doctor_id,
+            Appointment.appointment_date==appointment_date,
+            Appointment.status.in_(["pending","confirmed"])
+            
+        ).all()
+        
+        patients=[]
+        seen_patient_ids=set()
+        
+        if appointments:
+            for appt in appointments:
+                if appt.patient_id in seen_patient_ids:
+                    continue
+                
+                seen_patient_ids.add(appt.patient_id)
+                
+                total_visits = Appointment.query.filter(
+                    Appointment.doctor_id == doctor_id,
+                    Appointment.patient_id == appt.patient_id,
+                    Appointment.status == "completed"
+                ).count()
+                
+                last_visit = Appointment.query.filter(
+                    Appointment.doctor_id == doctor_id,
+                    Appointment.patient_id == appt.patient_id,
+                    Appointment.status == "completed",
+                    Appointment.appointment_date < appointment_date
+                ).order_by(Appointment.appointment_date.desc()).first()
+                
+                patients.append({
+                    "patient_id": appt.patient.id,
+                    "name": appt.patient.name,
+                    "appointment_id": appt.id,
+                    "time": appt.start_time.strftime("%H:%M"),
+                    "status": appt.status,
+                    "type": appt.type,
+                    "age":appt.patient.age,
+                    "gender":appt.patient.gender,
+                    "last_visit":last_visit.appointment_date.strftime("%Y-%m-%d") if last_visit else None,
+                    "visits":total_visits
+                })
+                
+        
+        return {
+            "date":date_str,
+            "total_patients":len(patients),
+            "patients":patients
+        },200
         

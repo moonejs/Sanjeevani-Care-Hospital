@@ -1,5 +1,6 @@
 <script setup>
     import DoctorAppointmentsTable from '@/components/Doctor/DoctorAppointmentsTable.vue';
+    import AssignedPatientTable from '@/components/Doctor/AssignedPatientTable.vue';
     import { ref,onMounted } from 'vue';
     import { useAppointmentStore } from '@/stores/appointment.store';
 
@@ -18,9 +19,12 @@
 </script>
 
 <template>
-    <div class="container-fluid">
-        <div class="  doctor-dashboard-table-1">
+    <div class="container-fluid bg-danger-subtle d-flex">
+        <div class=" bg-success doctor-dashboard-table-1">
             <DoctorAppointmentsTable/>
+        </div>
+        <div class="bg-warning position-absolute doctor-dashboard-table-2">
+            <AssignedPatientTable/>
         </div>
     </div>
 </template>

@@ -116,5 +116,11 @@
     height: 10%;
     width: 20%;
     position: absolute;
-    right: 8rem;
+    right: 1rem;
+}
+
+.doctor-dashboard-table-2{
+    width: 45%;
+    right: 2rem;
+    top: 49%;
 }
