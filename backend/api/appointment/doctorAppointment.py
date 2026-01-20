@@ -5,6 +5,7 @@ from extensions import db
 from flask import request
 from datetime import datetime, timedelta
 from models import Doctor,Appointment,Availability,Treatment
+from sqlalchemy import case,func
 
 
 class AppointmentDetailsByDoctor(Resource):
@@ -24,7 +25,17 @@ class AppointmentDetailsByDoctor(Resource):
         appointments=Appointment.query.filter(
             Appointment.doctor_id==doctor_id,
             Appointment.appointment_date==appointment_date
-        ).order_by(Appointment.start_time).all()
+        ).order_by(
+                case(
+                    (Appointment.status == "pending", 1),
+                    (Appointment.status == "confirmed", 2),
+                    (Appointment.status == "completed", 3),
+                    (Appointment.status == "cancelled", 4),
+                    else_=5
+                ),
+                Appointment.start_time
+            ).all()
+        
 
         result = []
 
@@ -55,11 +66,37 @@ class AppointmentDetailsByDoctor(Resource):
                 "status": appt.status,
                 "session": session
             })
+        stats = (
+            db.session.query(
+                Appointment.status,
+                func.count(Appointment.id)
+            )
+            .filter(
+                Appointment.doctor_id == doctor_id,
+                Appointment.appointment_date == appointment_date
+            )
+            .group_by(Appointment.status)
+            .all()
+        )
+
+        summary = {
+            "Total":0,
+            "completed": 0,
+            "confirmed": 0,
+            "pending": 0,
+            "cancelled": 0
+        }
+
+        for status, count in stats:
+            summary[status] = count
+
+        summary["Total"] = sum(summary.values())
 
         return {
             "date": date_str,
             "total": len(result),
-            "appointments": result
+            "appointments": result,
+            "summary": summary
         }, 200
         
 

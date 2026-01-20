@@ -1,133 +1,125 @@
-.round{
-    border-radius: 6px;
+.round {
+  border-radius: 6px;
 }
 
-
-.patient-header{
-    height: 25vh;
+.patient-header {
+  height: 25vh;
 }
 
-.custom-card{
-    height: 20vh;
-    width: 15vw;
-    cursor: pointer;
+.custom-card {
+  height: 20vh;
+  width: 15vw;
+  cursor: pointer;
 }
-.custom-card i{
-    font-size: 5rem;
-}
-
-.empty-state{
-    height: 50vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.custom-card i {
+  font-size: 5rem;
 }
 
-.departmentDetail-page-left{
-    height: 89vh;
-    width: 40vw;
-}
-.departmentDetail-page-left .upper{
-    height: 50%;
-    width: 100%;
-}
-.departmentDetail-page-right{
-    height:89vh;
-    width: 60vw;
+.empty-state {
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.doctor-profile-card{
-    height: 15vh;
-    width: 10vw;
+.departmentDetail-page-left {
+  height: 89vh;
+  width: 40vw;
+}
+.departmentDetail-page-left .upper {
+  height: 50%;
+  width: 100%;
+}
+.departmentDetail-page-right {
+  height: 89vh;
+  width: 60vw;
 }
 
-
-.doctorDetail-page-left{
-    height: 70vh;
-    width: 40vw;
+.doctor-profile-card {
+  height: 15vh;
+  width: 10vw;
 }
 
-.doctorDetail-page-right{
-    height: 70vh;
-    width: 60vw;
+.doctorDetail-page-left {
+  height: 70vh;
+  width: 40vw;
 }
 
-.search-box{
-    height: 20vh;
-        
+.doctorDetail-page-right {
+  height: 70vh;
+  width: 60vw;
 }
 
-.date-section{
-    height: 20vh;
-    
+.search-box {
+  height: 20vh;
 }
 
-
-
+.date-section {
+  height: 20vh;
+}
 
 /* schedule */
-.schedule-page-dates{
-    height: 10vh;
-   
+.schedule-page-dates {
+  height: 10vh;
 }
-.schedule-div{
-    height: 65vh;
-}
-
-.schedule-page-btm{
-    height: 8.3vh;
-}
-.table-top-box{
-    height: 5rem;
-    width: 8rem;
-    cursor: pointer;
+.schedule-div {
+  height: 65vh;
 }
 
-.session-box-session-label{
-    font-size: 2rem;
+.schedule-page-btm {
+  height: 8.3vh;
+}
+.table-top-box {
+  height: 5rem;
+  width: 8rem;
+  cursor: pointer;
 }
 
-
-.date-box{
-    height: 4rem;
-    width: 4rem;
-    background-color: rgb(234, 65, 229);
-    cursor: pointer;
+.session-box-session-label {
+  font-size: 2rem;
 }
 
-.doctor-appoint-card{
-    
-    width: 100%;
+.date-box {
+  height: 4rem;
+  width: 4rem;
+  background-color: rgb(234, 65, 229);
+  cursor: pointer;
 }
 
-.booking-badge{
-    cursor: pointer;
+.doctor-appoint-card {
+  width: 100%;
 }
 
+.booking-badge {
+  cursor: pointer;
+}
 
 /* Tables */
 
-.doctor-dashboard-table-1{
-    width: 50%;
+.doctor-dashboard-table-1 {
+  width: 54%;
+  height: 89vh;
+  overflow-y: auto;
 }
 
-
-.time{
-    height: 10%;
-    width: 20%;
-    position: absolute;
-    right: 1rem;
+.time {
+  height: 10%;
+  width: 20%;
+  position: absolute;
+  right: 1rem;
 }
 
-.doctor-dashboard-table-2{
-    width: 45%;
-    right: 2rem;
-    top: 49%;
+.doctor-dashboard-table-2 {
+  width: 45%;
+  right: 1.1rem;
+  top: 49%;
+  height: 50vh;
+  overflow-y: auto;
 }
 
-.next-app-card{
-    right: 1rem;
-    top: 24%;
-    width: 25rem;
-    height: 10rem;
+.next-app-card {
+  right: 1rem;
+  top: 24%;
+  width: 25rem;
+  height: 10rem;
 }

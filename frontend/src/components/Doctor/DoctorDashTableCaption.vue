@@ -1,7 +1,7 @@
 <script setup>
     import TableNavigaionBox from '../common/TableNavigaionBox.vue';
     import TableStats from '../common/TableStats.vue';
-    import { ref } from 'vue';
+   
     defineProps({
         title:String,
         navArray:Array,
@@ -17,12 +17,12 @@
             <TableStats :table-stats="tableStatsArr" />
         </div>
     </div>
-    <div>
+    <div class="d-flex align-items-center">
         <div>
             <TableNavigaionBox :nav-array="navArray"/>
         </div>
-        <div>
-            
+        <div v-if="stats=='navs'">
+            <TableStats :table-stats="tableStatsArr" />
         </div>
     </div>
  

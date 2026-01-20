@@ -1,5 +1,5 @@
 <script setup>
-    import { onMounted,ref } from 'vue'
+    import { computed, onMounted,ref } from 'vue'
     import { useAppointmentStore } from '@/stores/appointment.store'
     import DoctorDashTableCaption from './DoctorDashTableCaption.vue'
     import BaseTableHead from '../layout/BaseTableHead.vue'
@@ -38,12 +38,15 @@
       showCompleteModal.value = false
       
     }
+    const tableStatsArr=computed(()=>{
+      return [appointment.appointmentSummary] 
+    })
 </script>
 
 <template>
   <BaseTable>
     <template #caption>
-      <DoctorDashTableCaption  title="Upcoming Appointments" :nav-array="navArray"/>
+      <DoctorDashTableCaption  title="Upcoming Appointments" :nav-array="navArray" stats="navs" :table-stats-arr="tableStatsArr"/>
 
     </template>
 

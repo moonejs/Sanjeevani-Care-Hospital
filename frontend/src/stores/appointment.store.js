@@ -13,6 +13,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     const doctorsAvailability = ref([])
     const selectedDate=ref("")
     const appointmentListByDoctor=ref([])
+    const appointmentSummary = ref({ total: 0, pending: 0, confirmed: 0, completed: 0, cancelled: 0 })
     
 
     function formatDate(date) {
@@ -138,6 +139,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         try {
             const res=await fetchAppointmentsByDoctorApi(date)
             appointmentListByDoctor.value=res.data.appointments
+            appointmentSummary.value=res.data.summary
             console.log(res);
             
         } catch (err) {
@@ -201,6 +203,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         fetchAppointmentsByDoctor,
         appointmentListByDoctor,
         updateAppointmentStatus,
-        completeAppointment
+        completeAppointment,
+        appointmentSummary
     }
 })

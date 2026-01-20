@@ -17,7 +17,7 @@
         setInterval(async () => {
             await appointment.fetchAppointmentsByDoctor(today)
             await doctor.refreshDoctor()
-        }, 15000)
+        }, 150000)
     })
 
     const tHeadArray=ref([])
