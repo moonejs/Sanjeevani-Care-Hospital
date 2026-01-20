@@ -5,9 +5,13 @@
     import BaseTableHead from '../layout/BaseTableHead.vue'
     import DoctorAppointmentRow from './DoctorAppointmentRow.vue'
     import BaseTable from '../layout/BaseTable.vue'
+    import CompleteModal from '@/views/doctor/CompleteModal.vue'
 
     const appointment = useAppointmentStore()
-
+    const showCompleteModal=ref(false)
+    const selectedPatient=ref(null)
+    const selectedAppointmentId = ref(null)
+    
 
     const navArray=ref(["Today","This Week"])
     const tHead=ref(["Time","Slot","Patient","Status","Type","Action"])
@@ -20,6 +24,17 @@
 
     async function updateStatus(app,status){
       await appointment.updateAppointmentStatus(app.appointment_id,status)
+      await appointment.fetchAppointmentsByDoctor(appointment.selectedDate)
+    }
+
+    function openCompleteModal(app){
+      showCompleteModal.value=true
+      selectedPatient.value=app.patient
+      selectedAppointmentId.value = app.appointment_id
+    }
+    async function completeVisit(payload){
+      await appointment.completeAppointment(selectedAppointmentId.value,payload)
+      showCompleteModal.value = false
       await appointment.fetchAppointmentsByDoctor(appointment.selectedDate)
     }
 </script>
@@ -41,10 +56,16 @@
       :key="app.appointment_id"
       :appointment="app" :index="index"
       @confirm="updateStatus(app,'confirmed')"
-      @complete="updateStatus(app,'completed')"
+      @complete="openCompleteModal(app)"
       @cancel="updateStatus(app,'cancelled')"
       />
     </template>
-    
   </BaseTable>
+  <CompleteModal
+    :show-complete-modal="showCompleteModal"
+    :patient="selectedPatient"
+    :appointment-id="selectedAppointmentId"
+    @close="showCompleteModal = false"
+    @submit="completeVisit"
+  />
 </template>

@@ -5,5 +5,5 @@
     })
 </script>
 <template>
-    <label :for="for">{{ label }}</label>
+    <label class="form-label" :for="for">{{ label }}</label>
 </template>

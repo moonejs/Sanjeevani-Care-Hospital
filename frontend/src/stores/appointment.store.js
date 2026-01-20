@@ -159,11 +159,11 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         }
     }
 
-    async function completeAppointment(data){
+    async function completeAppointment(appointment_id,data){
         loading.value=true
         error.value=null
         try {
-            const res=completeAppointmentApi(data)
+            const res=await completeAppointmentApi(appointment_id,data)
             console.log(res);
         } catch (err) {
             error.value=err

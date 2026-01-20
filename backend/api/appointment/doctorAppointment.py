@@ -118,22 +118,30 @@ class CompleteAppointment(Resource):
             return {"message": "Visit already completed"}, 409
 
         data = request.json
-        field_required=["diagnosis","notes","medicines","follow_up_date"]
-        
-        for field in field_required:
-            if not field in data:
-                return {"message":f"{field} is required"},400
         if not data:
             return {"message": "Visit data required"}, 400
-
+        
+        
+        if "diagnosis" not in data or not data["diagnosis"].strip():
+            return {"message": "diagnosis is required"}, 400
+        
+        follow_up_date = None
+        if data.get("follow_up_date"):
+            try:
+                follow_up_date = datetime.strptime(
+                    data["follow_up_date"], "%Y-%m-%d"
+                ).date()
+            except ValueError:
+                return {"message": "Invalid follow_up_date format (YYYY-MM-DD)"}, 400
+            
         treatment = Treatment(
             appointment_id=appointment.id,
             doctor_id=appointment.doctor_id,
             patient_id=appointment.patient_id,
             diagnosis=data.get("diagnosis"),
             notes=data.get("notes"),
-            medicines=data.get("medicines"),
-            follow_up_date=data.get("follow_up_date")
+            medicines=data.get("medicines",[]),
+            follow_up_date = follow_up_date
         )
 
         appointment.status = "completed"
