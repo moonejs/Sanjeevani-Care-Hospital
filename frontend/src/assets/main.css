@@ -124,3 +124,10 @@
     right: 2rem;
     top: 49%;
 }
+
+.next-app-card{
+    right: 1rem;
+    top: 24%;
+    width: 25rem;
+    height: 10rem;
+}

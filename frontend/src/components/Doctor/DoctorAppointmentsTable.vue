@@ -24,7 +24,8 @@
 
     async function updateStatus(app,status){
       await appointment.updateAppointmentStatus(app.appointment_id,status)
-      await appointment.fetchAppointmentsByDoctor(appointment.selectedDate)
+
+      
     }
 
     function openCompleteModal(app){
@@ -35,7 +36,7 @@
     async function completeVisit(payload){
       await appointment.completeAppointment(selectedAppointmentId.value,payload)
       showCompleteModal.value = false
-      await appointment.fetchAppointmentsByDoctor(appointment.selectedDate)
+      
     }
 </script>
 

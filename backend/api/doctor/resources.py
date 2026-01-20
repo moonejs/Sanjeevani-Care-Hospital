@@ -153,3 +153,39 @@ class PatientAssignedToday(Resource):
             "patients":patients
         },200
         
+        
+class NextAppointment(Resource):
+
+    @auth_required("token")
+    @roles_required("doctor")
+    def get(self):
+
+        doctor_id = current_user.doctor.id
+        today = datetime.now().date()
+        now_time = datetime.now().replace(second=0, microsecond=0).time()
+
+        appointment = (
+            Appointment.query
+            .filter(
+                Appointment.doctor_id == doctor_id,
+                Appointment.appointment_date == today,
+                Appointment.status == "confirmed",
+                Appointment.start_time > now_time
+            )
+            .order_by(Appointment.start_time)
+            .first()
+        )
+
+        if not appointment:
+            return {"message": "No upcoming appointment"}, 200
+
+        return {
+            "appointment_id": appointment.id,
+            "start_time": appointment.start_time.strftime("%H:%M"),
+            "end_time": appointment.end_time.strftime("%H:%M"),
+            "patient": {
+                "id": appointment.patient.id,
+                "name": appointment.patient.name
+            },
+            "type": appointment.type
+        }, 200

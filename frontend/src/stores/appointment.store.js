@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi,completeAppointmentApi } from '@/api/appointment'
 
+import { useDoctorStore } from './doctor.store'
 
 
 export const useAppointmentStore=defineStore('appointment',()=>{
@@ -12,7 +13,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     const doctorsAvailability = ref([])
     const selectedDate=ref("")
     const appointmentListByDoctor=ref([])
-
+    
 
     function formatDate(date) {
         return date.toISOString().split('T')[0]
@@ -132,7 +133,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     }
 
     async function fetchAppointmentsByDoctor(date){
-        loading.value=true,
+        loading.value=true
         error.value=null
         try {
             const res=await fetchAppointmentsByDoctorApi(date)
@@ -143,6 +144,8 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             error.value=err
             console.log(err);
             
+        }finally{
+            loading.value=false
         }
     }
 
@@ -151,6 +154,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         error.value=null
         try {
             const res=await updateAppointmentStatusApi(appointment_id,status)
+            await refreshAfterAppointmentChange()
             console.log(res);
         } catch (err) {
             error.value=err
@@ -164,6 +168,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         error.value=null
         try {
             const res=await completeAppointmentApi(appointment_id,data)
+            await refreshAfterAppointmentChange()
             console.log(res);
         } catch (err) {
             error.value=err
@@ -172,6 +177,15 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             loading.value=false
         }
     }
+    async function refreshAfterAppointmentChange(){
+        const doctorStore=useDoctorStore()
+        await Promise.all([
+            fetchAppointmentsByDoctor(selectedDate.value),
+            doctorStore.refreshDoctor()
+        ])
+    }
+
+
     return{
         saveDoctorAvailability,
         loading,
