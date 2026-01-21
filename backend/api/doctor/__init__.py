@@ -6,7 +6,11 @@ doctor_api=Api(doctor_bp)
 
 from .resources import DoctorDetails,DoctorResource,PatientAssignedToday,NextAppointment
 
+from .patient_resources import PatientProfile
+
 doctor_api.add_resource(DoctorDetails,"/doctors")
 doctor_api.add_resource(DoctorResource,"/doctors/<int:id>")
 doctor_api.add_resource(PatientAssignedToday,"/doctors/patients/today")
 doctor_api.add_resource(NextAppointment,"/doctors/appointments/next")
+
+doctor_api.add_resource(PatientProfile,"/doctors/patients/<int:patient_id>/profile")

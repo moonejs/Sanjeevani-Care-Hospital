@@ -25,8 +25,20 @@ export default [
       },
       {
         path:'patients',
-        name:'patients-doctor',
-        component:()=> import('@/views/doctor/PatientsPage.vue')
+        children:[
+          {
+            path:"",
+            name:'patients-doctor',
+            component:()=> import('@/views/doctor/patient/PatientsPage.vue')
+          },
+          {
+            path:":id",
+            name:'patientProfile-doctor',
+            component:()=>import('@/views/doctor/patient/PatientProfilePage.vue'),
+            props:true
+          }
+        ]
+        
       },
     ]
   }

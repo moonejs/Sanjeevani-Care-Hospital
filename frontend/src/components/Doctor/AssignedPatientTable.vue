@@ -12,6 +12,7 @@
     const doctor=useDoctorStore()
     const tHead=ref(["Name","Age","Gender","Last Visit","Visits","Action"])
     
+
     const tableStatsArr = computed(() => [
     { "Total Patients": doctor.totalAssignedPatients }
     ])
@@ -22,6 +23,8 @@
         const today = appointment.formatDate(appointment.today)
         await doctor.fetchAssignedTodayPatientsDetails(today)
     }
+
+
 
 
 </script>
@@ -38,7 +41,7 @@
         <template #body>
             <AssignedPatientRows 
             v-for="(patient,index) in doctor.assignedPatientsList" :key="patient.patient_id "
-            :patient="patient" :index="index"
+            :patient="patient" :index="index" 
             />
         </template>
 

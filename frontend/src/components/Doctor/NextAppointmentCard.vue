@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <div class="card shadow-sm bg-warning-subtle" v-if="appointment">
+  <div class="card shadow-sm bg-warning-subtle" v-if="appointment && appointment.type && appointment.patient">
     <div class="card-body">
 
       <h5 class="card-title mb-3">Next Appointment</h5>

@@ -24,3 +24,8 @@ export const fetchAssignedTodayPatientsDetailsApi=(date)=>{
 export const fetchNextAppointmentApi = () => {
   return api.get('/api/doctors/appointments/next')
 }
+
+export const fetchPatientProfileApi=(id)=>{
+    return api.get(`api/doctors/patients/${id}/profile`)
+}
+

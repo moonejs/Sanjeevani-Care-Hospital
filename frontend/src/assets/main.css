@@ -123,3 +123,12 @@
   width: 25rem;
   height: 10rem;
 }
+
+.patient-profile-left-panel{
+  width: 40%;
+}
+.patient-profile-right-panel{
+  width: 60vw;
+  height: 89vh;
+  overflow-y: auto;
+}
