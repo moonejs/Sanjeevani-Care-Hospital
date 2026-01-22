@@ -37,3 +37,9 @@ export const updateAppointmentStatusApi=(appointment_id,status)=>{
 export const completeAppointmentApi=(appointment_id,data)=>{
     return api.post(`api/doctors/appointments/${appointment_id}/complete`,data)
 }
+
+export const fetchDoctorAppointmentsHistoryApi=(params)=>{
+    return api.get('api/doctors/appointments/history',{
+        params
+    })
+}

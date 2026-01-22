@@ -132,3 +132,7 @@
   height: 89vh;
   overflow-y: auto;
 }
+
+.doctor-appointment-filter{
+  height: 20vh;
+}

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi,completeAppointmentApi } from '@/api/appointment'
+import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi,completeAppointmentApi,fetchDoctorAppointmentsHistoryApi } from '@/api/appointment'
 
 import { useDoctorStore } from './doctor.store'
 
@@ -14,6 +14,8 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     const selectedDate=ref("")
     const appointmentListByDoctor=ref([])
     const appointmentSummary = ref({ total: 0, pending: 0, confirmed: 0, completed: 0, cancelled: 0 })
+    const appointmentHistory = ref([])
+    const historyPagination = ref({ page: 1, per_page: 6, total: 0, pages: 1 })
     
 
     function formatDate(date) {
@@ -186,6 +188,24 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             doctorStore.refreshDoctor()
         ])
     }
+    async function fetchDoctorAppointmentHistory(page = 1) {
+        loading.value = true
+        error.value =null
+        try {
+            const res = await fetchDoctorAppointmentsHistoryApi({ page, per_page: historyPagination.value.per_page })
+
+            appointmentHistory.value = res.data.appointments
+            historyPagination.value = res.data.pagination
+            console.log(res);
+            
+        }catch(err){
+            error.value=err
+            console.log(err);
+            
+        }finally {
+            loading.value = false
+        } 
+    }
 
 
     return{
@@ -204,6 +224,9 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         appointmentListByDoctor,
         updateAppointmentStatus,
         completeAppointment,
-        appointmentSummary
+        appointmentSummary,
+        appointmentHistory,
+        historyPagination,
+        fetchDoctorAppointmentHistory
     }
 })
