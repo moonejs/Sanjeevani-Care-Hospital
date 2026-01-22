@@ -6,7 +6,7 @@ from flask import request
 from flask_login import current_user
 class PatientList(Resource):
     @auth_required("token")
-    @roles_accepted("admin","doctor")
+    @roles_accepted("admin")
     def get(self):
         patients=Patient.query.all()
         

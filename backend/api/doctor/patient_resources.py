@@ -4,7 +4,8 @@ from flask_login import current_user
 from datetime import datetime
 from sqlalchemy import func
 from extensions import db
-from models import Patient, Appointment, Treatment
+from models import Patient, Appointment
+from datetime import date
 
 class PatientProfile(Resource):
 
@@ -100,7 +101,64 @@ class PatientProfile(Resource):
         }, 200
 
 
+class DoctorPatients(Resource):
 
+    @auth_required("token")
+    @roles_required("doctor")
+    def get(self):
+        doctor_id = current_user.doctor.id
+        today = datetime.now().date()
+
+        patients = (
+            db.session.query(Patient)
+            .join(Appointment, Appointment.patient_id == Patient.id)
+            .filter(Appointment.doctor_id == doctor_id)
+            .distinct()
+            .all()
+        )
+
+        result = []
+
+        for patient in patients:
+            total_visits = Appointment.query.filter(
+                Appointment.doctor_id == doctor_id,
+                Appointment.patient_id == patient.id,
+                Appointment.status == "completed"
+            ).count()
+
+            
+            last_visit = Appointment.query.filter(
+                Appointment.doctor_id == doctor_id,
+                Appointment.patient_id == patient.id,
+                Appointment.status == "completed"
+            ).order_by(Appointment.appointment_date.desc()).first()
+
+            
+            has_active_appointment = Appointment.query.filter(
+                Appointment.doctor_id == doctor_id,
+                Appointment.patient_id == patient.id,
+                Appointment.status.in_(["pending", "confirmed"]),
+                Appointment.appointment_date >= today
+            ).first() is not None
+
+            result.append({
+                "patient_id": patient.id,
+                "name": patient.name,
+                "age": patient.age,
+                "gender": patient.gender,
+                "contact": patient.contact,
+                "total_visits": total_visits,
+                "last_visit": (
+                    last_visit.appointment_date.strftime("%Y-%m-%d")
+                    if last_visit else None
+                ),
+                "has_active_appointment": has_active_appointment
+            })
+
+        return {
+            "total_patients": len(result),
+            "patients": result
+        }, 200
 
 
 
