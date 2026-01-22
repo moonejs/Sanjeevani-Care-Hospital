@@ -29,3 +29,9 @@ export const fetchPatientProfileApi=(id)=>{
     return api.get(`api/doctors/patients/${id}/profile`)
 }
 
+export const fetchDoctorPatientsListApi=(params)=>{
+    return api.get('api/doctors/patients',{
+        params
+    })
+}
+

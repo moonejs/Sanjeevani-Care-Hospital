@@ -6,6 +6,7 @@ from sqlalchemy import func
 from extensions import db
 from models import Patient, Appointment
 from datetime import date
+from flask import request
 
 class PatientProfile(Resource):
 
@@ -107,15 +108,25 @@ class DoctorPatients(Resource):
     @roles_required("doctor")
     def get(self):
         doctor_id = current_user.doctor.id
-        today = datetime.now().date()
 
-        patients = (
+        page = int(request.args.get("page", 1))
+        per_page = int(request.args.get("per_page", 10))
+
+        query = (
             db.session.query(Patient)
             .join(Appointment, Appointment.patient_id == Patient.id)
             .filter(Appointment.doctor_id == doctor_id)
             .distinct()
-            .all()
         )
+
+        pagination = query.paginate(
+            page=page,
+            per_page=per_page,
+            error_out=False
+        )
+
+        patients = pagination.items
+        today = datetime.now().date()
 
         result = []
 
@@ -126,14 +137,12 @@ class DoctorPatients(Resource):
                 Appointment.status == "completed"
             ).count()
 
-            
             last_visit = Appointment.query.filter(
                 Appointment.doctor_id == doctor_id,
                 Appointment.patient_id == patient.id,
                 Appointment.status == "completed"
             ).order_by(Appointment.appointment_date.desc()).first()
 
-            
             has_active_appointment = Appointment.query.filter(
                 Appointment.doctor_id == doctor_id,
                 Appointment.patient_id == patient.id,
@@ -148,16 +157,18 @@ class DoctorPatients(Resource):
                 "gender": patient.gender,
                 "contact": patient.contact,
                 "total_visits": total_visits,
-                "last_visit": (
-                    last_visit.appointment_date.strftime("%Y-%m-%d")
-                    if last_visit else None
-                ),
+                "last_visit": last_visit.appointment_date.strftime("%Y-%m-%d") if last_visit else None,
                 "has_active_appointment": has_active_appointment
             })
 
         return {
-            "total_patients": len(result),
-            "patients": result
+            "patients": result,
+            "pagination": {
+                "page": pagination.page,
+                "per_page": pagination.per_page,
+                "total": pagination.total,
+                "pages": pagination.pages
+            }
         }, 200
 
 

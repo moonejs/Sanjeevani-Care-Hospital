@@ -11,7 +11,7 @@
     
 </script>
 <template>
-    <div class="d-flex align-items-center gap-7">
+    <div class="d-flex align-items-center justify-content-between">
         <h1>{{ title }}</h1>
         <div v-if="stats=='title'">
             <TableStats :table-stats="tableStatsArr" />
