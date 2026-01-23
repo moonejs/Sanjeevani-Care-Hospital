@@ -9,10 +9,14 @@
 
     const router = useRouter()
 
-    function viewProfile() {
+    function openPatientProfilePage(id){
+        console.log("jjjjj"+id);
+        
         router.push({
-            name: 'patientProfile-doctor',
-            params: { id: patient.patient_id }
+            name:'patientProfile-doctor',
+            params:{
+                id:id
+            }
         })
     }
 </script>
@@ -33,7 +37,7 @@
       </span>
     </td>
     <td>
-      <Btn label="View" class="btn-outline-primary btn-sm" @click="viewProfile"/>
+      <Btn label="View" class="btn-outline-primary btn-sm" @click="openPatientProfilePage(patient.patient_id)"/>
     </td>
   </tr>
 </template>

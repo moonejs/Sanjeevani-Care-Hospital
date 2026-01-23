@@ -5,5 +5,8 @@ export const patientData=()=>{
 }
 
 export const patientProfile=(data)=>{
-    return api.put("/api/patient/profile",data)
+    return api.put("/api/patients/profile",data)
+}
+export const fetchPatientDashboardDataApi=()=>{
+    return api.get("api/patients/dashboard")
 }
