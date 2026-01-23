@@ -35,3 +35,8 @@ export const fetchDoctorPatientsListApi=(params)=>{
     })
 }
 
+export const fetchDoctorsByDepartmentApi =(departmentId) => {
+    return api.get(`/api/departments/${departmentId}/doctors`)
+}
+
+

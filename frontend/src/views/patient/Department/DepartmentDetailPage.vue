@@ -13,7 +13,7 @@
 
     onMounted(()=>{
         department.fetchDepartmentById(departmentId)
-        doctor.fetchDoctors()
+        doctor.fetchDoctorsByDepartment(departmentId)
     })
 
     function openDoctorPage(id){
@@ -26,7 +26,7 @@
     }
 
     const doctorsList=computed(()=>{
-        return doctor.doctorsList
+        return doctor.doctorsByDepartment
     })
 
 </script>

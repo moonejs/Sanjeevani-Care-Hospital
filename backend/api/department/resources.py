@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask_security import auth_required,roles_required,roles_accepted
-from models import Department
+from models import Department,Doctor
 
 from flask import request
 
@@ -58,3 +58,25 @@ class DepartmentResource(Resource):
             "name":department.name,
             "description":department.description
         },200
+        
+class DoctorsByDepartment(Resource):
+
+    @auth_required("token")
+    @roles_accepted("admin", "patient")
+    def get(self, department_id):
+
+        doctors = Doctor.query.filter(
+            Doctor.department_id == department_id
+        ).all()
+
+        return [
+            {
+                "id": d.id,
+                "name": d.name,
+                "specialization": d.specialization,
+                "contact": d.contact,
+                "department": d.department.name
+            }
+            for d in doctors
+        ], 200
+

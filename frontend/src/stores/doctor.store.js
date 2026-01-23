@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { doctorDetailsApi ,doctorDetailsByIdApi,fetchAssignedTodayPatientsDetailsApi,fetchNextAppointmentApi,fetchPatientProfileApi,fetchDoctorPatientsListApi} from "@/api/doctor";
+import { doctorDetailsApi ,doctorDetailsByIdApi,fetchAssignedTodayPatientsDetailsApi,fetchNextAppointmentApi,fetchPatientProfileApi,fetchDoctorPatientsListApi,fetchDoctorsByDepartmentApi} from "@/api/doctor";
 import { ref } from "vue";
 
 
@@ -18,6 +18,7 @@ export const useDoctorStore=defineStore('doctor',()=>{
     const patients = ref([])
     const totalPatients = ref(0)
     const historyPagination = ref({ page: 1, per_page: 6, total: 0, pages: 1 })
+    const doctorsByDepartment = ref([])
 
     async function fetchDoctors(){
         if(doctorsList.value.length) return
@@ -134,6 +135,19 @@ export const useDoctorStore=defineStore('doctor',()=>{
             loading.value=false
         }
     }
+    async function fetchDoctorsByDepartment(departmentId){
+        loading.value = true
+        error.value = null
+        try {
+            const res = await fetchDoctorsByDepartmentApi(departmentId)
+            doctorsByDepartment.value = res.data
+        } catch(err){
+            error.value = err
+            console.log(err)
+        } finally {
+            loading.value = false
+        }
+    }
 
 
     return{
@@ -154,6 +168,8 @@ export const useDoctorStore=defineStore('doctor',()=>{
         fetchDoctorPatientsList,
         patients,
         totalPatients,
-        historyPagination
+        historyPagination,
+        fetchDoctorsByDepartment,
+        doctorsByDepartment
     }
 })

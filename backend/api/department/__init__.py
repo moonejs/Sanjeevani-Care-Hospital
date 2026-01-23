@@ -4,8 +4,9 @@ from flask_restful import Api
 department_bp=Blueprint("department_bp",__name__)
 department_api=Api(department_bp)
 
-from .resources import DepartmentDetails ,DepartmentResource
+from .resources import DepartmentDetails ,DepartmentResource,DoctorsByDepartment
 
 
 department_api.add_resource(DepartmentDetails,"/departments")
 department_api.add_resource(DepartmentResource,"/departments/<int:id>")
+department_api.add_resource(DoctorsByDepartment,"/departments/<int:department_id>/doctors")
