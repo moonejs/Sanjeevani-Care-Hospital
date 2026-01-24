@@ -3,7 +3,8 @@
     import { watch,onMounted } from 'vue';
     const props = defineProps({
         show: Boolean,
-        appointment: Object
+        appointment: Object,
+        owner:String
     })
 
     const emit = defineEmits(['close'])
@@ -41,9 +42,17 @@
     </div>
 
     <div class="offcanvas-body" v-if="appointment">
-      <div class="mb-3">
-        <h6 class="text-muted">Patient</h6>
+      <div class="mb-3" v-if="owner=='doctor'">
+        <h6 class="text-muted" >Patient</h6>
         <p class="fw-bold mb-0">{{ appointment?.patient.name }}</p>
+      </div>
+      <div class="mb-3" v-if="owner=='patient'">
+        <h6 class="text-muted" >Doctor</h6>
+        <p class="fw-bold mb-0">{{ appointment?.doctor.name }}</p>
+      </div>
+      <div class="mb-3" v-if="owner=='patient'">
+        <h6 class="text-muted" >Department</h6>
+        <p class="fw-bold mb-0">{{ appointment?.department.name }}</p>
       </div>
 
       <hr />

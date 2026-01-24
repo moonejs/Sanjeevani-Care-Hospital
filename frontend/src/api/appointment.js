@@ -43,3 +43,9 @@ export const fetchDoctorAppointmentsHistoryApi=(params)=>{
         params
     })
 }
+
+export const fetchPatientAppointmentsHistoryApi=(params)=>{
+    return api.get('api/patients/appointments/history',{
+        params
+    })
+}
