@@ -25,6 +25,20 @@ export default [
             component:()=>import('@/views/admin/doctors/AddDoctorPage.vue')
           }
         ]
+      },
+      {
+        path:"departments",
+        component:()=>import('@/views/admin/departments/DepartmentLayoutPage.vue'),
+        children:[
+          {
+            path:"",
+            component:()=>import('@/views/admin/departments/DepartmentsPage.vue')
+          },
+          {
+            path:"create",
+            component:()=>import('@/views/admin/departments/AddDepartmentPage.vue')
+          }
+        ]
       }
     ]
   }
