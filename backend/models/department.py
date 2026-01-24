@@ -12,12 +12,12 @@ class Department(db.Model):
     
     icon = db.Column(db.String(50), nullable=False, default="building-hospital")
 
-    phone = db.Column(db.String(20))
+    phone = db.Column(db.Integer)
     email = db.Column(db.String(120))
 
 
     building = db.Column(db.String(100))
-    floor = db.Column(db.String(50))
+    floor = db.Column(db.Integer)
 
 
     opd_timing = db.Column(db.String(100))

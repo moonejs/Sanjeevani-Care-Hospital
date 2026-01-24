@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref,computed } from "vue";
-import { departmentDetailsApi,departmentDetailsByIdApi } from "@/api/department";
+import { departmentDetailsApi,departmentDetailsByIdApi,addDepartmentApi } from "@/api/department";
 
 export const useDepartmentStore = defineStore('department',()=>{
     const departmentList=ref([])
@@ -54,12 +54,29 @@ export const useDepartmentStore = defineStore('department',()=>{
         }
     }
 
+    async function addDepartment(data) {
+        loading.value=true
+        error.value=null
+
+        try {
+            const res =await addDepartmentApi(data)
+            console.log(res);
+            
+        } catch (err) {
+            error.value=err
+            console.log(err);
+        }finally{
+            loading.value=false
+        }
+    }
+
     return {
         departmentList,
         fetchDepartments,
         loading,
         error,
         fetchDepartmentById,
-        selectedDepartment
+        selectedDepartment,
+        addDepartment
     }
 })

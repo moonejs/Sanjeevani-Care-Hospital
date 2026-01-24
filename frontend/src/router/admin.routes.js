@@ -1,3 +1,4 @@
+
 export default [
   {
     path: '/admin',
@@ -32,10 +33,12 @@ export default [
         children:[
           {
             path:"",
+            name:'departmentList-admin',
             component:()=>import('@/views/admin/departments/DepartmentsPage.vue')
           },
           {
             path:"create",
+            name:'addDepartment-admin',
             component:()=>import('@/views/admin/departments/AddDepartmentPage.vue')
           }
         ]

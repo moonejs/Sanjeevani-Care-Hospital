@@ -1,7 +1,7 @@
 <script setup>
-    import CheckBox from '../Form/CheckBox.vue';
-    import Label from '../Form/Label.vue';
-    import Input from '../Form/Input.vue';
+    import CheckBox from '../Form/BaseCheckbox.vue';
+    import Label from '../Form/BaseLabel.vue';
+    import Input from '../Form/BaseInput.vue';
     import { watch ,computed} from 'vue';
 
 

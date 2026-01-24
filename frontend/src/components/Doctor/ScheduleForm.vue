@@ -1,6 +1,6 @@
 <script setup>
-    import CheckBox from '../Form/CheckBox.vue';
-    import Label from '../Form/Label.vue';
+    import CheckBox from '../Form/BaseCheckbox.vue';
+    import Label from '../Form/BaseLabel.vue';
     import SessionBox from './SessionBox.vue';
     import Badge from '../common/Badge.vue';
     import { computed ,watch,ref} from 'vue';
