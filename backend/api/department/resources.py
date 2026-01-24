@@ -16,7 +16,8 @@ class DepartmentDetails(Resource):
             {
                 "id":d.id,
                 "name":d.name,
-                "description":d.description
+                "description":d.description,
+                "icon":d.icon
             }
             for d in departments
         ],200
@@ -27,15 +28,24 @@ class DepartmentDetails(Resource):
         
         data=request.json
         
-        field_required=["name","description"]
+        field_required=["name","description","icon"]
         
         for field in field_required:
             if field not in data:
                 return{"message":f"{field} is required."},400
         
-        department=Department(
+        department = Department(
             name=data["name"],
-            description=data["description"]
+            description=data["description"],
+            icon=data["icon"],
+            services=data.get("services", []),
+            facilities=data.get("facilities", []),
+            phone=data.get("phone"),
+            email=data.get("email"),
+            building=data.get("building"),
+            floor=data.get("floor"),
+            opd_timing=data.get("opd_timing"),
+            emergency_available=data.get("emergency_available", False),
         )
         
         db.session.add(department)
@@ -53,11 +63,20 @@ class DepartmentResource(Resource):
         if not department:
             return {"message":"Department no t found"},404
         
-        return{
-            "id":department.id,
-            "name":department.name,
-            "description":department.description
-        },200
+        return {
+            "id": department.id,
+            "name": department.name,
+            "description": department.description,
+            "icon": department.icon,
+            "services": department.services,
+            "facilities": department.facilities,
+            "phone": department.phone,
+            "email": department.email,
+            "building": department.building,
+            "floor": department.floor,
+            "opd_timing": department.opd_timing,
+            "emergency_available": department.emergency_available
+        }, 200
         
 class DoctorsByDepartment(Resource):
 
