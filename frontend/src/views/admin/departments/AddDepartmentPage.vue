@@ -40,7 +40,7 @@
     
     const nameField = useField( computed(() => form.name),[required(), minLength(3),maxLength(25)])
     const descriptionField = useField( computed(() => form.description), [required(),minLength(50)])
-    const phoneField = useField(computed(()=> form.phone),[minLength(10),maxLength(10)])
+    const phoneField = useField(computed(()=> form.phone),[minLength(10,"Phone Number must be of 10 words"),maxLength(10)])
     const emailField = useField(computed(()=> form.email),[minLength(5),maxLength(27)])
     
 
