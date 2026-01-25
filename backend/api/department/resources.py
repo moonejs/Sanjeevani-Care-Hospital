@@ -33,12 +33,12 @@ class DepartmentDetails(Resource):
         for field in field_required:
             if field not in data:
                 return{"message":f"{field} is required."},400
-        existing = Department.query.filter_by(name=data["name"].lower()).first()
+        existing = Department.query.filter_by(name=data["name"]).first()
         if existing:
             return {"message": f"Department {data['name']} already exists"}, 409
                 
         department = Department(
-            name=data["name"].lower(),
+            name=data["name"],
             description=data["description"],
             icon=data["icon"],
             services=data.get("services", []),

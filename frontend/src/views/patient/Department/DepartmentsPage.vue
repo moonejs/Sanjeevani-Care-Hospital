@@ -6,6 +6,7 @@
     import { onMounted } from 'vue';
     import { useRouter } from 'vue-router';
 
+
     const department=useDepartmentStore()
     const route=useRouter()
 
@@ -24,8 +25,6 @@
         
     }
 
-    
-
 </script>
 
 <template>
@@ -42,7 +41,7 @@
             <div v-else class="main bg-danger-subtle container-fluid mt-3 ">
                 <div  class="row mb-3">
                     <div class="col-2" v-for="dept in department.departmentList" :key="dept.id">
-                        <ProfileCard :label="dept.name" @select="openDepartmentPage(dept.id)" />
+                        <ProfileCard type="department" :profile="dept" @select="openDepartmentPage(dept.id)" />
                     </div>
                 </div>
                 

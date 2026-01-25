@@ -17,6 +17,8 @@ export const useDepartmentStore = defineStore('department',()=>{
         try {
             const res=await departmentDetailsApi()
             departmentList.value=res.data
+            console.log(res);
+            
             
         } catch (err) {
             error.value=err
@@ -43,6 +45,8 @@ export const useDepartmentStore = defineStore('department',()=>{
             
             selectedDepartment.value=res.data
             console.log(selectedDepartment.value);
+            console.log(res);
+            
             
             
         } catch (error) {

@@ -1,5 +1,5 @@
 <script setup>
-    import { ref,computed,reactive } from "vue"
+    import { ref,computed,reactive, capitalize } from "vue"
     import { useRouter } from "vue-router"
     import { useDepartmentStore } from "@/stores/department.store"
 
@@ -41,7 +41,7 @@
     const nameField = useField( computed(() => form.name),[required(), minLength(3),maxLength(25)])
     const descriptionField = useField( computed(() => form.description), [required(),minLength(50)])
     const phoneField = useField(computed(()=> form.phone),[minLength(10,"Phone Number must be of 10 words"),maxLength(10)])
-    const emailField = useField(computed(()=> form.email),[minLength(5),maxLength(27)])
+    const emailField = useField(computed(()=> form.email),[minLength(3),maxLength(27)])
     
 
 
@@ -80,11 +80,11 @@
     <div class="row">
       <div class="col-4">
         <BaseLabel label="Department Name" :required="true" />
-        <BaseInput v-model="form.name" placeholder="Department name"  :error=" nameField.error.value" :valid=" nameField.valid.value" :show="nameField.show.value" required="required"/>
+        <BaseInput v-model.capitalize.trim="form.name" placeholder="Department name"  :error=" nameField.error.value" :valid=" nameField.valid.value" :show="nameField.show.value" required="required"/>
       </div>
       <div class="col-2">
         <BaseLabel label="Department Icon" :required="true"/>
-        <select v-model="form.icon" class="form-select" required>
+        <select v-model.trim="form.icon" class="form-select" required>
             <option disabled value="">
               Select a department icon
             </option>
@@ -107,7 +107,7 @@
     <div class="row">
       <div class="col">
         <BaseLabel label="Description" :required="true" />
-        <BaseTextarea v-model="form.description" placeholder="Department description" :error="descriptionField.error.value " :valid="descriptionField.valid.value" :show="descriptionField.show.value"/>
+        <BaseTextarea v-model.capitalize.trim="form.description" placeholder="Department description" :error="descriptionField.error.value " :valid="descriptionField.valid.value" :show="descriptionField.show.value"/>
       </div>
        <div class="col">
         <BaseLabel label="Services (one per line)" />
@@ -122,11 +122,11 @@
       </div>
       <div class="col-3 ">
         <BaseLabel label="Phone" />
-        <BaseInput type="Number" v-model="form.phone" placeholder="012-345-6789" group="+91" :start="true" :error=" phoneField.error.value" :valid=" phoneField.valid.value" :show="phoneField.show.value"/>
+        <BaseInput type="Number" v-model.trim="form.phone" placeholder="012-345-6789" group="+91" :start="true" :error=" phoneField.error.value" :valid=" phoneField.valid.value" :show="phoneField.show.value"/>
       </div>
       <div class="col-3">
         <BaseLabel label="Email" />
-        <BaseInput  group="@hospital.com" :end="true" v-model="form.email" placeholder="Department"
+        <BaseInput  group="@hospital.com" :end="true" v-model.trim="form.email" placeholder="Department"
         :error=" emailField.error.value" :valid="emailField.valid.value" :show="emailField.show.value" />
       </div>
     </div>
@@ -135,11 +135,11 @@
     <div class="row">
       <div class="col-3">
         <BaseLabel label="Building" />
-        <BaseInput v-model="form.building"/>
+        <BaseInput v-model.trim="form.building"/>
       </div>
       <div class="col-2">
         <BaseLabel label="Floor" />
-        <BaseInput type="Number" v-model="form.floor" group="Floor" :end="true" placeholder="2"/>
+        <BaseInput type="Number" v-model.trim="form.floor" group="Floor" :end="true" placeholder="2"/>
       </div>
       <div class="col-3">
         <BaseCheckbox v-model="form.emergency_available" id="emergency"/>
