@@ -16,3 +16,9 @@ class Config:
     
     SQLALCHEMY_DATABASE_URI = "sqlite:///hms.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    
+    BASE_DIR = os.getcwd()
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "patients", "profile")
+    ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+    MAX_CONTENT_LENGTH = 2 * 1024 * 1024

@@ -66,7 +66,7 @@
         router.push("/admin/departments")
     }
 
-    const { isValid } = useFormValidation({fields: [nameField, descriptionField],
+    const { isValid } = useFormValidation({fields: [nameField, descriptionField,emailField,phoneField],
       requiredValues: [
         computed(() => form.icon)
       ],

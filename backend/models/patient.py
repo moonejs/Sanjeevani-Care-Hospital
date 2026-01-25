@@ -8,8 +8,17 @@ class Patient(db.Model):
     age = db.Column(db.Integer)
     gender = db.Column(db.String(10))
     
-    contact = db.Column(db.String(15))
+    contact = db.Column(db.Integer)
     address = db.Column(db.String(255))
+    
+    height_cm = db.Column(db.Float)
+    weight_kg = db.Column(db.Float)
+    blood_group = db.Column(db.String(5))
+    
+    emergency_contact_name = db.Column(db.String(100))
+    emergency_contact_number = db.Column(db.Integer)
+    
+    profile_image = db.Column(db.String(255))
     
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
     

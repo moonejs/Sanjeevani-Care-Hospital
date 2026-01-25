@@ -2,9 +2,16 @@ from flask_restful import Resource
 from flask_security import auth_required , roles_required,roles_accepted
 from extensions import db
 from models import Patient,Appointment  
-from flask import request
+from flask import request,current_app
 from flask_login import current_user
 from datetime import datetime
+import os 
+import uuid
+from utils.files import allowed_file
+
+from werkzeug.utils import secure_filename
+
+
 class PatientList(Resource):
     @auth_required("token")
     @roles_accepted("admin")
@@ -27,14 +34,27 @@ class PatientProfile(Resource):
     @roles_required("patient")
     def get(self):
         patient=current_user.patient
+        image_url = None
+        
+        if patient.profile_image:
+            image_url = f"/uploads/patients/profile/{patient.profile_image}"
         
         return{
-            "name":patient.name,
-            "age":patient.age,
-            "gender":patient.gender,
-            "contact":patient.contact,
-            "address":patient.address,
-            "profile_completed":patient.profile_completed
+            "name": patient.name,
+            "age": patient.age,
+            "gender": patient.gender,
+            "contact": patient.contact,
+            "address": patient.address,
+
+            "height_cm": patient.height_cm,
+            "weight_kg": patient.weight_kg,
+            "blood_group": patient.blood_group,
+
+            "emergency_contact_name": patient.emergency_contact_name,
+            "emergency_contact_number": patient.emergency_contact_number,
+
+            "profile_image": image_url,
+            "profile_completed": patient.profile_completed
         }
     
     
@@ -43,13 +63,31 @@ class PatientProfile(Resource):
     @roles_required("patient")
     def put(self):
         patient=current_user.patient
-        data=request.json
+        data=request.form
         
-        patient.name=data["name"]
-        patient.age=data["age"]
-        patient.gender=data["gender"]
-        patient.contact=data["contact"]
-        patient.address=data["address"]
+        patient.name = data.get("name")
+        patient.age = data.get("age")
+        patient.gender = data.get("gender")
+        patient.contact = data.get("contact")
+        patient.address = data.get("address")
+
+        patient.height_cm = data.get("height_cm")
+        patient.weight_kg = data.get("weight_kg")
+        patient.blood_group = data.get("blood_group")
+
+        patient.emergency_contact_name = data.get("emergency_contact_name")
+        patient.emergency_contact_number = data.get("emergency_contact_number")
+        
+        image = request.files.get("profile_image")
+        
+        if image and allowed_file(image.filename,current_app.config["ALLOWED_EXTENSIONS"]):
+            ext = image.filename.rsplit(".", 1)[1].lower()
+            filename = f"{uuid.uuid4()}.{ext}"
+
+            image_path = os.path.join(current_app.config["UPLOAD_FOLDER"],secure_filename(filename))
+
+            image.save(image_path)
+            patient.profile_image = filename
         
         patient.profile_completed=True
         

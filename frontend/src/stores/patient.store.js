@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { fetchPatientDashboardDataApi } from "@/api/patient";
+import { fetchPatientDashboardDataApi,updatepatientProfileApi } from "@/api/patient";
 import { fetchPatientAppointmentsHistoryApi } from "@/api/appointment";
 
 import { ref } from "vue";
@@ -54,6 +54,21 @@ export const usePatientStore=defineStore('patient',()=>{
         }
     }
 
+    async function updatepatientProfile(data){
+        loading.value=true
+        error.value=null
+        try {
+            const res =await updatepatientProfileApi(data)
+            console.log(res);
+            
+        } catch (err) {
+            console.log(err);
+            error.value=err
+            
+        }finally{
+            loading.value=false
+        }
+    }
 
 
 
@@ -66,6 +81,7 @@ export const usePatientStore=defineStore('patient',()=>{
         fetchPatientDashboardData,
         fetchPatientAppointmentsHistory,
         historyPagination,
-        patientAppointmentHistory
+        patientAppointmentHistory,
+        updatepatientProfile
     }
 })
