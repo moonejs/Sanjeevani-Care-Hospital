@@ -39,4 +39,14 @@ export const fetchDoctorsByDepartmentApi =(departmentId) => {
     return api.get(`/api/departments/${departmentId}/doctors`)
 }
 
+export const updateDoctorProfileApi=(data)=>{
+    return api.put("/api/doctors/profile",data,{
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
+}
 
+export const fetchCurrrentDoctorDetailsApi=()=>{
+    return api.get('/api/doctors/profile')
+}

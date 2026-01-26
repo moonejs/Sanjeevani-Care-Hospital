@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { doctorDetailsApi ,doctorDetailsByIdApi,fetchAssignedTodayPatientsDetailsApi,fetchNextAppointmentApi,fetchPatientProfileApi,fetchDoctorPatientsListApi,fetchDoctorsByDepartmentApi} from "@/api/doctor";
+import { doctorDetailsApi ,doctorDetailsByIdApi,fetchAssignedTodayPatientsDetailsApi,fetchNextAppointmentApi,fetchPatientProfileApi,fetchDoctorPatientsListApi,fetchDoctorsByDepartmentApi,addDoctorApi} from "@/api/doctor";
 import { ref } from "vue";
 
 
@@ -148,6 +148,21 @@ export const useDoctorStore=defineStore('doctor',()=>{
             loading.value = false
         }
     }
+    async function addDoctor(data){
+        loading.value=true
+        error.value=null
+        try {
+            const res = await addDoctorApi(data)
+            console.log(res);
+            
+        } catch (err) {
+            error.value=err
+            console.log(err);
+            
+        }finally{
+            loading.value=false
+        }
+    }
 
 
     return{
@@ -170,6 +185,7 @@ export const useDoctorStore=defineStore('doctor',()=>{
         totalPatients,
         historyPagination,
         fetchDoctorsByDepartment,
-        doctorsByDepartment
+        doctorsByDepartment,
+        addDoctor
     }
 })

@@ -15,3 +15,15 @@ export const postive = (msg) =>{
 export const maxValue = (max, msg) => {
     return (value) => value && value <= max ? "": msg || `Must be less than or equal to ${max}`
 }
+
+export const specialChar= (msg) => {
+    return (value) => value && /[^a-zA-Z0-9\s]/.test(value) ? "" : msg || "add at least one Special character"
+}
+
+export const hasCapital = (msg) => {
+    return (value) => value && /[A-Z]/.test(value) ? "" : msg || "Must contain at least one capital letter"
+}
+
+export const hasDigit = (msg) => {
+    return (value) => value && /\d/.test(value) ? "" : msg || "Must contain at least one digit"
+}

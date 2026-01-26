@@ -53,6 +53,8 @@
                     
                 </div>
             </div>
+
+            
         </div>
         <div class="departmentDetail-page-right container-fluid bg-danger">
             <div v-if="department.loading">

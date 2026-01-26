@@ -16,23 +16,32 @@ class DoctorDetails(Resource):
         doctors = Doctor.query.all()
         
         return [
-            {
-                "id":d.id,
-                "email":d.user.email,
-                "name":d.name,
-                "specialization":d.specialization,
-                "contact":d.contact,
-                "department":d.department.name
-            }
-            for d in doctors
-        ],200
+        {
+            "id": d.id,
+            "name": d.name,
+            "email": d.user.email,
+            "specialization": d.specialization,
+            "qualification": d.qualification,
+            "experience_years": d.experience_years,
+            "contact": d.contact,
+            "department": d.department.name,
+            "opd_timing": d.opd_timing,
+            "emergency_available": d.emergency_available,
+            "consultation_fee": d.consultation_fee,
+            "profile_image": d.profile_image,
+            "languages_spoken": (
+                d.languages_spoken.split(",") if d.languages_spoken else []
+            )
+        }
+        for d in doctors
+    ], 200
     
     @auth_required("token")
     @roles_required("admin")
     def post(self):
         data=request.json
         
-        required_fields = ["email", "password", "name", "specialization", "contact", "department_id"]
+        required_fields = ["email", "password", "name", "specialization", "department_id"]
         
         for field in required_fields:
             if field not in data:
@@ -61,8 +70,8 @@ class DoctorDetails(Resource):
         doctor = Doctor(
             name=data["name"],
             specialization=data['specialization'],
-            contact=data['contact'],
             user_id=user.id,
+            roles=",".join(data["roles"]),
             department_id=department.id
         )
         db.session.add(doctor)

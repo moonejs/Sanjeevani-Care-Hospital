@@ -15,3 +15,7 @@ doctor_api.add_resource(NextAppointment,"/doctors/appointments/next")
 
 doctor_api.add_resource(PatientProfile,"/doctors/patients/<int:patient_id>/profile")
 doctor_api.add_resource(DoctorPatients,"/doctors/patients")
+
+from .profile import DoctorProfile
+
+doctor_api.add_resource(DoctorProfile,'doctors/profile')

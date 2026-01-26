@@ -6,10 +6,25 @@ class Doctor(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     
     name = db.Column(db.String(100),nullable=False)
-    
     specialization = db.Column(db.String(100),nullable=False)
-    
     contact = db.Column(db.String(15))
+    
+    roles = db.Column(db.String(100)) 
+    
+    qualification = db.Column(db.String(100))
+    experience_years = db.Column(db.Integer)
+    registration_number = db.Column(db.String(50))
+    bio = db.Column(db.Text)
+    consultation_fee = db.Column(db.Integer)
+    
+    opd_timing = db.Column(db.String(100))
+    emergency_available = db.Column(db.Boolean, default=False)
+    room_number = db.Column(db.String(20))
+    
+    profile_image = db.Column(db.String(255))
+    languages_spoken = db.Column(db.String(255)) 
+    
+    profile_completed = db.Column(db.Boolean, default=False)
     
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
     
