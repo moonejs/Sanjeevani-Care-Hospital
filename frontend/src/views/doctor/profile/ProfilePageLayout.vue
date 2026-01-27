@@ -39,12 +39,14 @@
 
 <template>
   <div class="container-fluid mt-3">
-    <DoctorProfileHeader />
+    
 
-    <DoctorProfileProgress />
+    
 
     <div class="row mt-3">
       <div class="col-3">
+        <DoctorProfileHeader />
+        <DoctorProfileProgress />
         <DoctorProfileSidebar @select="changeActiveSection" :section="activeSection"/>
       </div>
 
