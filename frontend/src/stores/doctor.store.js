@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { doctorDetailsApi ,doctorDetailsByIdApi,fetchAssignedTodayPatientsDetailsApi,fetchNextAppointmentApi,fetchPatientProfileApi,fetchDoctorPatientsListApi,fetchDoctorsByDepartmentApi,addDoctorApi} from "@/api/doctor";
+import { doctorDetailsApi ,doctorDetailsByIdApi,fetchAssignedTodayPatientsDetailsApi,fetchNextAppointmentApi,fetchPatientProfileApi,fetchDoctorPatientsListApi,fetchDoctorsByDepartmentApi,addDoctorApi,fetchCurrrentDoctorDetailsApi,updateDoctorProfileApi} from "@/api/doctor";
 import { ref } from "vue";
 
 
@@ -19,6 +19,7 @@ export const useDoctorStore=defineStore('doctor',()=>{
     const totalPatients = ref(0)
     const historyPagination = ref({ page: 1, per_page: 6, total: 0, pages: 1 })
     const doctorsByDepartment = ref([])
+    const doctorProfile = ref(null)
 
     async function fetchDoctors(){
         if(doctorsList.value.length) return
@@ -164,6 +165,39 @@ export const useDoctorStore=defineStore('doctor',()=>{
         }
     }
 
+    async function fetchCurrrentDoctorDetails() {
+        loading.value = true
+        error.value=null
+        try {
+            const res = await fetchCurrrentDoctorDetailsApi()
+            doctorProfile.value = res.data
+            console.log(res);
+            
+        } catch (err) {
+            error.value = err
+            console.log(err);
+            
+        } finally {
+            loading.value = false
+        }
+    }
+    async function updateDoctorProfile(formData) {
+        loading.value = true
+        error.value=null
+        try {
+            const res = await updateDoctorProfileApi(formData)
+            await fetchCurrrentDoctorDetails() 
+            console.log(res);
+            
+        } catch (err) {
+            error.value = err
+            console.log(err);
+            
+        } finally {
+            loading.value = false
+        }
+    }
+
 
     return{
         fetchDoctors,
@@ -186,6 +220,9 @@ export const useDoctorStore=defineStore('doctor',()=>{
         historyPagination,
         fetchDoctorsByDepartment,
         doctorsByDepartment,
-        addDoctor
+        addDoctor,
+        fetchCurrrentDoctorDetails,
+        updateDoctorProfile,
+        doctorProfile
     }
 })

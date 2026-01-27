@@ -26,7 +26,7 @@
                 
             </div>
             <div>
-                <NavProfile/>
+                <NavProfile role="doctor"/>
             </div>
         </div>
     </nav>

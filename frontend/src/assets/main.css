@@ -143,3 +143,18 @@
   height: 100px;
   width: 100px;
 }
+
+.doctor-profile-img{
+  position:absolute;
+  top:0;
+  right:0;
+  width: fit-content;
+}
+.doctor-profile-img img{
+  height: 12rem;
+  width: 12rem;
+}
+
+.personal-details{
+  height: 70vh;
+}

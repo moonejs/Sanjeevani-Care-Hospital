@@ -20,6 +20,8 @@ class DoctorProfile(Resource):
             "id": doctor.id,
             "name": doctor.name,
             "specialization": doctor.specialization,
+            "age":doctor.age,
+            "gender":doctor.gender,
             "contact": doctor.contact,
             "qualification": doctor.qualification,
             "experience_years": doctor.experience_years,
@@ -31,7 +33,10 @@ class DoctorProfile(Resource):
             "emergency_available": doctor.emergency_available,
             "room_number": doctor.room_number,
             "languages_spoken": doctor.languages_spoken,
-            "profile_image": doctor.profile_image,
+            "profile_image": (
+                request.host_url + "uploads/doctors/profile/" + doctor.profile_image
+                if doctor.profile_image else None
+            ),
             "profile_completed": doctor.profile_completed,
             "department_id": doctor.department_id
         }, 200
@@ -42,7 +47,8 @@ class DoctorProfile(Resource):
         doctor = current_user.doctor
         data = request.form
         
-
+        doctor.age = data.get("age")
+        doctor.gender = data.get("gender")
         doctor.contact = data.get("contact", doctor.contact)
         doctor.qualification = data.get("qualification")
         doctor.experience_years = data.get("experience_years")
@@ -58,10 +64,15 @@ class DoctorProfile(Resource):
         image = request.files.get("profile_image")
         
         if image and allowed_file(image.filename,current_app.config["ALLOWED_EXTENSIONS"]):
+            if doctor.profile_image:
+                old_path = os.path.join(current_app.config["UPLOAD_FOLDER_DOCTOR"], doctor.profile_image)
+                if os.path.exists(old_path):
+                    os.remove(old_path)
+
             ext = image.filename.rsplit(".", 1)[1].lower()
             filename = f"{uuid.uuid4()}.{ext}"
 
-            image_path = os.path.join(current_app.config["UPLOAD_FOLDER"],secure_filename(filename))
+            image_path = os.path.join(current_app.config["UPLOAD_FOLDER_DOCTOR"],secure_filename(filename))
 
             image.save(image_path)
             doctor.profile_image = filename

@@ -8,6 +8,8 @@ class Doctor(db.Model):
     name = db.Column(db.String(100),nullable=False)
     specialization = db.Column(db.String(100),nullable=False)
     contact = db.Column(db.String(15))
+    age = db.Column(db.Integer)
+    gender = db.Column(db.String(10))
     
     roles = db.Column(db.String(100)) 
     

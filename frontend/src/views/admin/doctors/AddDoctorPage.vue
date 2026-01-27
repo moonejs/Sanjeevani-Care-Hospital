@@ -44,7 +44,10 @@
 
 
     async function submitForm() {
-        await doctor.addDoctor({...form})
+        await doctor.addDoctor({
+          ...form,
+          email:`${form.email}@hospital.com`
+        })
     }
 
 

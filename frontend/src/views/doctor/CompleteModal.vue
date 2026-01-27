@@ -1,6 +1,6 @@
 <script setup>
     import { ref } from 'vue';
-    import Label from '@/components/Form/Label.vue';
+    import Label from '@/components/Form/BaseLabel.vue';
     import Btn from '@/components/common/Btn.vue';
     const props=defineProps({
         showCompleteModal:Boolean,

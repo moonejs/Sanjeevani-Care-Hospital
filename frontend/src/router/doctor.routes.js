@@ -38,8 +38,14 @@ export default [
             props:true
           }
         ]
-        
       },
+      {
+        path:'profile',
+        component:()=>import('@/views/doctor/profile/ProfilePageLayout.vue'),
+        
+
+      }
+
     ]
   }
 ]

@@ -4,6 +4,10 @@
     import { useRouter } from 'vue-router';
     import { computed } from 'vue';
 
+    const props=defineProps({
+        role:String
+    })
+
     const auth=useAuthStore()
     const route=useRouter()
     
@@ -38,7 +42,7 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <NavLink label="Profile" route="/patient/profile"/>
+                <NavLink label="Profile" :route="`/${role}/profile`"/>
             </li>
             <li><hr class="dropdown-divider"></li>
             <li>

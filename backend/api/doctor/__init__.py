@@ -18,4 +18,4 @@ doctor_api.add_resource(DoctorPatients,"/doctors/patients")
 
 from .profile import DoctorProfile
 
-doctor_api.add_resource(DoctorProfile,'doctors/profile')
+doctor_api.add_resource(DoctorProfile,'/doctors/profile')

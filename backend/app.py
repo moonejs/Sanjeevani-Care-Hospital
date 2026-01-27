@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,send_from_directory,current_app
 from config import Config
 from extensions import db , security 
 
@@ -9,6 +9,8 @@ from models import User, Role
 from flask_cors import CORS
 from flask_security import SQLAlchemyUserDatastore
 import extensions
+
+import os
 
 
 app=Flask(__name__)
@@ -36,6 +38,13 @@ for bp in all_blueprints:
 @app.route('/')
 def hello_world():
     return "<h1>Hello Mad-2</h1>"
+
+@app.route("/uploads/doctors/profile/<filename>")
+def doctor_profile_image(filename):
+    return send_from_directory(
+        current_app.config["UPLOAD_FOLDER_DOCTOR"],
+        filename
+    )
 
 def create_database():
     with app.app_context():
