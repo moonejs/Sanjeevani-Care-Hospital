@@ -133,7 +133,7 @@
       <div class="row">
         <div class="col-6">
           <BaseLabel label="Languages Spoken" />
-          <span> (use <mark class="font-monospace">ctl</mark> to select multiple Languages )</span>
+          <span class="font-small"> (use <mark class="font-monospace">ctl</mark> to select multiple Languages )</span>
           <select class="form-select" v-model="form.languages_spoken" multiple>
             <option value="english">English</option>
             <option value="hindi">Hindi</option>

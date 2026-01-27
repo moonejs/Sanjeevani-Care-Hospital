@@ -47,40 +47,65 @@ class DoctorProfile(Resource):
         doctor = current_user.doctor
         data = request.form
         
-        doctor.age = data.get("age")
-        doctor.gender = data.get("gender")
-        doctor.contact = data.get("contact", doctor.contact)
-        doctor.qualification = data.get("qualification")
-        doctor.experience_years = data.get("experience_years")
-        doctor.registration_number = data.get("registration_number")
-        doctor.bio = data.get("bio")
-        doctor.consultation_fee = data.get("consultation_fee")
-        doctor.opd_timing = data.get("opd_timing")
-        doctor.emergency_available = data.get("emergency_available") == "true"
-        doctor.room_number = data.get("room_number")
-        doctor.languages_spoken = data.get("languages_spoken")
-        
-        doctor.roles = ",".join(data.get("roles", []))
+        if "age" in data:
+            doctor.age = data.get("age")
+            
+        if "gender" in data:
+            doctor.gender = data.get("gender")
+            
+        if "contact" in data:
+            doctor.contact = data.get("contact")
+
+        if "qualification" in data:
+            doctor.qualification = data.get("qualification")
+
+        if "experience_years" in data:
+            doctor.experience_years = data.get("experience_years")
+
+        if "registration_number" in data:
+            doctor.registration_number = data.get("registration_number")
+
+        if "bio" in data:
+            doctor.bio = data.get("bio")
+
+        if "consultation_fee" in data:
+            doctor.consultation_fee = data.get("consultation_fee")
+
+        if "opd_timing" in data:
+            doctor.opd_timing = data.get("opd_timing")
+
+        if "emergency_available" in data:
+            doctor.emergency_available = data.get("emergency_available") == "true"
+
+        if "room_number" in data:
+            doctor.room_number = data.get("room_number")
+
+        if "languages_spoken" in data:
+            doctor.languages_spoken = data.get("languages_spoken")
+
+        if "roles" in data:
+            doctor.roles = ",".join(data.getlist("roles"))
+
         image = request.files.get("profile_image")
-        
-        if image and allowed_file(image.filename,current_app.config["ALLOWED_EXTENSIONS"]):
+        if image and allowed_file(image.filename, current_app.config["ALLOWED_EXTENSIONS"]):
             if doctor.profile_image:
-                old_path = os.path.join(current_app.config["UPLOAD_FOLDER_DOCTOR"], doctor.profile_image)
+                old_path = os.path.join(
+                    current_app.config["UPLOAD_FOLDER_DOCTOR"],
+                    doctor.profile_image
+                )
                 if os.path.exists(old_path):
                     os.remove(old_path)
 
             ext = image.filename.rsplit(".", 1)[1].lower()
             filename = f"{uuid.uuid4()}.{ext}"
-
-            image_path = os.path.join(current_app.config["UPLOAD_FOLDER_DOCTOR"],secure_filename(filename))
-
+            image_path = os.path.join(
+                current_app.config["UPLOAD_FOLDER_DOCTOR"],
+                secure_filename(filename)
+            )
             image.save(image_path)
             doctor.profile_image = filename
 
-            
-
         doctor.profile_completed = True
-
         db.session.commit()
 
         return {

@@ -158,3 +158,6 @@
 .personal-details{
   height: 70vh;
 }
+.pointer{
+  cursor: pointer;
+}
