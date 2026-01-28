@@ -28,9 +28,6 @@ export const hasDigit = (msg) => {
     return (value) => value && /\d/.test(value) ? "" : msg || "Must contain at least one digit"
 }
 
-export const yearRange = (min, max, msg) => value => {
-  if (!value) return true
-  const year = Number(value)
-  if (isNaN(year)) return msg || "Invalid year"
-  return year >= min && year <= max ?"": msg || `Year must be between ${min} and ${max}`
+export const hasAlpha = (letter, msg) => {
+    return (value) => value && value.includes(letter) ? "" : msg || `Must contain the letter '${letter}'`
 }

@@ -1,28 +1,30 @@
 <script setup>
-import { computed , ref,watch } from "vue"
-import { useDoctorStore } from "@/stores/doctor.store"
+  import { computed , ref,watch } from "vue"
+  import { useDoctorStore } from "@/stores/doctor.store"
 
-const store = useDoctorStore()
+  const store = useDoctorStore()
 
 
-const percentage = computed(() => {
-  if (!store.doctorProfile) return 0
-  return store.doctorProfile.completion_percentage || 0
-})
+  const percentage = computed(() => {
+    if (!store.doctorProfile) return 0
+    return store.doctorProfile.completion_percentage || 0
+  })
 
-const color = ref('bg-danger')
+  const color = ref('bg-danger')
 
-const updateColor = () => {
-  if (percentage.value <= 25) {
-    color.value = 'bg-danger'
-  } else if (percentage.value < 100) {
-    color.value = 'bg-warning'
-  } else {
-    color.value = 'bg-success'
+  const updateColor = () => {
+    if (percentage.value <= 25) {
+      color.value = 'bg-danger'
+    } else if (percentage.value <= 50) {
+      color.value = 'bg-tertiary'
+    } else if (percentage.value <=75) {
+      color.value = 'bg-warning'
+    } else {
+      color.value = 'bg-success'
+    }
   }
-}
 
-watch(percentage, updateColor)
+  watch(percentage, updateColor, { immediate: true })
 
 </script>
 
@@ -30,7 +32,7 @@ watch(percentage, updateColor)
   <div class="mt-2">
     <div class="progress-wrapper">
       <div class="progress-info">
-        <span class="h4 progress-tooltip " :class="color">Profile Complete</span>
+        <span class="h4 progress-tooltip " :class="color" :style="{ marginLeft: Math.min(percentage - 4.5, 58) + '%' }" >Profile Complete </span>
         <div class="progress-percentage">
             <strong>{{ percentage }}%</strong>
         </div>
