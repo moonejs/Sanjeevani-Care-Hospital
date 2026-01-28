@@ -1,52 +1,68 @@
 <script setup>
-    import Header from '@/components/layout/Header.vue';
-    import ProfileCard from '@/components/layout/ProfileCard.vue';
-    import { useDoctorStore } from '@/stores/doctor.store';
-    import Loading from '@/components/common/Loading.vue';
-    import { onMounted } from 'vue';
-    import { useRouter } from 'vue-router';
+    import DoctorFilter from "./DoctorFilter.vue"
+    import DoctorCard from "./DoctorCard.vue"
+    import Loading from "@/components/common/Loading.vue"
 
-    const doctor=useDoctorStore()
-    const route=useRouter()
+    import { useDoctorStore } from "@/stores/doctor.store"
+    import { onMounted, ref, computed } from "vue"
+    import { useRouter } from "vue-router"
 
-    onMounted(()=>{
-        doctor.fetchDoctors()
+    const doctorStore = useDoctorStore()
+    const router = useRouter()
+
+    const filters = ref({
+        department: null,
+        specialization: null
     })
 
-    function openDoctorPage(id){
-        console.log(id);
-        route.push({
-            name:'doctorProfile-patient',
-            params:{
-                id:id
-            }
-        })
-        
+    onMounted(() => {
+        doctorStore.fetchDoctors()
+    })
+
+    const filteredDoctors = computed(() => {
+        let list = doctorStore.doctorsList
+
+        if (filters.value.department) {
+            list = list.filter(
+            d => d.department_name === filters.value.department
+            )
+        }
+
+        if (filters.value.specialization) {
+            list = list.filter(
+            d => d.specialization === filters.value.specialization
+            )
+        }return list})
+
+    function openDoctor(id) {
+        router.push({ name: "doctorProfile-patient", params: { id } })
     }
-
-    
-
 </script>
 
 <template>
-    <div>
-        <Header label="Doctors"/>
-            <div v-if="doctor.loading" class="empty-state">
-                <Loading :loading="true" />
-            </div>
-            <div
-                v-else-if="!doctor.doctorsList.length"
-                class="empty-state">
-                <h2>No doctors yet</h2>
-            </div>
-            <div v-else class="main bg-danger-subtle container-fluid mt-3 ">
-                <div  class="row mb-3">
-                    <div class="col-2" v-for="dept in doctor.doctorsList" :key="dept.id">
-                        <ProfileCard :label="dept.name" @select="openDoctorPage(dept.id)" />
-                    </div>
-                </div>
-                
-            </div>
+
+
+  <div class="container-fluid mt-3">
+    <div v-if="doctorStore.loading">
+      <Loading :loading="true" />
     </div>
-    
+
+    <div v-else class="row">
+      <div class="col-3">
+        <DoctorFilter :departments="['Neurology','Orthopedic','Cardiology']" :specializations="['Surgeon','Consultant','Physician']" v-model="filters"
+        />
+      </div>
+
+      <div class="col-9">
+        <div class="doctors-list-div" >
+          <div class="row g-3">
+            <div v-for="doc in filteredDoctors" :key="doc.id" class="col-12" 
+            >
+              <DoctorCard :doctor="doc"  />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

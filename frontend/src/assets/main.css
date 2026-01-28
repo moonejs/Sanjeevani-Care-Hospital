@@ -37,10 +37,10 @@
   width: 60vw;
 }
 
-.doctor-profile-card {
+/* .doctor-profile-card {
   height: 15vh;
   width: 10vw;
-}
+} */
 
 .doctorDetail-page-left {
   height: 70vh;
@@ -126,38 +126,58 @@
   height: 10rem;
 }
 
-.patient-profile-left-panel{
+.patient-profile-left-panel {
   width: 40%;
 }
-.patient-profile-right-panel{
+.patient-profile-right-panel {
   width: 60vw;
   height: 89vh;
   overflow-y: auto;
 }
 
-.doctor-appointment-filter{
+.doctor-appointment-filter {
   height: 20vh;
 }
 
-.department-detail-icon{
+.department-detail-icon {
   height: 100px;
   width: 100px;
 }
 
-.doctor-profile-img{
-  position:absolute;
-  top:0;
-  right:0;
+.doctor-profile-img {
+  position: absolute;
+  top: 0;
+  right: 0;
   width: fit-content;
 }
-.doctor-profile-img img{
+.doctor-profile-img img {
   height: 12rem;
   width: 12rem;
 }
 
-.personal-details{
+.personal-details {
   height: 87vh;
 }
-.pointer{
+.pointer {
   cursor: pointer;
+}
+
+.doctor-card {
+  width: 62vw;
+}
+.doctor-card-badge1 {
+  bottom: 8rem;
+  right: 10rem;
+}
+
+.doctor-card-img img {
+  height: 23rem;
+  width: 100%;
+  object-fit: cover;
+}
+
+.doctors-list-div{
+  max-height: 87vh;
+  overflow-y:auto;
+  overflow-x: hidden;
 }
