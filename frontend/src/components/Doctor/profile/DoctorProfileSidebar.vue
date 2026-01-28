@@ -5,8 +5,6 @@
       { key: "education", label: "Education & Specialization" },
       { key: "registration", label: "Registration & Documents" },
       { key: "clinics", label: "Clinics (Fees & Timings)" },
-      { key: "services", label: "Services & Experience" },
-      { key: "awards", label: "Awards & Memberships" }
     ]
     defineProps({
       section:String

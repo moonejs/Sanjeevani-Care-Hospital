@@ -66,12 +66,13 @@ class DoctorProfile(Resource):
             "opd_timing": doctor.opd_timing,
             "room_number": doctor.room_number,
             "languages_spoken": doctor.languages_spoken,
+            ""
             "profile_image": (
                 request.host_url + "uploads/doctors/profile/" + doctor.profile_image
                 if doctor.profile_image else None
             ),
 
-            
+            "emergency_available":doctor.emergency_available,
             "sections": sections,
             "completion_percentage": completion_percentage(sections),
             "profile_completed": all(sections.values()),

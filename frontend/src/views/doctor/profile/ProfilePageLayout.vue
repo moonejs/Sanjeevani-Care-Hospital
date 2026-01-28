@@ -10,8 +10,7 @@
     import EducationDetails from "./section/EducationDetails.vue"
     import RegistrationDocuments from "./section/RegistrationDocuments.vue"
     import ClinicsTiming from "./section/ClinicsTiming.vue"
-    import ServicesExperience from "./section/ServicesExperience.vue"
-    import AwardsMemberships from "./section/AwardsMemberships.vue"
+
 
     const doctorStore = useDoctorStore()
     const activeSection = ref("personal")
@@ -25,8 +24,6 @@
         education: EducationDetails,
         registration: RegistrationDocuments,
         clinics: ClinicsTiming,
-        services: ServicesExperience,
-        awards: AwardsMemberships
     }))
 
     function changeActiveSection(newSection){
