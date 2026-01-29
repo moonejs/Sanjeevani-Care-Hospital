@@ -19,12 +19,10 @@
         doctor.fetchDoctorsByDepartment(departmentId)
     })
 
-    function openDoctorPage(id){
+    function openDoctor(id) {
         router.push({
-            name:'doctorProfile-patient',
-            params:{
-                id:id
-            }
+            name: "doctors-patient",
+            query: { focus: id }
         })
     }
 
@@ -52,10 +50,7 @@
             <div v-else-if="!doctorsList.length" class="text-muted">
             No doctors available
             </div>
-            <DoctorMiniCard v-for="doc in doctorsList" :key="doc.id" :doctor="doc" @select="openDoctorPage" class="mb-2 " />
-
-    
-
+            <DoctorMiniCard v-for="doc in doctorsList" :key="doc.id" :doctor="doc" @select="openDoctor(doc.id)" class="mb-2 " />
 
             
         </div>

@@ -9,11 +9,12 @@
     })
     const bookable=computed(()=>{
             return props.doctor.is_bookable
-        })
+    })
+    const emit=defineEmits(['select'])
 </script>
 
 <template>
-  <div class="bg-light doctor-mini-card p-3 mb-3 pointer animate-up-1 border-1 position-relative">
+  <div class="bg-light doctor-mini-card p-3 mb-3 pointer animate-up-1 border-1 position-relative" @click="emit('select')">
     <div class="d-flex align-items-center gap-3">
 
       <div class="doctor-avatar">
