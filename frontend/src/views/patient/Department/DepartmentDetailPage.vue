@@ -6,6 +6,7 @@
     import { onMounted ,computed } from 'vue';
     import { departmentIcons } from '@/utils/departmentIcons';
     import { Phone,Mail,MapPinHouse,Calendar } from 'lucide-vue-next';
+    import DoctorMiniCard from '@/components/Patient/DoctorMiniCard.vue';
     import Badge from '@/components/common/Badge.vue';
     const department=useDepartmentStore()
     const route=useRoute()
@@ -41,18 +42,20 @@
     <div class="d-flex container-fluid">
 
         <div class="departmentDetail-page-left container-fluid bg-success">
-            <div class="upper bg-warning">
-                <h1>Speciallists</h1>
+            <h5 class="mb-3 fw-bold">Doctors in this Department</h5>
 
-                <div class="bg-primary">
-                    <div class="row">
-                        <div class="col-4" v-for="doctor in doctorsList" :key="doctor.id" >
-                            <ProfileCard :label="doctor.name"   @select="openDoctorPage(doctor.id)" class="doctor-profile-card" />
-                        </div>
-                    </div>
-                    
-                </div>
+            <div v-if="doctor.loading" class="text-muted">
+                Loading doctors...
             </div>
+
+    
+            <div v-else-if="!doctorsList.length" class="text-muted">
+            No doctors available
+            </div>
+            <DoctorMiniCard v-for="doc in doctorsList" :key="doc.id" :doctor="doc" @select="openDoctorPage" class="mb-2 " />
+
+    
+
 
             
         </div>

@@ -6,6 +6,8 @@ from flask import request
 
 from extensions import db
 
+from utils.comman import is_doctor_bookable
+
 class DepartmentDetails(Resource):
     @auth_required("token")
     @roles_accepted("admin","patient")
@@ -96,8 +98,13 @@ class DoctorsByDepartment(Resource):
                 "id": d.id,
                 "name": d.name,
                 "specialization": d.specialization,
-                "contact": d.contact,
-                "department": d.department.name
+                "department": d.department.name,
+                "roles":d.roles,
+                "is_bookable": is_doctor_bookable(d),
+                "profile_image": (
+                    request.host_url + "uploads/doctors/profile/" + d.profile_image
+                    if d.profile_image else None
+                ),
             }
             for d in doctors
         ], 200
