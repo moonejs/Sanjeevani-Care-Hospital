@@ -1,68 +1,68 @@
 <script setup>
-    import DoctorFilter from "./DoctorFilter.vue"
-    import DoctorCard from "./DoctorCard.vue"
-    import Loading from "@/components/common/Loading.vue"
+  import DoctorFilter from "./DoctorFilter.vue"
+  import DoctorCard from "./DoctorCard.vue"
+  import LoadingState from "@/components/common/LoadingState.vue"
+  import DoctorCardSkeleton from "@/components/Patient/DoctorCardSkeleton.vue"
+  import { useDoctorStore } from "@/stores/doctor.store"
+  import { onMounted, ref, computed } from "vue"
+  import { useRouter } from "vue-router"
 
-    import { useDoctorStore } from "@/stores/doctor.store"
-    import { onMounted, ref, computed } from "vue"
-    import { useRouter } from "vue-router"
+  const doctorStore = useDoctorStore()
+  const router = useRouter()
 
-    const doctorStore = useDoctorStore()
-    const router = useRouter()
+  const filters = ref({
+    department: null,
+    specialization: null
+  })
 
-    const filters = ref({
-        department: null,
-        specialization: null
-    })
+  onMounted(() => {
+    doctorStore.fetchDoctors()
+  })
 
-    onMounted(() => {
-        doctorStore.fetchDoctors()
-    })
-
-    const filteredDoctors = computed(() => {
-        let list = doctorStore.doctorsList
-
-        if (filters.value.department) {
-            list = list.filter(
-            d => d.department_name === filters.value.department
-            )
-        }
-
-        if (filters.value.specialization) {
-            list = list.filter(
-            d => d.specialization === filters.value.specialization
-            )
-        }return list})
-
-    function openDoctor(id) {
-        router.push({ name: "doctorProfile-patient", params: { id } })
+  const filteredDoctors = computed(() => {
+    let list = doctorStore.doctorsList
+    if (filters.value.department) {
+      list = list.filter(d => d.department === filters.value.department)
     }
+    if (filters.value.specialization) {
+      list = list.filter(d => d.specialization === filters.value.specialization)
+    }
+    return list
+  })
+
+  function openDoctor(id) {
+    router.push({ name: "doctorProfile-patient", params: { id } })
+  }
 </script>
 
 <template>
-
-
   <div class="container-fluid mt-3">
-    <div v-if="doctorStore.loading">
-      <Loading :loading="true" />
-    </div>
+    <div class="row">
 
-    <div v-else class="row">
       <div class="col-3">
-        <DoctorFilter :departments="['Neurology','Orthopedic','Cardiology']" :specializations="['Surgeon','Consultant','Physician']" v-model="filters"
+        <DoctorFilter
+          :departments="['Neurology','Orthopedic','Cardiology']"
+          :specializations="['Surgeon','Consultant','Physician']"
+          v-model="filters"
         />
       </div>
 
-      <div class="col-9">
-        <div class="doctors-list-div" >
-          <div class="row g-3">
-            <div v-for="doc in filteredDoctors" :key="doc.id" class="col-12" 
-            >
-              <DoctorCard :doctor="doc"  />
-            </div>
+      <div class="col-9 ">
+        <LoadingState :loading="doctorStore.loading" type="skeleton" :count="4">
+          
+          <template #skeleton>
+            <DoctorCardSkeleton />
+          </template>
+
+        
+          <DoctorCard v-for="doc in filteredDoctors" :key="doc.id" :doctor="doc" @click="openDoctor(doc.id)" class="mb-3"/>
+
+          <div v-if="!filteredDoctors.length" class="text-center text-muted">
+            No doctors found
           </div>
-        </div>
+        </LoadingState>
       </div>
+
     </div>
   </div>
 </template>

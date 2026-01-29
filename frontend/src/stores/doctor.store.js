@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { doctorDetailsApi ,doctorDetailsByIdApi,fetchAssignedTodayPatientsDetailsApi,fetchNextAppointmentApi,fetchPatientProfileApi,fetchDoctorPatientsListApi,fetchDoctorsByDepartmentApi,addDoctorApi,fetchCurrrentDoctorDetailsApi,updateDoctorProfileApi} from "@/api/doctor";
+import { delay } from "@/utils/comman";
 import { ref } from "vue";
 
 
@@ -28,6 +29,7 @@ export const useDoctorStore=defineStore('doctor',()=>{
         try {
             const res = await doctorDetailsApi()
             console.log(res);
+            await delay(5000)
             doctorsList.value=res.data
             
         } catch (error) {
