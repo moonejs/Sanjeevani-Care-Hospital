@@ -45,6 +45,12 @@ class PatientDoctorsAvailability(Resource):
                 "doctor": {
                     "id": doctor.id,
                     "name": doctor.name,
+                    "specialization": doctor.specialization,
+                    "roles":doctor.roles,
+                    "profile_image": (
+                        request.host_url + "uploads/doctors/profile/" + doctor.profile_image
+                        if doctor.profile_image else None
+                    ),
                     "department": doctor.department.name if doctor.department else None
                 },
                 "sessions": {
@@ -254,3 +260,46 @@ class PatientAppointmentBooking(Resource):
             "appointment_id": appointment.id,
             "status": appointment.status
         }, 201
+
+class PatientRescheduleAppointment(Resource):
+
+    @auth_required("token")
+    @roles_required("patient")
+    def put(self, appointment_id):
+        data = request.json
+        patient_id = current_user.patient.id
+
+        appointment = Appointment.query.filter(
+            Appointment.id==appointment_id,
+            Appointment.patient_id==patient_id,
+            Appointment.status.in_(["pending", "confirmed"])
+        ).first()
+
+        if not appointment:
+            return {"message": "Appointment not found"}, 404
+
+        new_date = datetime.strptime(data["date"], "%Y-%m-%d").date()
+        new_start = datetime.strptime(data["start_time"], "%H:%M").time()
+
+       
+        booked = Appointment.query.filter(
+            Appointment.doctor_id == appointment.doctor_id,
+            Appointment.appointment_date == new_date,
+            Appointment.start_time == new_start,
+            Appointment.status.in_(["pending", "confirmed"]),
+            Appointment.id != appointment.id
+        ).count()
+
+        if booked > 0:
+            return {"message": "Slot already booked"}, 409
+
+        appointment.appointment_date = new_date
+        appointment.start_time = new_start
+        appointment.end_time = (
+            datetime.combine(new_date, new_start)
+            + timedelta(minutes=15)
+        ).time()
+
+        db.session.commit()
+
+        return {"message": "Appointment rescheduled successfully"}, 200

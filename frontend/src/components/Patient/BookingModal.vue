@@ -1,17 +1,19 @@
   <script setup>
-  const props = defineProps({
-    showModal: Boolean,
-    selectedDoctor: Object,
-    selectedSlot: Object,
-    appointmentType: String,
-    slotSession:String
-  })
+    import { useAppointmentStore } from '@/stores/appointment.store';
+    const appointment=useAppointmentStore()
+    const props = defineProps({
+      showModal: Boolean,
+      selectedDoctor: Object,
+      selectedSlot: Object,
+      appointmentType: String,
+      slotSession:String
+    })
 
-  const emit = defineEmits([
-    'update:appointmentType',
-    'close',
-    'confirm'
-  ])
+    const emit = defineEmits([
+      'update:appointmentType',
+      'close',
+      'confirm'
+    ])
   </script>
 
   <template>
@@ -21,8 +23,12 @@
         <div class="modal-content">
 
           <div class="modal-header">
-            <h5 class="modal-title">Book Appointment</h5>
+            <h5 class="modal-title">{{ appointment.activeAppointment && appointment.activeAppointment.doctor.id == selectedDoctor.doctor.id ? "Reschedule Appointment" : "Book Appointment" }}</h5>
             <button class="btn-close" @click="emit('close')"></button>
+          </div>
+          <div v-if="appointment.activeAppointment && appointment.activeAppointment.doctor.id == selectedDoctor.doctor.id" class="alert alert-warning">
+            You already have an appointment.
+            Selecting a new slot will reschedule it.
           </div>
 
           <div class="modal-body">
@@ -54,7 +60,7 @@
 
           <div class="modal-footer">
             <button class="btn btn-secondary" @click="emit('close')">Cancel</button>
-            <button class="btn btn-primary" @click="emit('confirm')">Confirm</button>
+            <button class="btn btn-primary" @click="emit('confirm')">{{ appointment.activeAppointment && appointment.activeAppointment.doctor.id == selectedDoctor.doctor.id ? 'Reschedule' : 'Confirm Booking' }}</button>
           </div>
 
         </div>

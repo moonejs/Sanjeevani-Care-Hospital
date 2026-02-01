@@ -69,3 +69,4 @@ class PatientAppointmentsHistory(Resource):
                 "pages": pagination.pages
             }
         }, 200
+

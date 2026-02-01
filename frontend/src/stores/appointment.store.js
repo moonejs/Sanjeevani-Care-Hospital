@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi,completeAppointmentApi,fetchDoctorAppointmentsHistoryApi } from '@/api/appointment'
+import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi,completeAppointmentApi,fetchDoctorAppointmentsHistoryApi,rescheduleAppointmentApi } from '@/api/appointment'
+
+import { fetchPatientAppointmentsHistoryApi } from '@/api/appointment'
 
 import { useDoctorStore } from './doctor.store'
 
@@ -16,6 +18,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     const appointmentSummary = ref({ total: 0, pending: 0, confirmed: 0, completed: 0, cancelled: 0 })
     const appointmentHistory = ref([])
     const historyPagination = ref({ page: 1, per_page: 6, total: 0, pages: 1 })
+    const activeAppointment = ref(null)
     
 
     function formatDate(date) {
@@ -207,6 +210,29 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         } 
     }
 
+    async function rescheduleAppointment({ appointment_id, date, start_time }) {
+        loading.value = true
+        error.value = null
+        try {
+            const res=await rescheduleAppointmentApi(appointment_id, {date,
+                start_time})
+            console.log(res);
+            
+        } catch (err) {
+            error.value = err
+            throw err
+        } finally {
+            loading.value = false
+        }
+    }
+    async function fetchMyActiveAppointment() {
+        const res = await fetchPatientAppointmentsHistoryApi({ page: 1, per_page: 5 })
+
+        activeAppointment.value =res.data.appointments.find(a =>["pending", "confirmed"].includes(a.status)) || null
+    }
+
+
+
 
     return{
         saveDoctorAvailability,
@@ -227,6 +253,9 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         appointmentSummary,
         appointmentHistory,
         historyPagination,
-        fetchDoctorAppointmentHistory
+        fetchDoctorAppointmentHistory,
+        activeAppointment,
+        rescheduleAppointment,
+        fetchMyActiveAppointment
     }
 })

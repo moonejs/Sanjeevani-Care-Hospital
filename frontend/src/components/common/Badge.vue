@@ -9,7 +9,7 @@
 </script>
 
 <template>
-    <span class="badge" :class="`text-bg-${color}`" >{{ label }}
+    <span class="badge" :class="`text-bg-${color}`" @click="emit('click')">{{ label }}
         <span v-if="cross" class="ms-2 pointer" @click="emit('click')">×</span>
 
     </span>

@@ -42,6 +42,12 @@
       }
       return list
     })
+    function openDoctorApptPage(id){
+      router.push({
+            name: "book-appointments",
+            query: { focus: id }
+        })
+    }
   </script>
 
   <template>
@@ -64,7 +70,7 @@
             </template>
 
           
-            <DoctorCard v-for="doc in filteredDoctors" :key="doc.id" :doctor="doc"  :id="`doctor-${doc.id}`" class="mb-3 " :class="doc.id == route.query.focus ? 'bg-secondary-subtle' :''"/>
+            <DoctorCard v-for="doc in filteredDoctors" :key="doc.id" :doctor="doc"  :id="`doctor-${doc.id}`" class="mb-3 " :class="doc.id == route.query.focus ? 'bg-secondary-subtle' :''" @doctor-appt="openDoctorApptPage(doc.id)"/>
 
             <div v-if="!filteredDoctors.length" class="text-center text-muted">
               No doctors found

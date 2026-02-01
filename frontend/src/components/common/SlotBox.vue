@@ -3,7 +3,8 @@
     import Badge from './Badge.vue';
     const props=defineProps({
         session:String,
-        sessionInfo:Array
+        sessionInfo:Array,
+        doctor:Object
     })
     const emit = defineEmits(['slotSelected'])
     console.log(props.sessionInfo);
@@ -47,9 +48,9 @@
     //     slots.value=generateSlots(info.startTime,info.endTime,info.slotDuration)
     // },{ immediate: true })
     function selectSlot(slot) {
-        if (slot.status === 'full'){
+        if (slot.status !== 'available'){
             return  
-        } 
+        }
         emit('slotSelected', {
             session:props.session,
             slot:slot
@@ -58,15 +59,12 @@
 </script>
 <template>
     <div class="mb-3">
-        <h4>{{ props.session }}</h4>
-        <div v-if="!sessionInfo.length">
-            <h6>No Slots</h6>
+        <h6 class="fw-semibold mb-2">{{ session }}</h6>
+        <div v-if="!sessionInfo.length" class="text-muted small">
+            No slots available
         </div>
         <div class="d-flex gap-2">
-            <Badge v-for="slot in sessionInfo" :key="slot.time" :label="slot.time"
-            :color="getColor(slot)"
-            class="booking-badge"
-            @click="selectSlot(slot)"/>
+            <Badge v-for="slot in sessionInfo" :key="slot.time" :label="slot.time" :color="getColor(slot)" class="booking-badge" @click="selectSlot(slot)" />
         </div>
   </div>
 </template>

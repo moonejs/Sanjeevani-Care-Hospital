@@ -21,6 +21,10 @@ export const bookAppointmentApi=(data)=>{
     return api.post("api/appointments/book",data)
 }
 
+export const rescheduleAppointmentApi=(appointment_id,data)=>{
+    return api.put(`api/appointments/reschedule/${appointment_id}`,data)
+}
+
 export const fetchAppointmentsByDoctorApi=(date)=>{
     return api.get("api/doctors/appointments",{
         params:{"date":date}

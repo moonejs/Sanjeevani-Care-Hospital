@@ -5,7 +5,7 @@
     const props=defineProps({
         doctor: Object
     })
-    
+    const emit=defineEmits(['doctor-appt'])
     const parseQualifications = (qual) => {
         try {
             return typeof qual === 'string' ? JSON.parse(qual) : qual
@@ -95,7 +95,7 @@
               {{ lang }}<span v-if="index < doctor.languages_spoken.length - 1">, </span>
             </span>
           </p>
-          <Btn label="Book Appointment" class="btn-primary" :disabled="!bookable" @click="" />
+          <Btn label="Book Appointment" class="btn-primary" :disabled="!bookable" @click="emit('doctor-appt')" />
         </div>
       </div>
     </div>

@@ -43,11 +43,7 @@ export default [
             name:'doctors-patient',
             component:()=> import('@/views/patient/Doctor/DoctorsPage.vue'),
           },
-          {
-            path:":id",
-            name:'doctorProfile-patient',
-            component:()=>import('@/views/patient/Doctor/DoctorProfilePage.vue')
-          }
+          
         ]
       },
       {

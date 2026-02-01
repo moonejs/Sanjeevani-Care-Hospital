@@ -94,6 +94,11 @@
 
 .booking-badge {
   cursor: pointer;
+
+}
+.booking-badge.disabled{
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 /* Tables */
@@ -201,4 +206,12 @@
   border: 2px solid #0d6efd;
   border-radius: 12px;
   box-shadow: 0 0 0 4px rgba(13,110,253,0.15);
+}
+
+.appointment-doctor-card-header img{
+  width: 4vw;
+  height: 8vh;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #dee2e6;
 }
