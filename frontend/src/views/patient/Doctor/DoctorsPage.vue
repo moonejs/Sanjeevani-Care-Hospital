@@ -4,13 +4,14 @@
     import LoadingState from "@/components/common/LoadingState.vue"
     import DoctorCardSkeleton from "@/components/Patient/DoctorCardSkeleton.vue"
     import { useDoctorStore } from "@/stores/doctor.store"
+    import { useAppointmentStore } from "@/stores/appointment.store"
     import { onMounted, ref, computed,nextTick } from "vue"
     import { useRouter,useRoute } from "vue-router"
 
     const doctorStore = useDoctorStore()
     const router = useRouter()
     const route =useRoute()
-
+    const appointment=useAppointmentStore()
     const filters = ref({
       department: null,
       specialization: null
@@ -18,7 +19,7 @@
 
     onMounted(async() => {
       await doctorStore.fetchDoctors()
-
+      await appointment.fetchMyActiveAppointment()
       if(route.query.focus){
         await nextTick()
         const el = document.getElementById(

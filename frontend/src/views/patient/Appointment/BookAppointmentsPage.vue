@@ -50,7 +50,6 @@
 
 
     function openBookingModal({ doctor, slot }) {
-        
         selectedDoctor.value = doctor
         selectedSlot.value = slot.slot
         showModal.value = true
@@ -77,6 +76,17 @@
         await appointment.fetchAllDoctorsAvailability(appointment.selectedDate)
     }
 
+    async function cancelMyAppointment() {
+        if (!appointment.activeAppointment) return
+
+        const confirmCancel = confirm("Are you sure you want to cancel?")
+        if (!confirmCancel) return
+
+        await appointment.cancelBookedAppointment(appointment.activeAppointment.id,{reason:"Cancelled by patient"})
+        showModal.value = false
+    }
+
+
 </script>
 
 <template>
@@ -94,7 +104,7 @@
         </div>
         <BookingModal :show-modal="showModal" :selected-doctor="selectedDoctor" :selected-slot="selectedSlot",
         :slot-session="slotSession"
-         v-model:appointment-type="appointmentType" @close="showModal = false" @confirm="confirmBooking" />
+         v-model:appointment-type="appointmentType" @close="showModal = false" @confirm="confirmBooking" @cancelAppointment="cancelMyAppointment" />
 
     </div>
 </template> 

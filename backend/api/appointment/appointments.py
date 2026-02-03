@@ -12,6 +12,9 @@ class PatientDoctorsAvailability(Resource):
     @roles_accepted("patient")
     def get(self):
         date_str = request.args.get("date")
+        today = datetime.now().date()
+        now = datetime.now().time()
+
         if not date_str:
             return {"message": "date is required"}, 400
 
@@ -70,12 +73,28 @@ class PatientDoctorsAvailability(Resource):
                                 Appointment.start_time == slot,
                                 Appointment.status.in_(["pending", "confirmed"])
                             ).count()
+                    
+                    my_booking = Appointment.query.filter(
+                                    Appointment.doctor_id == doctor.id,
+                                    Appointment.patient_id == current_user.patient.id,
+                                    Appointment.appointment_date == date,
+                                    Appointment.start_time == slot,
+                                    Appointment.status.in_(["pending", "confirmed"])
+                                ).first()
 
-                    status = (
-                        "available" if booked == 0 else
-                        "partial" if booked < availability.morning_max_patients else
-                        "full"
-                    )
+                    
+                    
+                    if my_booking:
+                        status = "booked_by_me"
+                    elif booked >= availability.morning_max_patients:
+                        status = "full"
+                    elif booked > 0:
+                        status = "partial"
+                    elif date == today and slot <= now:
+                        status = "past"
+                    else:
+                        status = "available"
+
 
                     doctor_data["sessions"]["morning"].append({
                         "time": slot.strftime("%H:%M"),
@@ -96,11 +115,26 @@ class PatientDoctorsAvailability(Resource):
                                 Appointment.status.in_(["pending", "confirmed"])
                             ).count()
 
-                    status = (
-                        "available" if booked == 0 else
-                        "partial" if booked < availability.afternoon_max_patients else
-                        "full"
-                    )
+                    my_booking = Appointment.query.filter(
+                                    Appointment.doctor_id == doctor.id,
+                                    Appointment.patient_id == current_user.patient.id,
+                                    Appointment.appointment_date == date,
+                                    Appointment.start_time == slot,
+                                    Appointment.status.in_(["pending", "confirmed"])
+                                ).first()
+
+                    
+                    
+                    if my_booking:
+                        status = "booked_by_me"
+                    elif booked >= availability.afternoon_max_patients:
+                        status = "full"
+                    elif booked > 0:
+                        status = "partial"
+                    elif date == today and slot <= now:
+                        status = "past"
+                    else:
+                        status = "available"
 
                     doctor_data["sessions"]["afternoon"].append({
                         "time": slot.strftime("%H:%M"),
@@ -121,11 +155,26 @@ class PatientDoctorsAvailability(Resource):
                                 Appointment.status.in_(["pending", "confirmed"])
                             ).count()
 
-                    status = (
-                        "available" if booked == 0 else
-                        "partial" if booked < availability.evening_max_patients else
-                        "full"
-                    )
+                    my_booking = Appointment.query.filter(
+                                    Appointment.doctor_id == doctor.id,
+                                    Appointment.patient_id == current_user.patient.id,
+                                    Appointment.appointment_date == date,
+                                    Appointment.start_time == slot,
+                                    Appointment.status.in_(["pending", "confirmed"])
+                                ).first()
+
+                    
+                    
+                    if my_booking:
+                        status = "booked_by_me"
+                    elif booked >= availability.evening_max_patients:
+                        status = "full"
+                    elif booked > 0:
+                        status = "partial"
+                    elif date == today and slot <= now:
+                        status = "past"
+                    else:
+                        status = "available"
 
                     doctor_data["sessions"]["evening"].append({
                         "time": slot.strftime("%H:%M"),
@@ -303,3 +352,33 @@ class PatientRescheduleAppointment(Resource):
         db.session.commit()
 
         return {"message": "Appointment rescheduled successfully"}, 200
+
+
+class PatientCancelAppointment(Resource):
+
+    @auth_required("token")
+    @roles_required("patient")
+    def put(self, appointment_id):
+        data = request.json 
+        reason = data.get("reason", "")
+
+        patient_id = current_user.patient.id
+
+        appointment = Appointment.query.filter(
+            Appointment.id == appointment_id,
+            Appointment.patient_id == patient_id,
+            Appointment.status.in_(["pending", "confirmed"])
+        ).first()
+
+        if not appointment:
+            return {"message": "Appointment not found or cannot be cancelled"}, 404
+
+        appointment.status = "cancelled"
+        appointment.cancel_reason = reason
+
+        db.session.commit()
+
+        return {
+            "message": "Appointment cancelled successfully",
+            "appointment_id": appointment.id
+        }, 200

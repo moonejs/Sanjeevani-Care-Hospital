@@ -12,7 +12,8 @@
     const emit = defineEmits([
       'update:appointmentType',
       'close',
-      'confirm'
+      'confirm',
+      'cancel-appointment'
     ])
   </script>
 
@@ -58,9 +59,13 @@
             </label>
           </div>
 
-          <div class="modal-footer">
-            <button class="btn btn-secondary" @click="emit('close')">Cancel</button>
-            <button class="btn btn-primary" @click="emit('confirm')">{{ appointment.activeAppointment && appointment.activeAppointment.doctor.id == selectedDoctor.doctor.id ? 'Reschedule' : 'Confirm Booking' }}</button>
+          <div class="modal-footer" v-if="appointment.activeAppointment && appointment.activeAppointment.doctor.id == selectedDoctor.doctor.id">
+            <button class="btn btn-outline-warning" v-if="appointment.activeAppointment.time!=selectedSlot.time" @click="emit('confirm')">Reschedule</button>
+            <button class="btn btn-outline-danger" v-else @click="emit('cancel-appointment')">Cancel</button>
+          </div>
+          <div v-else class="modal-footer">
+            <button class="btn btn-primary" @click="emit('confirm')">Confirm Booking</button>
+            
           </div>
 
         </div>

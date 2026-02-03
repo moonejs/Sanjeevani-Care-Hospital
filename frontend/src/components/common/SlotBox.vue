@@ -10,13 +10,11 @@
     console.log(props.sessionInfo);
 
     function getColor(slot) {
-        if (slot.status === 'available'){
-            return 'success'
-        } 
-        if (slot.status === 'partial'){
-            return 'warning'
-        } 
-            return 'danger'
+        if (slot.status === "booked_by_me") return "primary" 
+        if (slot.status === "available") return "success"
+        if (slot.status === "partial") return "warning"
+        if (slot.status === "full") return "danger"
+        if (slot.status === "past") return "secondary"
     }
     // function generateSlots(startTime,endTime,slotDuration){
     //     const slots=[]
@@ -48,7 +46,7 @@
     //     slots.value=generateSlots(info.startTime,info.endTime,info.slotDuration)
     // },{ immediate: true })
     function selectSlot(slot) {
-        if (slot.status !== 'available'){
+        if (slot.status == 'past' ||slot.status=='full'){
             return  
         }
         emit('slotSelected', {
@@ -64,7 +62,7 @@
             No slots available
         </div>
         <div class="d-flex gap-2">
-            <Badge v-for="slot in sessionInfo" :key="slot.time" :label="slot.time" :color="getColor(slot)" class="booking-badge" @click="selectSlot(slot)" />
+            <Badge v-for="slot in sessionInfo" :key="slot.time" :label="slot.time" :color="getColor(slot)" class="booking-badge" @click="selectSlot(slot)" :class="{ disabled:  slot.status == 'full' ||slot.status=='past'  ,'opacity-50': slot.status === 'past'}" />
         </div>
   </div>
 </template>

@@ -53,3 +53,7 @@ export const fetchPatientAppointmentsHistoryApi=(params)=>{
         params
     })
 }
+
+export const cancelBookedAppointmentApi=(appointment_id,data)=>{
+    return api.put(`api/appointments/cancel/${appointment_id}`,data)
+}

@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi,completeAppointmentApi,fetchDoctorAppointmentsHistoryApi,rescheduleAppointmentApi } from '@/api/appointment'
+import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi,completeAppointmentApi,fetchDoctorAppointmentsHistoryApi,rescheduleAppointmentApi,cancelBookedAppointmentApi } from '@/api/appointment'
 
 import { fetchPatientAppointmentsHistoryApi } from '@/api/appointment'
 
 import { useDoctorStore } from './doctor.store'
+
 
 
 export const useAppointmentStore=defineStore('appointment',()=>{
@@ -231,6 +232,23 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         activeAppointment.value =res.data.appointments.find(a =>["pending", "confirmed"].includes(a.status)) || null
     }
 
+    async function cancelBookedAppointment(appointment_id,data){
+        loading.value=true
+        error.value=null
+        try {
+            const res =await cancelBookedAppointmentApi(appointment_id,data)
+            await fetchMyActiveAppointment()
+            await fetchAllDoctorsAvailability(selectedDate.value)
+            console.log(res);
+            
+        } catch (err) {
+            error.value=err
+            console.log(err);
+            
+        }finally{
+            loading.value=false
+        }
+    }
 
 
 
@@ -256,6 +274,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         fetchDoctorAppointmentHistory,
         activeAppointment,
         rescheduleAppointment,
-        fetchMyActiveAppointment
+        fetchMyActiveAppointment,
+        cancelBookedAppointment
     }
 })

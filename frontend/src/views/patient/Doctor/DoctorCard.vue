@@ -1,7 +1,11 @@
 <script setup>
     import Badge from '@/components/common/Badge.vue'
     import Btn from '@/components/common/Btn.vue'
+    import { useAppointmentStore } from '@/stores/appointment.store'
     import { computed } from 'vue'
+
+    const appointment=useAppointmentStore()
+
     const props=defineProps({
         doctor: Object
     })
@@ -17,6 +21,15 @@
     const bookable=computed(()=>{
         return props.doctor.is_bookable
     })
+    async function cancelMyAppointment() {
+        if (!appointment.activeAppointment) return
+
+        const confirmCancel = confirm("Are you sure you want to cancel?")
+        if (!confirmCancel) return
+
+        await appointment.cancelBookedAppointment(appointment.activeAppointment.id,{reason:"Cancelled by patient"})
+        showModal.value = false
+    }
 </script>
 
 <template>
@@ -53,8 +66,12 @@
                     </small>
               </div>
             </div>
-            
-            <Badge :label="bookable ? 'Booking Open' : 'Booking closed'" :color="bookable ? 'success':'danger'"/>  
+            <div v-if="(appointment.activeAppointment && appointment.activeAppointment.doctor.id == props.doctor.id)" >
+                <Badge label="Active Booking" color="info" class="d-block mb-2" />
+                <Badge label="Reschedule Only" color="warning"  />
+                    
+            </div>
+            <Badge v-else :label="bookable ? 'Booking Open' : 'Booking closed'" :color="bookable ? 'success':'danger'"/>  
           </div>
 
           <div class="mb-2">
@@ -95,7 +112,11 @@
               {{ lang }}<span v-if="index < doctor.languages_spoken.length - 1">, </span>
             </span>
           </p>
-          <Btn label="Book Appointment" class="btn-primary" :disabled="!bookable" @click="emit('doctor-appt')" />
+          <div v-if="appointment.activeAppointment && appointment.activeAppointment.doctor.id == props.doctor.id" class="d-flex ">
+            <Btn label="Reschedule" class="btn-warning me-2" @click="emit('doctor-appt')"/>
+            <Btn label="Cancel Appointment" class="btn-outline-danger" @click="cancelMyAppointment"/>
+          </div >
+          <Btn v-else label="Book Appointment" class="btn-primary" :disabled="!bookable" @click="emit('doctor-appt')" />
         </div>
       </div>
     </div>
