@@ -4,7 +4,6 @@
     import SessionBox from './SessionBox.vue';
     import Badge from '../common/Badge.vue';
     import { computed ,watch,ref} from 'vue';
-
     const form=defineModel()
     const color=ref("danger")
 

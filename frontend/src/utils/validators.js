@@ -31,3 +31,28 @@ export const hasDigit = (msg) => {
 export const hasAlpha = (letter, msg) => {
     return (value) => value && value.includes(letter) ? "" : msg || `Must contain the letter '${letter}'`
 }
+
+
+function toMinutes(time) {
+  if (!time) return null
+  const [h, m] = time.split(":").map(Number)
+  return h * 60 + m
+}
+
+export const timeMin = (min, msg) => value => {
+  if (!value) return null
+  return toMinutes(value) < toMinutes(min) ? msg : null
+}
+
+export const timeMax = (max, msg) => value => {
+  if (!value) return null
+  return toMinutes(value) > toMinutes(max) ? msg : null
+}
+
+export const afterTime = (startRef, msg) => value => {
+    if (!value) return null
+    if (!startRef.value) return "Please enter start time first"
+    return toMinutes(value) <= toMinutes(startRef.value)
+        ? msg || "End time must be after start time"
+        : null
+}

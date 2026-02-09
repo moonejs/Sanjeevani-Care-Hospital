@@ -1,8 +1,10 @@
 <script setup>
     import CheckBox from '../Form/BaseCheckbox.vue';
     import Label from '../Form/BaseLabel.vue';
-    import Input from '../Form/BaseInput.vue';
+    import BaseInput from '../Form/BaseInput.vue';
     import { watch ,computed} from 'vue';
+    import { useField } from '@/reusable/useField';
+    import { afterTime,timeMax,timeMin } from "@/utils/validators"
 
 
 
@@ -33,6 +35,35 @@
             }
         }
     )
+    const SESSION_RULES = {
+        Morning: { min: "05:00", max: "11:59" },
+        Afternoon: { min: "12:00", max: "16:59" },
+        Evening: { min: "17:00", max: "22:00" }
+    }
+
+    const rules = SESSION_RULES[props.session]
+
+    const startTimeField = useField(
+        computed(() => sessionDetail.value.startTime),
+        [
+            timeMin(rules.min, `Enter valid ${props.session} sessioin Time`),
+            timeMax(rules.max, `Enter valid ${props.session} session Time `)
+        ]
+    )
+
+    const endTimeField = useField(
+    computed(() => sessionDetail.value.endTime),
+        [
+            afterTime(
+                computed(() => sessionDetail.value.startTime),
+                "End time must be after start time"
+            ),
+            timeMin(rules.min, `Enter valid ${props.session} sessioin Time `),
+            timeMax(rules.max, `Enter valid ${props.session} sessioin Time`),
+        ]
+    )
+    
+
 
     const disableInput=computed(()=>{
         return !props.isOnlineBookingEnabled || !sessionDetail.value.enabled;
@@ -43,7 +74,7 @@
     })
 </script>
 <template>
-    <div class="session-box bg-success mb-4">
+    <div class="session-box bg-success-subtle mb-4">
         <div class="bg-info">
             <Label class="session-box-session-label" :label="props.session" :for="props.session"/>
             <CheckBox v-model="sessionDetail.enabled" :id="props.session" :disabled="disableCheckbox"   />
@@ -52,12 +83,12 @@
             <div class="row">
                 <div class="col">
                     <Label label="Start Time" for="start_time"/>
-                    <Input type="time"  :id="`${props.session}-start`"v-model="sessionDetail.startTime" :disabled="disableInput" placeholder="9:00 AM"/>
+                    <BaseInput type="time"  :id="`${props.session}-start`"v-model="sessionDetail.startTime" :disabled="disableInput" :error="startTimeField.error.value":valid="startTimeField.valid.value":show="startTimeField.show.value"/>
                     
                 </div>
                 <div class="col">
                     <Label label="End Time" for="end_time"/>
-                    <Input type="time" :id="`${props.session}-end`" v-model="sessionDetail.endTime" :disabled="disableInput" />
+                    <BaseInput type="time" :id="`${props.session}-end`" v-model="sessionDetail.endTime" :disabled="disableInput" :error="endTimeField.error.value":valid="endTimeField.valid.value":show="endTimeField.show.value"/>
                 </div>
                 <div class="col">
                     <Label label="Slot Duration" for="slot_duration"/>

@@ -3,8 +3,8 @@
     import ScheduleForm from '@/components/Doctor/ScheduleForm.vue';
     import Btn from '@/components/common/Btn.vue';
     import { useAppointmentStore } from '@/stores/appointment.store';
-
-    import { ref,onMounted, watch } from 'vue';
+    import { useFormValidation } from '@/reusable/useFormValidation';
+    import { ref,onMounted, watch,computed } from 'vue';
 
  
 
@@ -97,6 +97,16 @@
         fetchCurrentAvailability(d)    
     })
 
+    // const { isValid } = useFormValidation({
+    //     fields: [
+    //         startTimeField,
+    //         endTimeField,
+    //         slotDurationField
+    //     ],
+    //     requiredValues: [
+    //         computed(() => availability.value.onlineBooking)
+    //     ]
+    // })
     
 </script>
 
