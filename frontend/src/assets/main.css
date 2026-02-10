@@ -215,3 +215,19 @@
   border-radius: 50%;
   border: 2px solid #dee2e6;
 }
+
+
+
+.admin-dashboard{
+  height: 100vh;
+  width: 100vw;
+}
+
+.admin-navbar{
+   height: 100%;
+  /* width: 20%;  */
+}
+.admin-main-dashboard-container{
+  height: 100%;
+  width: 100%; 
+}
