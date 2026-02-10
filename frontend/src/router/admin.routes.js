@@ -42,6 +42,18 @@ export default [
             component:()=>import('@/views/admin/departments/AddDepartmentPage.vue')
           }
         ]
+      },
+      {
+        path:"appointments",
+        name:"appointments-admin",
+        component:()=>import('@/views/admin/AppointmentsPage.vue'),
+        
+      },
+      {
+        path:"patients",
+        name:"patients-admin",
+        component:()=>import('@/views/admin/PatientsPage.vue'),
+        
       }
     ]
   }
