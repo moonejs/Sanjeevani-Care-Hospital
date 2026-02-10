@@ -1,6 +1,9 @@
 <script setup>
+    import CountCard from '@/components/admin/CountCard.vue';
 </script>
 
 <template>
-    <div>i am admin baby</div>
+    <div>
+        <CountCard label=""/>
+    </div>
 </template>
