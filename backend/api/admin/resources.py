@@ -45,9 +45,12 @@ class AdminDashboard(Resource):
             "id": appt.id,
             "patient_name": appt.patient.name,
             "doctor_name": appt.doctor.name,
+            "department":appt.doctor.department.name,
             "date": appt.appointment_date.strftime("%Y-%m-%d"),
             "time": appt.start_time.strftime("%H:%M"),
-            "status": appt.status
+            "status": appt.status,
+            "session":appt.session,
+            "type":appt.type
         } for appt in upcoming]
         
         status_summary = {
@@ -67,12 +70,12 @@ class AdminDashboard(Resource):
         for status, count in status_counts:
             status_summary[status] = count
         
-        recent = Appointment.query.order_by(Appointment.created_at.desc()).limit(5).all()
+        # recent = Appointment.query.order_by(Appointment.created_at.desc()).limit(5).all()
         
-        recent_activity = [{
-            "message": f"{a.patient.name} booked appointment with {a.doctor.name}",
-            "time": a.created_at.strftime("%Y-%m-%d %H:%M")
-        } for a in recent]
+        # recent_activity = [{
+        #     "message": f"{a.patient.name} booked appointment with {a.doctor.name}",
+        #     "time": a.created_at.strftime("%Y-%m-%d %H:%M")
+        # } for a in recent]
         
         return {
             "stats": {
@@ -84,5 +87,5 @@ class AdminDashboard(Resource):
             },
             "upcoming_appointments": upcoming_data,
             "status_summary": status_summary,
-            "recent_activity": recent_activity
+            # "recent_activity": recent_activity
         }, 200

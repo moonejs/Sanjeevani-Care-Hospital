@@ -17,7 +17,7 @@ class Appointment(db.Model):
     status = db.Column(db.String(60),default="pending",nullable=False)
 
     type = db.Column(db.String(60),default="opd",nullable=False)
-
+    session=db.Column(db.String(60),nullable=False)
     notes = db.Column(db.Text)
     cancel_reason = db.Column(db.Text)
 

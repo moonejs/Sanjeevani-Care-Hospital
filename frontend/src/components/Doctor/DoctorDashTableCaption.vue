@@ -8,7 +8,7 @@
         stats:String,
         tableStatsArr:Array
     })
-    
+    const emit=defineEmits(['todayOrWeek'])
 </script>
 <template>
     <div class="d-flex align-items-center justify-content-between">
@@ -17,11 +17,11 @@
             <TableStats :table-stats="tableStatsArr" />
         </div>
     </div>
-    <div class="d-flex align-items-center">
-        <div>
-            <TableNavigaionBox :nav-array="navArray"/>
+    <div class="d-flex align-items-center " v-if="stats=='navs'">
+        <div >
+            <TableNavigaionBox @today-or-week="(value) => emit('todayOrWeek', value)"/>
         </div>
-        <div v-if="stats=='navs'">
+        <div >
             <TableStats :table-stats="tableStatsArr" />
         </div>
     </div>

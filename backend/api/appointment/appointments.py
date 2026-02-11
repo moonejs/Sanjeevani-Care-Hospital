@@ -298,7 +298,8 @@ class PatientAppointmentBooking(Resource):
             start_time=start_time,
             end_time=end_time,
             status="pending",
-            type=type
+            type=type,
+            session=session
         )
 
         db.session.add(appointment)

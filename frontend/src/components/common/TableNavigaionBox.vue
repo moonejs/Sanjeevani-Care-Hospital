@@ -1,12 +1,23 @@
 <script setup>
+    
+    import { ref } from 'vue';
     defineProps({
         navArray:Array
     })
+    const activeTab = ref('today')
+    const emit=defineEmits(['todayOrWeek'])
 </script>
 <template>
     <div class="nav nav-tabs">
-        <li class="nav-item" v-for="(nav,i) in navArray" :key="i">
-            <h3 class="bg-danger me-3 p-1">{{ nav }}</h3>
+        <li class="nav-item">
+            <button class="nav-link" :class="{active: activeTab==='today'}"  @click="activeTab='today'; emit('todayOrWeek','today')"  >
+                Today
+            </button>
+            </li>
+            <li class="nav-item">
+            <button class="nav-link" :class="{active: activeTab==='week'}" @click="activeTab='week' ; emit('todayOrWeek','week')" >
+                This Week
+            </button>
         </li>
         
     </div>
