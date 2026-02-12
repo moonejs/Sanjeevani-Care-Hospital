@@ -32,6 +32,7 @@ class DoctorDetails(Resource):
             "experience_years": d.experience_years,
             "room_number":d.room_number,
             "roles":d.roles,
+            "registration_number":d.registration_number,
             "department": d.department.name,
             "opd_timing": d.opd_timing,
             "emergency_available": d.emergency_available,
@@ -40,6 +41,7 @@ class DoctorDetails(Resource):
                 request.host_url + "uploads/doctors/profile/" + d.profile_image
                 if d.profile_image else None
             ),
+            "profile_completed":d.profile_completed,
             "is_bookable": is_doctor_bookable(d),
             "languages_spoken": (
                 d.languages_spoken.split(",") if d.languages_spoken else []

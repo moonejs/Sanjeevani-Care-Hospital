@@ -15,15 +15,21 @@
 </script>
 
 <template>
-    <div class="row container">
-        <!-- <div class="row gap-3">
+    <div class="row container-fluid justify-content-between">
+        
+        <div class="col-10 bg-warning-subtle  ">
+            <AdminDashboardAppointmentTable />
+        </div>
+        <div class="col-2 bg-info-subtle">
+            <div class="row">
+                dd
+            </div>
+            <div class="row gap-3">
             <CountCard label="Doctors" :stats="stats?.doctors"/>
             <CountCard label="Patients" :stats="stats?.patients"/>
             <CountCard label="Appointments" :stats="stats?.appointments"/>
             
-        </div> -->
-        <div class="col bg-warning-subtle">
-            <AdminDashboardAppointmentTable />
+            </div>
         </div>
         
     </div>

@@ -1,6 +1,13 @@
 <script setup>
-
+    import AdminDoctorsTable from '@/components/admin/AdminDoctorsTable.vue';
 </script>
 <template>
-    <h1>Doctors List</h1>
+    <div class="">
+        <div class="col">
+            Add Doctor
+        </div>
+    </div>
+    <div class="container-fluid">
+        <AdminDoctorsTable/>
+    </div>
 </template>
