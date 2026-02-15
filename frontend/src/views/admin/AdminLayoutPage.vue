@@ -15,7 +15,7 @@ import SideNavbar from '@/components/admin/SideNavbar.vue';
             <SideNavbar/>
             
         </div>
-        <div class="admin-main-dashboard-container bg-danger">
+        <div class="admin-main-dashboard-container bg-danger-subtle">
             <RouterView/>
         </div>
     </div>

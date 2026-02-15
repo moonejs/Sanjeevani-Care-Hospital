@@ -19,7 +19,18 @@ class DepartmentDetails(Resource):
                 "id":d.id,
                 "name":d.name,
                 "description":d.description,
-                "icon":d.icon
+                "icon":d.icon,
+                "services":d.services,
+                "facilities":d.facilities,
+                "phone":d.phone,
+                "building":d.building,
+                "floor":d.floor,
+                "emergency_available":d.emergency_available,
+                "is_active":d.is_active,
+                "email":d.email,
+                "opd_timing":d.opd_timing,
+                
+                
             }
             for d in departments
         ],200
