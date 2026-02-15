@@ -5,6 +5,7 @@
     import { useDoctorStore } from '@/stores/doctor.store';
     import AdminDoctorsRow from './AdminDoctorsRow.vue';
     import { onMounted } from 'vue';
+    
     const tHead=["Photo","Registration No.","Name","Department","Email","Specialization","Appointment Status","Actions"]
     
     const doctorStore=useDoctorStore()
@@ -12,6 +13,8 @@
     onMounted(async()=>{
         await doctorStore.fetchDoctors()
     })
+
+    const emit = defineEmits(['view'])
 </script>
 
 <template>
@@ -24,7 +27,7 @@
         </template>
         <template #body>
             <AdminDoctorsRow v-for="(doctor,index) in doctorStore.doctorsList" :key="index" :index="
-            index" :doctor="doctor"/>
+            index" :doctor="doctor" @view="emit('view',doctor)"/>
         </template>
     
     </BaseTable>

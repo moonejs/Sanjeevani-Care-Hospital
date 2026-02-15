@@ -1,9 +1,11 @@
 <script setup>
     import Badge from '../common/Badge.vue';
+    import Btn from '../common/Btn.vue';
     defineProps({
         doctor:Object,
         index:Number
     })
+    const emit=defineEmits(['view'])
 </script>
 <template>
     <tr>
@@ -17,6 +19,9 @@
         <td>
             <Badge label="open" v-if="doctor?.is_bookable" class="text-bg-success"/>
             <Badge label="close" v-else class="text-bg-danger"/>
+        </td>
+        <td>
+            <Btn label="View" class="btn-outline-primary btn-sm" @click="emit('view')" />
         </td>
         
     </tr>
