@@ -24,7 +24,17 @@ class PatientList(Resource):
                 "name":p.name,
                 "gender":p.gender,
                 "age":p.age,
-                "contact":p.contact
+                "contact":p.contact,
+                "address":p.address,
+                "height_cm":p.height_cm,
+                "weight_kg":p.weight_kg,
+                "blood_group":p.blood_group,
+                "emergency_contact_name":p.emergency_contact_name,
+                "emergency_contact_number":p.emergency_contact_number,
+                "profile_image":p.profile_image,
+                "profile_completed":p.profile_completed,
+                "email":p.user.email, 
+                
             }
             for p in patients
         ]

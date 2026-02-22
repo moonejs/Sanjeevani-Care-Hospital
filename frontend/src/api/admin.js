@@ -7,3 +7,7 @@ export const fetchAdminDashboardDetailsApi=(range='today')=>{
     })
 }
 
+export const fetchPatientsApi=()=>{
+    return api.get("api/patients")
+}
+
