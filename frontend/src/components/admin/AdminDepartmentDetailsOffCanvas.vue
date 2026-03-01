@@ -47,7 +47,7 @@
       <div class="mb-3">
         <h6 class="fw-semibold mb-2">Basic Information</h6>
         <div class="small text-muted mb-1">Description</div>
-        <p class="mb-2">{{ department.description || "—" }}</p>
+        <p class="mb-2">{{ department.description || "----" }}</p>
 
         <div class="d-flex flex-wrap gap-3">
           <div>

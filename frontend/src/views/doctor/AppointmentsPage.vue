@@ -5,6 +5,7 @@
     import Pagination from '@/components/common/Pagination.vue'
     import AppointmentDetailsOffcanvas from '@/components/Doctor/appointment/AppointmentDetailsOffcanvas.vue'
     import { ref } from 'vue'
+    import LoadingState from '@/components/common/LoadingState.vue'
 
     const appointment = useAppointmentStore()
     const showDetails = ref(false)
@@ -32,10 +33,14 @@
         <div class="bg-info doctor-appointment-filter">
             filter
         </div>
-        <div class="container-fluid">
-            <DoctorAppointmentsPageTable :appointments="appointment.appointmentHistory" @view="openDetails" />
-            <Pagination :pagination="appointment.historyPagination" @change="changePage"/>
-        </div>
-        <AppointmentDetailsOffcanvas :show="showDetails" :appointment="selectedAppointment" @close="closeDetails"/>
+        <LoadingState :loading="appointment.loading">
+
+            <div class="container-fluid" v-if="appointment.appointmentHistory.length !=0">
+                <DoctorAppointmentsPageTable :appointments="appointment.appointmentHistory" @view="openDetails" />
+                <Pagination :pagination="appointment.historyPagination" @change="changePage"/>
+            </div>
+            <h2 v-else class="text-muted text-center mt-10">No Appointment History</h2>
+            <AppointmentDetailsOffcanvas :show="showDetails" :appointment="selectedAppointment" @close="closeDetails"/>
+        </LoadingState>
     </div>
 </template>

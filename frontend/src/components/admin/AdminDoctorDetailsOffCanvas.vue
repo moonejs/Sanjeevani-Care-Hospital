@@ -66,10 +66,10 @@
       
       <div class="mb-3">
         <h6 class="fw-semibold border-bottom pb-1">Basic Info</h6>
-        <p><b>Gender:</b> {{ doctor.gender }}</p>
-        <p><b>Age:</b> {{ doctor.age }}</p>
+        <p><b>Gender:</b> {{ doctor.gender || 'Not Provided'}}</p>
+        <p><b>Age:</b> {{ doctor.age || "Not Provided" }}</p>
         <p><b>Email:</b> {{ doctor.email }}</p>
-        <p><b>Contact:</b> {{ doctor.contact }}</p>
+        <p><b>Contact:</b> {{ doctor.contact ?? 'Not Provided' }}</p>
       </div>
 
       
@@ -78,25 +78,26 @@
         <p><b>Department:</b> {{ doctor.department }}</p>
         <p><b>Roles:</b> {{ doctor.roles }}</p>
         <p><b>Qualification:</b> {{ doctor.qualification }}</p>
-        <p><b>Experience:</b> {{ doctor.experience_years || 'N/A' }} years</p>
+        <p><b>Experience (years) :</b> {{ doctor.experience_years  ?? 'Not Provided' }}</p>
         <p><b>Registration No:</b> {{ doctor.registration_number }}</p>
       </div>
 
       
       <div class="mb-3">
         <h6 class="fw-semibold border-bottom pb-1">Hospital Details</h6>
-        <p><b>Room:</b> {{ doctor.room_number }}</p>
-        <p><b>OPD Timing:</b> {{ doctor.opd_timing }}</p>
-        <p><b>Consultation Fee:</b> ₹{{ doctor.consultation_fee }}</p>
+        <p><b>Room:</b> {{ doctor.room_number ?? 'Not Provided' }}</p>
+        <p><b>OPD Timing:</b> {{ doctor.opd_timing ?? 'Not Provided'}}</p>
+        <p><b>Consultation Fee (₹):</b> {{ doctor.consultation_fee ?? 'Not Provided'}}</p>
       </div>
 
       
       <div class="mb-3">
         <h6 class="fw-semibold border-bottom pb-1">Languages</h6>
         <div class="d-flex flex-wrap gap-2">
-          <span v-for="(lang, i) in doctor.languages_spoken" :key="i" class="badge bg-light text-dark border">
+          <span v-if="doctor.languages_spoken.length !=0" v-for="(lang, i) in doctor.languages_spoken" :key="i" class="badge bg-light text-dark border">
             {{ lang }}
           </span>
+          <span v-else class="text-muted small">No Languages Provided</span>
         </div>
       </div>
 

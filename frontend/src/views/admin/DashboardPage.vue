@@ -15,8 +15,8 @@
 </script>
 
 <template>
+    
     <div class="row container-fluid justify-content-between">
-        
         <div class="col-10 bg-warning-subtle  ">
             <AdminDashboardAppointmentTable />
         </div>

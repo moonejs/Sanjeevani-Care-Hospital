@@ -5,7 +5,7 @@
     import AdminDashboardAppointmentRow from './AdminDashboardAppointmentRow.vue';
     import BaseTableHead from '../layout/BaseTableHead.vue';
     import { useAdminStore } from '@/stores/admin.store';
-
+    import Loading from '../common/Loading.vue';
     const adminStore=useAdminStore()
 
     const type=ref('today')
@@ -27,7 +27,15 @@
             <BaseTableHead :t-head="tHead"/>
         </template>
         <template #body>
-            <AdminDashboardAppointmentRow v-for="(app,index) in adminStore.dashboard.upcoming_appointments" :key="index" :index="index" :appointment="app"/>
+            <Loading :loading="adminStore.loading" class="ms-2 mt-3 start-50 position-absolute" />
+
+            <template v-if="!adminStore.loading">
+                <h2 v-if="adminStore.dashboard.upcoming_appointments.length === 0" class="text-muted position-absolute ms-10 mt-4">No Upcoming Appointments</h2>
+                
+                <AdminDashboardAppointmentRow v-else v-for="(app, index) in adminStore.dashboard.upcoming_appointments" :key="index" :index="index" :appointment="app"/>
+            </template>
+            
+
         </template>
     </BaseTable>
 </template>

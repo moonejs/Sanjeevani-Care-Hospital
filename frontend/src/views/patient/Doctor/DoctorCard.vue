@@ -83,33 +83,37 @@
           <p class="small mb-2 text-muted fst-italic text-truncate" style="max-width: 600px;" v-if="doctor.bio">
             "{{ doctor.bio }}"
           </p>
+          
 
           <div class="row g-2 small mb-2">
             <div class="col-6">
-              <strong>Experience:</strong> <mark>{{ doctor.experience_years ||'Null' }} years</mark>  
+              <strong>Experience (years): </strong> <mark>{{ doctor.experience_years ||'Not Provided'  }} </mark>  
             </div>
             <div class="col-6">
-              <strong>Age :</strong> {{ doctor.age || 'Null' }} years
+              <strong>Age (years) :</strong> {{ doctor.age || 'Not Provided'  }} 
             </div>
             <div class="col-6">
-              <strong class="text-capitalize">Gender : {{ doctor.gender || 'Null'}} </strong> 
+              <strong class="text-capitalize">Gender : {{ doctor.gender || 'Not Provided' }} </strong> 
             </div>
             <div class="col-6">
-              <strong>Room:</strong> {{ doctor.room_number || 'Null' }}
+              <strong>Room:</strong> {{ doctor.room_number || 'Not Provided'  }}
             </div>
             <div class="col-6">
-              <strong>Fee:</strong> ₹{{ doctor.consultation_fee || 'Null' }}
+              <strong>Fee (₹):</strong> {{ doctor.consultation_fee || 'Not Provided'  }}
             </div>
           </div>
 
           <p class="small mb-2">
-            <strong>OPD :</strong> {{ doctor.opd_timing || 'Null' }}
+            <strong>OPD :</strong> {{ doctor.opd_timing || 'Not Provided'  }}
           </p>
 
           <p class="text-capitalize mb-2">
             <strong>Languages : </strong> 
-            <span v-for="(lang, index) in doctor.languages_spoken" :key="lang">
+            <span v-for="(lang, index) in doctor.languages_spoken" :key="lang" v-if="doctor.languages_spoken.length !=0">
               {{ lang }}<span v-if="index < doctor.languages_spoken.length - 1">, </span>
+            </span>
+            <span v-else class="text-muted small">
+              Not Provided
             </span>
           </p>
           <div v-if="appointment.activeAppointment && appointment.activeAppointment.doctor.id == props.doctor.id" class="d-flex ">

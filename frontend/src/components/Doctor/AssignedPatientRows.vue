@@ -20,10 +20,10 @@
 <template>
     <tr>
         <th scope="row">{{ index+1 }}</th>
-        <td>{{ patient.name }}</td>
-        <td>{{ patient.age }}</td>
+        <td>{{ patient.name || 'Not Provided'}}</td>
+        <td>{{ patient.age ||'Not Provided' }}</td>
         <td>{{ patient.gender }}</td>
-        <td>{{ patient.last_visit }}</td>
+        <td>{{ patient.last_visit || 'Never Visited' }}</td>
         <td>{{ patient.visits }}</td>
         <td>
             <Btn label="View" class="btn-outline-tertiary btn-sm" @click="openPatientProfilePage(patient.patient_id)" />

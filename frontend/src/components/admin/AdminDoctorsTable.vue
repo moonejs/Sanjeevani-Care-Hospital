@@ -4,15 +4,12 @@
     import DoctorDashTableCaption from '../Doctor/DoctorDashTableCaption.vue';
     import { useDoctorStore } from '@/stores/doctor.store';
     import AdminDoctorsRow from './AdminDoctorsRow.vue';
-    import { onMounted } from 'vue';
+
     
     const tHead=["Photo","Registration No.","Name","Department","Email","Specialization","Appointment Status","Actions"]
     
     const doctorStore=useDoctorStore()
 
-    onMounted(async()=>{
-        await doctorStore.fetchDoctors()
-    })
 
     const emit = defineEmits(['view'])
 </script>

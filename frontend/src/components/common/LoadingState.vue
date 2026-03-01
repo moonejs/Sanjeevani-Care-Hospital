@@ -1,7 +1,7 @@
 <script setup>
   defineProps({
     loading: Boolean,
-
+    class:String,
     type: {
       type: String,
       default: "spinner"
@@ -16,8 +16,8 @@
 
 <template>
     <template v-if="loading">
-      <div v-if="type === 'spinner'" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status"></div>
+      <div v-if="type === 'spinner'" class="text-center py-5  mt-10" :class="$props.class">
+        <div class="spinner-border text-primary " role="status"></div>
       </div>
 
       <template v-else>

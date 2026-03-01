@@ -3,7 +3,7 @@
     import { usePatientStore } from '@/stores/patient.store'
     import PatientAppointmentsTable from '@/components/Patient/PatientAppointmentsTable.vue'
     import AppointmentDetailsOffcanvas from '@/components/Doctor/appointment/AppointmentDetailsOffcanvas.vue'
-
+    import LoadingState from '@/components/common/LoadingState.vue'
     import Pagination from '@/components/common/Pagination.vue'
 
     const patient = usePatientStore()
@@ -28,24 +28,30 @@
 </script>
 
 <template>
-  <div class="container-fluid">
-    
-    <PatientAppointmentsTable
-      :appointments="patient.patientAppointmentHistory"
-      :loading="patient.loading"
-      @view="openDetails"
-    />
+  <LoadingState :loading="patient.loading">
+      <div class="container-fluid" v-if="patient.patientAppointmentHistory.length !=0">
+      
+      <PatientAppointmentsTable
+        :appointments="patient.patientAppointmentHistory"
+        :loading="patient.loading"
+        @view="openDetails"
+      />
 
-    <Pagination
-      :pagination="patient.historyPagination"
-      @change="changePage"
-    />
+      <Pagination
+        :pagination="patient.historyPagination"
+        @change="changePage"
+      />
 
-    <AppointmentDetailsOffcanvas
-      :show="showDetails"
-      :appointment="selectedAppointment"
-      @close="showDetails = false",
-      owner="patient"
-    />
-  </div>
+      <AppointmentDetailsOffcanvas
+        :show="showDetails"
+        :appointment="selectedAppointment"
+        @close="showDetails = false",
+        owner="patient"
+      />
+    </div>
+    <div v-else>
+      <h2 class="text-muted text-center mt-10 ">No Appointments Found</h2>
+    </div>
+  </LoadingState>
+  
 </template>

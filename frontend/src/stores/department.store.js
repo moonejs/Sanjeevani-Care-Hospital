@@ -1,19 +1,23 @@
 import { defineStore } from "pinia";
 import { ref,computed } from "vue";
 import { departmentDetailsApi,departmentDetailsByIdApi,addDepartmentApi } from "@/api/department";
+import { delay } from "@/utils/comman";
 
 export const useDepartmentStore = defineStore('department',()=>{
+
     const departmentList=ref([])
     const loading=ref(false)
     const error=ref(null)
     const selectedDepartment=ref(null)
+
+
 
     async function fetchDepartments(){
         if(departmentList.value.length) return
         loading.value=true
         error.value=null
 
-        const start=Date.now()
+        
         try {
             const res=await departmentDetailsApi()
             departmentList.value=res.data
@@ -25,13 +29,7 @@ export const useDepartmentStore = defineStore('department',()=>{
             console.log(err);
             
         }finally{
-            const elapsed = Date.now() - start
-            const minDelay = 800 
-            if (elapsed < minDelay) {
-            await new Promise(resolve =>
-                setTimeout(resolve, minDelay - elapsed))
-            }
-
+            await delay(2000)
             loading.value = false
             }
     }
@@ -81,6 +79,6 @@ export const useDepartmentStore = defineStore('department',()=>{
         error,
         fetchDepartmentById,
         selectedDepartment,
-        addDepartment
+        addDepartment,
     }
 })

@@ -73,8 +73,8 @@
           
             <DoctorCard v-for="doc in filteredDoctors" :key="doc.id" :doctor="doc"  :id="`doctor-${doc.id}`" class="mb-3 " :class="doc.id == route.query.focus ? 'bg-secondary-subtle' :''" @doctor-appt="openDoctorApptPage(doc.id)"/>
 
-            <div v-if="!filteredDoctors.length" class="text-center text-muted">
-              No doctors found
+            <div v-if="!filteredDoctors.length" >
+              <h2 class="text-muted mt-6 text-center">No doctors found</h2>
             </div>
           </LoadingState>
         </div>

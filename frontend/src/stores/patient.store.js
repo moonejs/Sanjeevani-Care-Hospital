@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { fetchPatientDashboardDataApi,updatepatientProfileApi,exportPatientTreatmentApi,checkExportStatusApi } from "@/api/patient";
 import { fetchPatientAppointmentsHistoryApi } from "@/api/appointment";
+import { delay } from "@/utils/comman";
 
 import { ref } from "vue";
 
@@ -12,10 +13,13 @@ export const usePatientStore=defineStore('patient',()=>{
     const lastVisit = ref(null)
     const historyPagination = ref({ page: 1, per_page: 6, total: 0, pages: 1 })
     const patientAppointmentHistory=ref([])
+    
 
     async function fetchPatientDashboardData(){
         loading.value=true
         error.value=null
+
+       
         try {
             const res = await fetchPatientDashboardDataApi()
 
@@ -30,6 +34,7 @@ export const usePatientStore=defineStore('patient',()=>{
             console.log(err);
             
         }finally{
+            await delay(1000)
             loading.value=false
         }
     }
@@ -38,6 +43,7 @@ export const usePatientStore=defineStore('patient',()=>{
         loading.value=true
         error.value=null
 
+        
         try {
 
             const res = await fetchPatientAppointmentsHistoryApi({ page, per_page: historyPagination.value.per_page })
@@ -50,6 +56,7 @@ export const usePatientStore=defineStore('patient',()=>{
             console.log(err);
             
         }finally{
+            await delay(2000)
             loading.value=false
         }
     }

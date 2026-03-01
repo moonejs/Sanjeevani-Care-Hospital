@@ -4,8 +4,6 @@ import { delay } from "@/utils/comman";
 import { ref } from "vue";
 
 
-
-
 export const useDoctorStore=defineStore('doctor',()=>{
 
     const doctorsList=ref([])
@@ -22,21 +20,24 @@ export const useDoctorStore=defineStore('doctor',()=>{
     const doctorsByDepartment = ref([])
     const doctorProfile = ref(null)
 
+
     async function fetchDoctors(){
-        if(doctorsList.value.length) return
         loading.value=true
         error.value=null
+        
         try {
             const res = await doctorDetailsApi()
-            console.log(res);
-            await delay(5000)
+            console.log(res);        
             doctorsList.value=res.data
+        
             
-        } catch (error) {
-            error.value=error
+        } catch (err) {
+            error.value=err
             console.log(error);            
         }finally{
+            await delay(5000)
             loading.value=false
+
         }
         
     }
@@ -135,6 +136,7 @@ export const useDoctorStore=defineStore('doctor',()=>{
             console.log(err);
             
         }finally{
+            await delay(2000)
             loading.value=false
         }
     }
@@ -225,6 +227,6 @@ export const useDoctorStore=defineStore('doctor',()=>{
         addDoctor,
         fetchCurrrentDoctorDetails,
         updateDoctorProfile,
-        doctorProfile
+        doctorProfile,
     }
 })

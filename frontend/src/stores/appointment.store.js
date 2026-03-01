@@ -5,7 +5,7 @@ import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAva
 import { fetchPatientAppointmentsHistoryApi } from '@/api/appointment'
 
 import { useDoctorStore } from './doctor.store'
-
+import { delay } from '@/utils/comman'
 
 
 export const useAppointmentStore=defineStore('appointment',()=>{
@@ -153,6 +153,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             console.log(err);
             
         }finally{
+            
             loading.value=false
         }
     }
@@ -195,6 +196,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     async function fetchDoctorAppointmentHistory(page = 1) {
         loading.value = true
         error.value =null
+
         try {
             const res = await fetchDoctorAppointmentsHistoryApi({ page, per_page: historyPagination.value.per_page })
 
@@ -207,6 +209,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             console.log(err);
             
         }finally {
+            await delay(2000)
             loading.value = false
         } 
     }

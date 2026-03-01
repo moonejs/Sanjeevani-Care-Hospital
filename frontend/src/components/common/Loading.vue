@@ -4,7 +4,7 @@
     })
 </script>
 <template>
-    <div v-if="loading" class="spinner-border" role="status">
+    <div v-if="loading" class=" spinner-border text-primary " role="status">
         
     </div>
 </template>

@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref, computed ,watch} from 'vue'
 import { fetchAdminDashboardDetailsApi,fetchPatientsApi } from '@/api/admin'
-
+import { delay } from '@/utils/comman'
 
 export const useAdminStore=defineStore('admin',()=>{
     const loading = ref(false)
     const error = ref(null)
     const appointmentSummary = ref({pending: 0, confirmed: 0, completed: 0, cancelled: 0})
     const patientList=ref([])
+
+
 
     const dashboard = ref({
         stats: {},
@@ -20,7 +22,6 @@ export const useAdminStore=defineStore('admin',()=>{
     async function fetchAdminDashboardDetails(range = "today") {
         loading.value = true
         error.value = null
-
         try {
             selectedRange.value = range
             const res = await fetchAdminDashboardDetailsApi(range)
@@ -32,6 +33,7 @@ export const useAdminStore=defineStore('admin',()=>{
             error.value = err
             console.error("Dashboard fetch failed:", err)
         } finally {
+            await delay(2000)
             loading.value = false
         }
     }

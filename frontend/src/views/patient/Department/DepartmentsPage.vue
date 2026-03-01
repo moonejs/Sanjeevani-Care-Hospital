@@ -3,6 +3,7 @@
     import ProfileCard from '@/components/layout/ProfileCard.vue';
     import { useDepartmentStore } from '@/stores/department.store';
     import Loading from '@/components/common/Loading.vue';
+    import LoadingState from '@/components/common/LoadingState.vue';
     import { onMounted } from 'vue';
     import { useRouter } from 'vue-router';
 
@@ -30,13 +31,9 @@
 <template>
     <div>
         <Header label="Departments"/>
-            <div v-if="department.loading" class="empty-state">
-                <Loading :loading="true" />
-            </div>
-            <div
-                v-else-if="!department.departmentList.length"
-                class="empty-state">
-                <h2>No departments yet</h2>
+            <LoadingState :loading="department.loading">
+            <div v-if="department.departmentList.length == 0" class="empty-state">
+                <h2>No departments Found</h2>
             </div>
             <div v-else class="main bg-danger-subtle container-fluid mt-3 ">
                 <div  class="row mb-3">
@@ -44,8 +41,9 @@
                         <ProfileCard type="department" :profile="dept" @select="openDepartmentPage(dept.id)" />
                     </div>
                 </div>
-                
             </div>
+            </LoadingState>
+            
     </div>
     
 </template>

@@ -43,7 +43,7 @@
 
   <div v-else class="card bg-light">
     <div class="card-body text-muted">
-      No upcoming appointments
+      No Confirm appointments
     </div>
   </div>
 </template>

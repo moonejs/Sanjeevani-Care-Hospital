@@ -6,6 +6,7 @@
     import { useDoctorStore } from '@/stores/doctor.store';
     import NextAppointmentCard from '@/components/Doctor/NextAppointmentCard.vue';
     import Time from '@/components/Doctor/Time.vue';
+    
     const appointment=useAppointmentStore()
     const doctor=useDoctorStore()
 
@@ -17,7 +18,7 @@
         setInterval(async () => {
             await appointment.fetchAppointmentsByDoctor(today)
             await doctor.refreshDoctor()
-        }, 150000)
+        }, 15000)
     })
 
     const tHeadArray=ref([])

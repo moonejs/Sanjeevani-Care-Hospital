@@ -55,7 +55,8 @@
     </template>
     
     <template #body>
-      <DoctorAppointmentRow 
+      <h2 class="text-muted position-absolute ms-9 mt-4" v-if="appointment.appointmentListByDoctor.length ==0">No Upcoming Appointments</h2>
+      <DoctorAppointmentRow v-else
       v-for="(app,index) in appointment.appointmentListByDoctor"
       :key="app.appointment_id"
       :appointment="app" :index="index"
