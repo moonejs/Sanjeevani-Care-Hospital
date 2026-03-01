@@ -4,8 +4,11 @@ from flask_restful import Api
 patient_bp = Blueprint("patient_bp",__name__)
 patient_api = Api(patient_bp)
 
-from .resources import PatientList ,PatientProfile,PatientDashboard 
+from .resources import PatientList ,PatientProfile,PatientDashboard,ExportTreatment,ExportStatus 
 
 patient_api.add_resource(PatientList,"/patients")
 patient_api.add_resource(PatientProfile,"/patients/profile")
 patient_api.add_resource(PatientDashboard,"/patients/dashboard")
+patient_api.add_resource(ExportTreatment,"/patients/treatment/export")
+
+patient_api.add_resource(ExportStatus, "/patients/treatment/status/<string:task_id>")

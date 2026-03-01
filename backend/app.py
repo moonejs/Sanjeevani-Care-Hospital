@@ -9,13 +9,16 @@ from models import User, Role
 from flask_cors import CORS
 from flask_security import SQLAlchemyUserDatastore
 import extensions
-
+from celery_app import celery, init_celery
 import os
 
 
 app=Flask(__name__)
 app.config.from_object(Config)
+
 db.init_app(app)
+
+init_celery(app)
 
 CORS(app,origins=["http://127.0.0.1:5000","http://localhost:5173"],supports_credentials=True,
     allow_headers=[
@@ -46,9 +49,13 @@ def doctor_profile_image(filename):
         filename
     )
 
+@app.route("/exports/<filename>")
+def download_file(filename):
+    return send_from_directory("exports", filename, as_attachment=True)
+
 def create_database():
     with app.app_context():
-        
+            
         db.create_all()
         
         patient_role = user_datastore.find_or_create_role(
@@ -74,3 +81,5 @@ def create_database():
 if __name__=='__main__':
     create_database()
     app.run(debug=True)
+
+from tasks import *

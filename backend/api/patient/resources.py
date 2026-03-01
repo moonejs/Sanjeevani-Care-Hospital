@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask_security import auth_required , roles_required,roles_accepted
 from extensions import db
 from models import Patient,Appointment  
-from flask import request,current_app
+from flask import request,current_app,send_from_directory
 from flask_login import current_user
 from datetime import datetime
 import os 
@@ -10,6 +10,11 @@ import uuid
 from utils.files import allowed_file
 
 from werkzeug.utils import secure_filename
+
+from tasks import export_patient_treatments
+from celery.result import AsyncResult
+from celery_app import celery
+
 
 
 class PatientList(Resource):
@@ -175,3 +180,42 @@ class PatientDashboard(Resource):
             "upcoming_count": upcoming_count,
             "last_visit": last_visit
         }, 200
+        
+        
+        
+class ExportTreatment(Resource):
+    @auth_required("token")
+    @roles_required("patient")
+    def post(self):
+        patient=current_user.patient
+        
+        if not patient:
+            return {"message":"Patient not found"},403
+        
+        task = export_patient_treatments.delay(patient.id)
+        
+        return {
+            "message": "Export started",
+            "task_id": task.id
+        }, 202
+        
+class ExportStatus(Resource):
+    @auth_required("token")
+    @roles_required("patient")
+    def get(self, task_id):
+
+        task = AsyncResult(task_id, app=celery)
+
+        if task.state == "PENDING":
+            return {"status": "pending"}
+
+        if task.state == "STARTED":
+            return {"status": "processing"}
+
+        if task.state == "SUCCESS":
+            return {
+                "status": "completed",
+                "filename": task.result["filename"]
+            }
+
+        return {"status": "failed"}, 500

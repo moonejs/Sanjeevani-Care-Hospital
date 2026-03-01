@@ -1,5 +1,9 @@
 <script setup>
     import Btn from '@/components/common/Btn.vue'
+    import { usePatientStore } from '@/stores/patient.store';
+
+    const patientStore=usePatientStore()
+    
     import { watch,onMounted } from 'vue';
     const props = defineProps({
         show: Boolean,
@@ -29,6 +33,9 @@
       }
     )
 
+    async function exportTreatment(){
+      await patientStore.exportPatientTreatment()
+    }
    
 
 </script>
@@ -109,7 +116,7 @@
 
       <hr />
       <div class="d-flex gap-2">
-        <Btn label="Print" class="btn-outline-secondary btn-sm" />
+        <Btn  :label="patientStore.loading ? 'Exporting...' : 'Print'" class="btn-outline-secondary btn-sm" @click="exportTreatment" />
         <Btn label="Close" class="btn-outline-dark btn-sm" @click="emit('close')" />
       </div>
     </div>

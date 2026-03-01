@@ -2,4 +2,4 @@ Flask
 Flask-SQLAlchemy
 Flask-Security
 Flask-Restful
-
+celery

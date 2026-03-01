@@ -23,6 +23,8 @@
         selectedAppointment.value = appt
         showDetails.value = true
     }
+
+    
 </script>
 
 <template>

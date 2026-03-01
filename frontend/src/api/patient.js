@@ -14,3 +14,11 @@ export const updatepatientProfileApi=(data)=>{
 export const fetchPatientDashboardDataApi=()=>{
     return api.get("api/patients/dashboard")
 }
+
+export const exportPatientTreatmentApi=()=>{
+    return api.post("api/patients/treatment/export")
+}
+
+export const checkExportStatusApi = (taskId) => {
+    return api.get(`/api/patients/treatment/status/${taskId}`)
+}

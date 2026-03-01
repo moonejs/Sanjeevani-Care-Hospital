@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { fetchPatientDashboardDataApi,updatepatientProfileApi } from "@/api/patient";
+import { fetchPatientDashboardDataApi,updatepatientProfileApi,exportPatientTreatmentApi,checkExportStatusApi } from "@/api/patient";
 import { fetchPatientAppointmentsHistoryApi } from "@/api/appointment";
 
 import { ref } from "vue";
@@ -70,7 +70,50 @@ export const usePatientStore=defineStore('patient',()=>{
         }
     }
 
+    async function exportPatientTreatment() {
+    loading.value = true
+    error.value = null
 
+    try {
+        const res = await exportPatientTreatmentApi()
+        const taskId = res.data.task_id
+
+        const interval = setInterval(async () => {
+            try {
+                const statusRes = await checkExportStatusApi(taskId)
+
+                console.log("Status:", statusRes.data.status)
+
+                if (statusRes.data.status === "completed") {
+                    clearInterval(interval)
+
+                    const filename = statusRes.data.filename
+
+                   
+                    window.location.href = `http://127.0.0.1:5000/exports/${filename}`
+
+                    loading.value = false
+                }
+
+                if (statusRes.data.status === "failed") {
+                    clearInterval(interval)
+                    loading.value = false
+                    error.value = "Export failed"
+                }
+
+            } catch (err) {
+                clearInterval(interval)
+                loading.value = false
+                error.value = err
+            }
+        }, 2000)
+
+    } catch (err) {
+        loading.value = false
+        error.value = err
+        console.log(err)
+    }
+}
 
     return {
         loading,
@@ -82,6 +125,7 @@ export const usePatientStore=defineStore('patient',()=>{
         fetchPatientAppointmentsHistory,
         historyPagination,
         patientAppointmentHistory,
-        updatepatientProfile
+        updatepatientProfile,
+        exportPatientTreatment
     }
 })
