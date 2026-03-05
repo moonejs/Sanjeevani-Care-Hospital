@@ -1,5 +1,5 @@
 <template>
-    <table class="table caption-top">
+    <table class="table caption-top table-hover3  ">
         <caption>
             <slot name="caption"/>
         </caption>
@@ -10,6 +10,8 @@
             <slot name="body" />
         </tbody>
         
-        
+
+      
     </table>
 </template>
+

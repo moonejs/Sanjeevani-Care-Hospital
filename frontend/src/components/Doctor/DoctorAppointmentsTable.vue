@@ -15,6 +15,7 @@
 
     const navArray=ref(["Today","This Week"])
     const tHead=ref(["Time","Slot","Patient","Status","Type","Action"])
+    const tHeadClasses=ref(["","","","","",""])
 
     onMounted(async () => {
       const today = appointment.formatDate(appointment.today)
@@ -51,7 +52,7 @@
     </template>
 
     <template #head>
-      <BaseTableHead :t-head="tHead"/>
+      <BaseTableHead :t-head="tHead" :t-head-classes="tHeadClasses"/>
     </template>
     
     <template #body>

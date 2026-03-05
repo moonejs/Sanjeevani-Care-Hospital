@@ -1,11 +1,15 @@
 <script setup>
     defineProps({
-        tHead:Array
+        tHead: Array,
+        tHeadClasses: {
+            type: Array,
+            default: () => []
+        }
     })
 </script>
 <template>
     <tr>
-        <th scope="col">S No.</th>
-        <th scope="col" v-for="(h,i) in tHead" :key="i">{{ h }}</th>
+        <th class="text-muted" scope="col">#</th>
+        <th scope="col" v-for="(h,i) in tHead" :key="i" :class="tHeadClasses[i]" class=" text-muted">{{ h }}</th>
     </tr>
 </template>

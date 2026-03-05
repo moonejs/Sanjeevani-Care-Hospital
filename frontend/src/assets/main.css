@@ -1,6 +1,90 @@
+:root {
+  --hms-bg-canvas: #f8f9fa;
+  --hms-card-border: #e0e0e0;
+  --hms-text-main: #3c4043;
+  --hms-text-muted: #70757a;
+  --hms-accent-blue: #1a73e8;
+  --hms-card-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+}
+
+body {
+  background-color: var(--hms-bg-canvas);
+  color: var(--hms-text-main);
+  
+}
+
+.ga-card {
+  background: #fff;
+  border: 1px solid var(--hms-card-border);
+  border-radius: 8px;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.ga-card:hover {
+  box-shadow: 0 4px 6px rgba(32,33,36,.1);
+}
+
+/* badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  padding: 0.5em 0.8em;
+  border-radius: 6px;
+  text-transform: capitalize;
+}
+
+.badge-soft-success { background: #e6f4ea; color: #0b6123; }
+.badge-soft-warning { background: #fef7e0; color: #e79301; }
+.badge-soft-danger { background: #fce8e6; color: #d93025; }
+.badge-soft-primary { background: #e8f0fe; color: #1a73e8; }
+
+/* tables */
+.table-hover3 tbody tr:hover {
+  background-color: rgba(26, 115, 232, 0.02) !important;
+}
+
+
+/* Buttons */
+.btn{
+    border-radius: 4px;
+}
+
 .round {
   border-radius: 6px;
 }
+
+
+.small-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: -2px;
+}
+.stat-item {
+    padding-left: 12px;
+    border-left: 1px solid #eee;
+}
+.stat-item:first-child {
+    border-left: none;
+}
+
+.next-apt-card {
+    border-left: 4px solid var(--hms-accent-blue) !important;
+    min-height: 160px;
+    background: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 .patient-header {
   height: 25vh;
@@ -124,12 +208,6 @@
   overflow-y: auto;
 }
 
-.next-app-card {
-  right: 1rem;
-  top: 24%;
-  width: 25rem;
-  height: 10rem;
-}
 
 .patient-profile-left-panel {
   width: 40%;

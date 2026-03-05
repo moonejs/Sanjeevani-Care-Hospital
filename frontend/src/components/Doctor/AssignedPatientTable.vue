@@ -10,7 +10,7 @@
 
     const appointment=useAppointmentStore()
     const doctor=useDoctorStore()
-    const tHead=ref(["Name","Age","Gender","Last Visit","Visits","Action"])
+    const tHead=ref(["Name","Last Visit","Visits","Action"])
     
 
     const tableStatsArr = computed(() => [

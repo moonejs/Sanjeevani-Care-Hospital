@@ -1,5 +1,6 @@
 <script setup>
   import Btn from '../common/Btn.vue';
+  import Badge from '../common/Badge.vue';
     const props=defineProps({
       appointment: Object,
       index:Number
@@ -22,21 +23,20 @@
   <tr>
     <th scope="row">{{ index+1 }}</th>
     <td>{{ appointment.time }}</td>
-    <td>{{ appointment.session }}</td>
+    <td class="text-uppercase text-muted">{{ appointment.session }}</td>
     <td>{{ appointment.patient.name }}</td>
     <td>
-      <span class="badge"
-        :class="{
-          'text-bg-success': appointment.status === 'confirmed',
-          'text-bg-warning': appointment.status === 'pending',
-          'text-bg-danger': appointment.status === 'cancelled',
-          'text-bg-primary': appointment.status === 'completed'
-        }"
-      >
-        {{ appointment.status }}
-      </span>
+      <Badge :label="appointment.status" 
+        :color="
+          appointment.status === 'confirmed' ? 'success' :
+          appointment.status === 'pending' ? 'warning' :
+          appointment.status === 'cancelled' ? 'danger' :
+          appointment.status === 'completed' ? 'primary' : ''
+        "
+      />
+      
     </td>
-    <td>{{ appointment.type }}</td>
+    <td class="text-muted small text-capitalize">{{ appointment.type }}</td>
     <td>
       <Btn v-if="appointment.status=='pending'" class="btn-outline-success btn-sm me-2" label="Confirm" @click="confirm"/>
       <Btn v-if="appointment.status=='confirmed'" class="btn-outline-primary btn-sm me-2" label="Complete" @click="complete"/>
