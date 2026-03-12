@@ -36,7 +36,7 @@
   <div class="row ">
     <div class="col-4">
       <h6><BaseLabel label=" Medical Registration Number" :required="true"/></h6>
-      <BaseInput  v-model.trim="form.registration_number" :error="registrationField.error.value" :valid="registrationField.valid.value" :show="registrationField.show.value" />
+      <BaseInput  v-model.trim="form.registration_number" :error="registrationField.error.value" :valid="registrationField.valid.value" :show="registrationField.show.value" placeholder="HMS123456..." />
       <Btn class="btn btn-primary mt-3" label="Save" :disabled="!isValid" @click="save" />
     </div>
   </div>

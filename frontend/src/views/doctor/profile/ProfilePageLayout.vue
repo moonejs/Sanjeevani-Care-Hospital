@@ -35,7 +35,7 @@
 </script>
 
 <template>
-  <div class="container-fluid mt-3">
+  <div class="container-fluid px-5 mt-3">
     
     <div class="row mt-3">
       <div class="col-3">
@@ -50,3 +50,5 @@
     </div>
   </div>
 </template>
+
+

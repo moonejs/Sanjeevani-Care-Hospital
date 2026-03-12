@@ -32,7 +32,7 @@
   <div class="mt-2">
     <div class="progress-wrapper">
       <div class="progress-info">
-        <span class="h4 progress-tooltip " :class="color" :style="{ marginLeft: Math.min(percentage - 4.5, 58) + '%' }" >Profile Complete </span>
+        <span class="h4 progress-tooltip  " :class="color" :style="{ marginLeft: Math.min(percentage - 4.5, 58) + '%' }" >Profile Complete </span>
         <div class="progress-percentage">
             <strong>{{ percentage }}%</strong>
         </div>

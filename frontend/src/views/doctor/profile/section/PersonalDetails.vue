@@ -78,9 +78,14 @@
 }
 </script>
 <template>
-  <div class="bg-success position-relative p-3 personal-details overflow-y-auto">
-    <div class="bg-danger">
-      <h2 class="mb-3 ">Personal Details</h2>
+
+<div class="card ">
+
+  <div class="card-body">
+
+    <h4 class="mb-4">
+      Personal Details
+    </h4>
 
       <div class="row">
         <div class="col-4">
@@ -113,8 +118,8 @@
 
             
         </div>
-        <div class=" doctor-profile-img bg-danger">
-              <img v-if="form.profile_image_url" :src="form.profile_image_url" class="img-thumbnail mb-2"  alt="...">
+        <div class=" doctor-profile-img ">
+              <img v-if="form.profile_image_url" :src="form.profile_image_url" class="img-thumbnail rounded-0 border-0 mb-2"  alt="...">
         </div>
         
       </div>

@@ -50,7 +50,6 @@
        <div
     v-for="value in appointment.days"
     :key="value.fullDate"
-    class="date-row"
     :class="{ active: appointment.selectedDate === value.fullDate }"
   >
 

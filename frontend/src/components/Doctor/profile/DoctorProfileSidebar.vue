@@ -13,7 +13,20 @@
 </script>
 
 <template>
-  <div class="list-group list-group-flush gap-4">
-    <Btn v-for="s in sections" :key="s.key" :class="`list-group-item list-group-item-action ${section === s.key ? 'active':''}`" :label="s.label" @click="emit('select',s.key)"/>
+  <div class=" date ">
+    <div v-for="s in sections" :key="s.key" :class="`action ${section === s.key ? 'active':''}`" class="pointer py-3 px-2 fw-bold border-bottom" @click="emit('select',s.key)">
+      {{ s.label }}
+    </div>
   </div>
 </template>
+
+<style scoped>
+.date :hover{
+  background-color: #e8f0fe;
+}
+.active{
+  background:#ddeaff;
+  border-left:3px solid #1a73e8;
+}
+</style>
+

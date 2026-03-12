@@ -8,7 +8,7 @@
   <div class="d-flex justify-content-between align-items-center">
     <div>
       <div class="d-flex ">
-        <h5 class="text-capitalize fw-bolder"> Dr. {{ doctorStore.doctorProfile?.name }}</h5> 
+        <h4 class="text-capitalize fw-bolder"> Dr. {{ doctorStore.doctorProfile?.name }}</h4> 
         <span  v-if="doctorStore.doctorProfile?.emergency_available"> <Badge class=" ms-2" label="Emergency Available" color="danger"/></span>
       </div> 
       <small class="text-muted">{{ doctorStore.doctorProfile?.specialization }}</small>
