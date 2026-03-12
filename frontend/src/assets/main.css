@@ -55,6 +55,9 @@ body {
 }
 
 
+
+
+
 .small-label {
     font-size: 0.65rem;
     font-weight: 600;
@@ -74,6 +77,166 @@ body {
     min-height: 160px;
     background: #fff;
 }
+
+
+
+
+
+
+
+
+/* Google-style Global Input Refinement */
+.form-control, .form-select {
+    border: 1px solid #dadce0; /* Google's signature border color */
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: #3c4043;
+    background-color: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: none !important; /* Remove Bootstrap shadow */
+}
+
+/* Google Focus State: Thin blue border with no glow */
+.form-control:focus, .form-select:focus {
+    border-color: #1a73e8; 
+    background-color: #fff;
+    outline: 0;
+}
+
+/* Google-style Readonly/Disabled State */
+.form-control:disabled, .form-select:disabled {
+    background-color: #f8f9fa;
+    border-color: #e8eaed;
+    color: #80868b;
+}
+
+/* Small labels above inputs like Google Forms/Cloud Console */
+.hms-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #5f6368;
+    margin-bottom: 4px;
+    display: block;
+}
+
+
+
+
+
+
+/* Schedule Specific Refinements */
+
+
+.date-selector-wrapper {
+    display: flex;
+    gap: 12px;
+    padding: 20px 0;
+    overflow-x: auto;
+    scrollbar-width: none; /* Hide scrollbar for clean look */
+}
+
+.date-box {
+    min-width: 70px;
+    height: 85px;
+    background: #fff;
+    border: 1px solid var(--hms-card-border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-box:hover {
+    border-color: var(--hms-accent-blue);
+    background: #f8faff;
+}
+
+.date-box.active {
+    background: var(--hms-accent-blue);
+    border-color: var(--hms-accent-blue);
+    color: white;
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+}
+
+.date-box h4 { font-size: 1.2rem; font-weight: 700; margin: 0; }
+.date-box h5 { font-size: 0.75rem; font-weight: 500; margin: 0; opacity: 0.8; text-transform: uppercase; }
+
+.session-card{
+  background:#fff;
+  border:1px solid #e0e0e0;
+  border-radius:8px;
+  transition:all .2s ease;
+}
+
+.session-card:hover{
+  border-color:#d2d6dc;
+}
+
+.session-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 18px;
+  border-bottom:1px solid #f1f3f4;
+}
+
+.session-title{
+  font-size:15px;
+  font-weight:600;
+  color:#3c4043;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.session-body{
+  padding:18px;
+}
+
+.session-label{
+  font-size:11px;
+  font-weight:600;
+  color:#5f6368;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  margin-bottom:6px;
+  display:block;
+}
+
+.session-card.disabled{
+  opacity:.55;
+  background:#fafafa;
+}
+
+/* Ensure cards look like Google Analytics / Cloud Console */
+.ga-card {
+  background: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  box-shadow: none; /* Google uses borders more than shadows */
+}
+
+/* Clean up the labels */
+.hms-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5f6368;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Make Bootstrap buttons more "Google" */
+.btn-primary {
+  
+  border: none;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
 
 
 

@@ -72,8 +72,13 @@
     const disableCheckbox=computed(()=>{
         return !props.isOnlineBookingEnabled;
     })
+    const sessionIcon = computed(() => {
+        if (props.session === "Morning") return "fa-solid fa-sun text-warning"
+        if (props.session === "Afternoon") return "fa-solid fa-cloud-sun text-primary"
+        if (props.session === "Evening") return "fa-solid fa-moon text-dark"
+    })
 </script>
-<template>
+<!-- <template>
     <div class="session-box bg-success-subtle mb-4">
         <div class="bg-info">
             <Label class="session-box-session-label" :label="props.session" :for="props.session"/>
@@ -108,4 +113,53 @@
             </div>
         </div>
     </div>
+</template> -->
+
+<template>
+  <div class="session-card" :class="{ disabled: !sessionDetail.enabled }">
+    <div class="session-header">
+      <div class="session-title">
+        <i :class="sessionIcon"></i>
+        {{ session }} Session
+      </div>
+      <div class="form-check form-switch">
+        <CheckBox v-model="sessionDetail.enabled" :disabled="disableCheckbox"  :id="props.session" />
+      </div>
+    </div>
+
+    <div class="session-body">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <Label label="Start Time" for="start_time"/>
+          <BaseInput type="time"  :id="`${props.session}-start`"v-model="sessionDetail.startTime" :disabled="disableInput" :error="startTimeField.error.value":valid="startTimeField.valid.value":show="startTimeField.show.value"/>
+          
+        </div>
+
+        <div class="col-md-6">
+          <Label label="End Time" for="end_time"/>
+          <BaseInput type="time" :id="`${props.session}-end`" v-model="sessionDetail.endTime" :disabled="disableInput" :error="endTimeField.error.value":valid="endTimeField.valid.value":show="endTimeField.show.value"/>
+        </div>
+
+        <div class="col-md-6">
+          <Label label="Slot Duration" for="slot_duration"/>
+          <select class="form-select" v-model="sessionDetail.slotDuration" :disabled="disableInput">
+              <option :value="15">15 minutes</option>
+              <option :value="30">30 minutes</option>
+              <option :value="45">45 minutes</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <Label label="Max Patients/Slot" for="max_patients"/>
+          <select class="form-select" v-model="sessionDetail.maxPatients" :disabled="disableInput">
+              <option :value="1">1</option>
+              <option :value="2">2</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 </template>

@@ -97,6 +97,17 @@
         fetchCurrentAvailability(d)    
     })
 
+    const formattedDate = computed(() => {
+      return new Date(currentTabDate.value).toLocaleDateString(
+        "en-US",
+        {
+          weekday: "long",
+          month: "long",
+          day: "numeric"
+        }
+      )
+    })
+
     // const { isValid } = useFormValidation({
     //     fields: [
     //         startTimeField,
@@ -110,7 +121,7 @@
     
 </script>
 
-<template>
+<!-- <template>
     <div>
         <div class="pt-5 px-8">
             <div class="schedule-page-dates container-fluid bg-success-subtle">
@@ -125,4 +136,50 @@
             <Btn @click="canSave" label="Save"/>
         </div>
     </div>
-</template> 
+</template>  -->
+<template>
+<div class="container-fluid">
+  <div class="bg-white container-fluid px-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h4 class="">Doctor Availability</h4>
+        <p class=" size">
+          Configure your consulting hours for each day
+        </p>
+      </div>
+      <Btn label="Save" @click="canSave" class="btn-primary px-4 animate-up-2"/>
+    </div>
+
+  </div>
+
+  <div class="d-flex flex-grow-1 overflow-hidden">
+    <div class="date-sidebar border-end bg-white">
+      <TableTopBox @selected-date="onDateSelected"/>
+
+    </div>
+    <main class="container-fluid">
+      <div class="">
+        <h2 class="mt-3">
+          {{ formattedDate }}
+        </h2>
+
+        <ScheduleForm v-model="availability"/>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+</template>
+
+<style scoped>
+  .size{
+    font-size: 15px;
+  }
+  .date-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

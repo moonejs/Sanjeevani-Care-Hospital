@@ -39,7 +39,7 @@
         </template>
 
         <template #body>
-            <h2 class="text-muted position-absolute ms-9 mt-4" v-if="doctor.assignedPatientsList.length ==0">No Assigned Patients</h2>
+            <h5 class="text-muted position-absolute ms-7 mt-2" v-if="doctor.assignedPatientsList.length ==0">No Assigned Patients</h5>
 
             <AssignedPatientRows v-else
             v-for="(patient,index) in doctor.assignedPatientsList" :key="patient.patient_id "

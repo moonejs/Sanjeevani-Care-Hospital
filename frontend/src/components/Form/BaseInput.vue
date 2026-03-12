@@ -1,6 +1,4 @@
 <script setup>
-import { required } from '@/utils/validators';
-
   defineProps({
     id: String,
     type: { type: String, default: "text" },
@@ -35,12 +33,21 @@ import { required } from '@/utils/validators';
       }"/>
     <span class="input-group-text" v-if="group && end">{{ group }}</span>
 
-    <div v-if="show && error " class="invalid-feedback">
+    <div v-if="show && error " class="invalid-feedback size">
       {{ error }}
     </div>
 
-    <div v-if="show && valid" class="valid-feedback">
+    <div v-if="show && valid" class="valid-feedback size">
       Looks good
     </div>
   </div>
 </template>
+
+<style scoped>
+  .size{
+    font-size: 0.85rem;
+  }
+</style>
+
+
+
