@@ -13,6 +13,13 @@ class Doctor(db.Model):
     
     roles = db.Column(db.String(100)) 
     
+    is_blocked = db.Column(db.Boolean, default=False)
+
+    blocked_at = db.Column(db.DateTime)
+    block_reason = db.Column(db.Text)
+    
+    
+    
     qualification = db.Column(db.String(100))
     experience_years = db.Column(db.Integer)
     registration_number = db.Column(db.String(50))

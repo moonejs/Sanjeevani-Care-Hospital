@@ -11,3 +11,12 @@ export const fetchPatientsApi=()=>{
     return api.get("api/patients")
 }
 
+export const blockDoctorApi = (doctorId, reason = "") => {
+    return api.post(`api/admin/doctors/${doctorId}/block`, {
+        reason
+    })
+}
+
+export const unblockDoctorApi = (doctorId) => {
+    return api.post(`api/admin/doctors/${doctorId}/unblock`)
+}

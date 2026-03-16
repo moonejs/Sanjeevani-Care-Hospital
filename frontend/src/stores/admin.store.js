@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed ,watch} from 'vue'
-import { fetchAdminDashboardDetailsApi,fetchPatientsApi } from '@/api/admin'
+import { fetchAdminDashboardDetailsApi,fetchPatientsApi,blockDoctorApi,unblockDoctorApi } from '@/api/admin'
 import { delay } from '@/utils/comman'
 
 export const useAdminStore=defineStore('admin',()=>{
@@ -56,6 +56,39 @@ export const useAdminStore=defineStore('admin',()=>{
             loading.value=false
         }
     }
+
+
+    async function blockDoctor(doctorId, reason="") {
+        loading.value = true
+        error.value = null
+        try {
+            const res = await blockDoctorApi(doctorId, reason)
+            console.log(res)
+            return res.data
+        } catch (err) {
+            error.value = err
+            console.error("Doctor block failed:", err)
+            throw err
+        } finally {
+            loading.value = false
+        }
+    }
+    async function unblockDoctor(doctorId){
+        loading.value = true
+        error.value = null
+
+        try{
+            const res = await unblockDoctorApi(doctorId)
+            return res.data
+        }
+        catch(err){
+            error.value = err
+            throw err
+        }
+        finally{
+            loading.value = false
+        }
+    }
     return {
         loading,
         error,
@@ -64,7 +97,9 @@ export const useAdminStore=defineStore('admin',()=>{
         fetchAdminDashboardDetails,
         appointmentSummary,
         fetchPatients,
-        patientList
+        patientList,
+        blockDoctor,
+        unblockDoctor
     }
 
 })

@@ -17,6 +17,11 @@ class DoctorAvailability(Resource):
     @roles_accepted("doctor")
     def get(self):
         doctor_id = current_user.doctor.id
+        doctor = Doctor.query.get(doctor_id)
+
+        if doctor.is_blocked:
+            return {"message": "Your account has been blocked by admin"}, 403
+        
         date_str=request.args.get("date")
         
         if not date_str:
@@ -88,7 +93,10 @@ class DoctorAvailability(Resource):
     def post(self):
         data=request.json
         doctor_id=current_user.doctor.id
-        
+        doctor = Doctor.query.get(doctor_id)
+
+        if doctor.is_blocked:
+            return {"message": "Your account has been blocked by admin"}, 403
         if not data:
             return {"message":"Data is required"},400
         

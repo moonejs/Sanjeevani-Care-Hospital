@@ -11,7 +11,7 @@
     const doctorStore=useDoctorStore()
 
 
-    const emit = defineEmits(['view'])
+    const emit = defineEmits(['view','block','unblock'])
 </script>
 
 <template>
@@ -24,7 +24,7 @@
         </template>
         <template #body>
             <AdminDoctorsRow v-for="(doctor,index) in doctorStore.doctorsList" :key="index" :index="
-            index" :doctor="doctor" @view="emit('view',doctor)"/>
+            index" :doctor="doctor" @view="emit('view',doctor)" @block="emit('block',doctor)" @unblock="emit('unblock',doctor)"/>
         </template>
     
     </BaseTable>

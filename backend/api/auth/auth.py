@@ -6,6 +6,9 @@ class Me(Resource):
     @auth_required("token")
     def get(self):
         user=current_user
+        if current_user.doctor and current_user.doctor.is_blocked:
+            return {"message": "Account blocked"}, 403
+        
         response= {
             "email" : user.email,
             "roles":[role.name for role in user.roles],

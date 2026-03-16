@@ -5,50 +5,60 @@ from flask_security.utils import hash_password
 from flask import request
 import extensions
 from extensions import db
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 from flask_login import current_user
 from utils.comman import is_doctor_bookable
 
 
 class DoctorDetails(Resource):
-    
     @auth_required("token")
     @roles_accepted("admin","patient")
     def get(self):
         doctors = Doctor.query.all()
-        
-        
-        return [
-        {
-            "id": d.id,
-            "name": d.name,
-            "age":d.age,
-            "gender":d.gender,
-            "email": d.user.email,
-            "specialization": d.specialization,
-            "bio":d.bio,
-            "contact":d.contact,
-            "qualification": d.qualification,
-            "experience_years": d.experience_years,
-            "room_number":d.room_number,
-            "roles":d.roles,
-            "registration_number":d.registration_number,
-            "department": d.department.name,
-            "opd_timing": d.opd_timing,
-            "emergency_available": d.emergency_available,
-            "consultation_fee": d.consultation_fee,
-            "profile_image": (
-                request.host_url + "uploads/doctors/profile/" + d.profile_image
-                if d.profile_image else None
-            ),
-            "profile_completed":d.profile_completed,
-            "is_bookable": is_doctor_bookable(d),
-            "languages_spoken": (
-                d.languages_spoken.split(",") if d.languages_spoken else []
-            )
-        }
-        for d in doctors
-    ], 200
+        today = date.today()
+        doctors_data = []
+
+        for d in doctors:
+
+            confirmed_exists = Appointment.query.filter(
+                Appointment.doctor_id == d.id,
+                Appointment.status == "confirmed",
+                Appointment.appointment_date >= today
+            ).first()
+
+            doctors_data.append({
+                "id": d.id,
+                "name": d.name,
+                "age": d.age,
+                "gender": d.gender,
+                "email": d.user.email,
+                "specialization": d.specialization,
+                "bio": d.bio,
+                "contact": d.contact,
+                "qualification": d.qualification,
+                "experience_years": d.experience_years,
+                "room_number": d.room_number,
+                "roles": d.roles,
+                "registration_number": d.registration_number,
+                "department": d.department.name,
+                "opd_timing": d.opd_timing,
+                "emergency_available": d.emergency_available,
+                "consultation_fee": d.consultation_fee,
+                "profile_image": (
+                    request.host_url + "uploads/doctors/profile/" + d.profile_image
+                    if d.profile_image else None
+                ),
+                "profile_completed": d.profile_completed,
+                "is_bookable": is_doctor_bookable(d),
+                "languages_spoken": (
+                    d.languages_spoken.split(",") if d.languages_spoken else []
+                ),
+                "is_blocked": d.is_blocked,
+
+                "can_block": False if confirmed_exists else True
+            })
+
+        return doctors_data, 200
     
     @auth_required("token")
     @roles_required("admin")

@@ -5,6 +5,7 @@ from flask import request
 from datetime import date, timedelta, datetime
 from models import Doctor, Patient, Appointment
 from sqlalchemy import func
+from extensions import db
 class AdminDashboard(Resource):
     @auth_required("token")
     @roles_required("admin")
@@ -88,4 +89,77 @@ class AdminDashboard(Resource):
             "upcoming_appointments": upcoming_data,
             "status_summary": status_summary,
             # "recent_activity": recent_activity
+        }, 200
+        
+        
+    
+class BlockDoctor(Resource):
+
+    @auth_required("token")
+    @roles_required("admin")
+    def post(self, doctor_id):
+
+        doctor = Doctor.query.get_or_404(doctor_id)
+
+        if doctor.is_blocked:
+            return {"message": "Doctor already blocked"}, 400
+
+        today = datetime.now().date()
+
+        active_appointment = Appointment.query.filter(
+            Appointment.doctor_id == doctor_id,
+            Appointment.status == "confirmed",
+            Appointment.appointment_date >= today
+        ).first()
+
+        if active_appointment:
+            return {
+                "message": "Doctor cannot be blocked during an ongoing appointment"
+            }, 400
+            
+        upcoming = Appointment.query.filter(
+            Appointment.doctor_id == doctor_id,
+            Appointment.status.in_(["pending"]),
+            Appointment.appointment_date >= today
+        ).all()
+
+        for appt in upcoming:
+            appt.status = "cancelled"
+            appt.cancel_reason = "Doctor unavailable"
+
+        doctor.is_blocked = True
+        doctor.blocked_at = datetime.now()
+        
+        doctor.user.active = False
+        doctor.user.fs_token_uniquifier = None
+        
+        db.session.commit()
+
+        return {
+            "message": "Doctor blocked successfully",
+            "cancelled_appointments": len(upcoming)
+        }, 200
+        
+        
+class UnblockDoctor(Resource):
+
+    @auth_required("token")
+    @roles_required("admin")
+    def post(self, doctor_id):
+
+        doctor = Doctor.query.get_or_404(doctor_id)
+
+        if not doctor.is_blocked:
+            return {"message": "Doctor is already active"}, 400
+
+        doctor.is_blocked = False
+        doctor.blocked_at = None
+        doctor.block_reason = None
+        
+        doctor.user.active = True
+        
+        db.session.commit()
+
+        return {
+            "message": "Doctor unblocked successfully"
         }, 200

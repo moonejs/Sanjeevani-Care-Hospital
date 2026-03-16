@@ -19,7 +19,7 @@ class PatientDoctorsAvailability(Resource):
             return {"message": "date is required"}, 400
 
         date = datetime.strptime(date_str, "%Y-%m-%d").date()
-        doctors = Doctor.query.all()
+        doctors = Doctor.query.filter_by(is_blocked=False).all()
         response = []
 
         def generate_slots(start, end, duration):
@@ -215,7 +215,15 @@ class PatientAppointmentBooking(Resource):
         start_time_str = data.get("start_time")
         type=data.get("type")
         patient_id = current_user.patient.id
+        
+        doctor = Doctor.query.get(doctor_id)
 
+        if not doctor:
+            return {"message": "Doctor not found"}, 404
+
+        if doctor.is_blocked:
+            return {"message": "Doctor is currently unavailable"}, 403
+        
         appointment_date = datetime.strptime(date_str, "%Y-%m-%d").date()
         start_time = datetime.strptime(start_time_str, "%H:%M").time()
 
@@ -234,7 +242,8 @@ class PatientAppointmentBooking(Resource):
 
         def in_range(start, end, value):
             return start <= value < end
-
+        
+        
 
         if availability.morning_enabled and in_range(availability.morning_start, availability.morning_end, start_time):
             session = "morning"
