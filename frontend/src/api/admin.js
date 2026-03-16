@@ -20,3 +20,7 @@ export const blockDoctorApi = (doctorId, reason = "") => {
 export const unblockDoctorApi = (doctorId) => {
     return api.post(`api/admin/doctors/${doctorId}/unblock`)
 }
+
+export const fetchAdminAppointmentsApi = (params) => {
+  return api.get("/api/admin/appointments", { params })
+}

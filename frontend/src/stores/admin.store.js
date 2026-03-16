@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed ,watch} from 'vue'
-import { fetchAdminDashboardDetailsApi,fetchPatientsApi,blockDoctorApi,unblockDoctorApi } from '@/api/admin'
+import { fetchAdminDashboardDetailsApi,fetchPatientsApi,blockDoctorApi,unblockDoctorApi,fetchAdminAppointmentsApi } from '@/api/admin'
 import { delay } from '@/utils/comman'
 
 export const useAdminStore=defineStore('admin',()=>{
@@ -8,7 +8,8 @@ export const useAdminStore=defineStore('admin',()=>{
     const error = ref(null)
     const appointmentSummary = ref({pending: 0, confirmed: 0, completed: 0, cancelled: 0})
     const patientList=ref([])
-
+    const adminAppointments = ref([])
+    const adminAppointmentsPagination = ref({ page: 1, per_page: 10, total: 0, pages: 1 })
 
 
     const dashboard = ref({
@@ -89,6 +90,33 @@ export const useAdminStore=defineStore('admin',()=>{
             loading.value = false
         }
     }
+
+    async function fetchAdminAppointments(page = 1) {
+        loading.value = true
+        error.value = null
+
+        try {
+
+            const res = await fetchAdminAppointmentsApi({
+                page,
+                per_page: adminAppointmentsPagination.value.per_page
+            })
+
+            adminAppointments.value = res.data.appointments
+            adminAppointmentsPagination.value = res.data.pagination
+
+            console.log(res)
+
+        } catch (err) {
+
+            error.value = err
+            console.log(err)
+
+        } finally {
+
+            loading.value = false
+        }
+    }
     return {
         loading,
         error,
@@ -99,7 +127,10 @@ export const useAdminStore=defineStore('admin',()=>{
         fetchPatients,
         patientList,
         blockDoctor,
-        unblockDoctor
+        unblockDoctor,
+        adminAppointments,
+        adminAppointmentsPagination,
+        fetchAdminAppointments,
     }
 
 })

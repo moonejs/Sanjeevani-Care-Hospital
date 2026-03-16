@@ -163,3 +163,65 @@ class UnblockDoctor(Resource):
         return {
             "message": "Doctor unblocked successfully"
         }, 200
+        
+class AdminAppointments(Resource):
+
+    @auth_required("token")
+    @roles_required("admin")
+    def get(self):
+        page = int(request.args.get("page", 1))
+        per_page = int(request.args.get("per_page", 10))
+
+        query = Appointment.query
+
+        
+        pagination = query.order_by(
+            Appointment.appointment_date.desc(),
+            Appointment.start_time.desc()
+        ).paginate(page=page, per_page=per_page, error_out=False)
+
+        appointments_data = []
+
+        for appt in pagination.items:
+
+            appointments_data.append({
+                "id": appt.id,
+                "date": appt.appointment_date.strftime("%Y-%m-%d"),
+                "start_time": appt.start_time.strftime("%H:%M"),
+                "end_time": appt.end_time.strftime("%H:%M"),
+                "status": appt.status,
+                "type": appt.type,
+                "session": appt.session,
+
+                "doctor": {
+                    "id": appt.doctor.id,
+                    "name": appt.doctor.name,
+                    "department": appt.doctor.department.name
+                },
+
+                "patient": {
+                    "id": appt.patient.id,
+                    "name": appt.patient.name
+                },
+
+                "treatment": {
+                    "diagnosis": appt.treatment.diagnosis,
+                    "notes": appt.treatment.notes,
+                    "medicines": appt.treatment.medicines,
+                    "follow_up_date": (
+                        appt.treatment.follow_up_date.strftime("%Y-%m-%d")
+                        if appt.treatment and appt.treatment.follow_up_date
+                        else None
+                    )
+                } if appt.treatment else None
+            })
+
+        return {
+            "appointments": appointments_data,
+            "pagination": {
+                "page": page,
+                "per_page": per_page,
+                "total": pagination.total,
+                "pages": pagination.pages
+            }
+        }, 200
