@@ -89,7 +89,7 @@
 
 </script>
 
-<template>
+<!-- <template>
     <div class="">
         
         <div class="search-box bg-success">
@@ -107,4 +107,80 @@
          v-model:appointment-type="appointmentType" @close="showModal = false" @confirm="confirmBooking" @cancelAppointment="cancelMyAppointment" />
 
     </div>
-</template> 
+</template>  -->
+
+<template>
+  <div class="container-fluid">
+    <div class="row">
+      
+      <div class="col-md-3 col-lg-2 bg-white border-end  sticky-top">
+        <TableTopBox label="Today" @selected-date="onDateSelected"/>
+      </div>
+      
+      <div class="col-lg-7 col-md-6 py-3">
+        <div class="d-flex justify-content-between align-items-center mb-3 px-2">
+          <div>
+            <h4 class="fw-semibold mb-1">Book Appointment</h4>
+            <div class="text-muted small">
+              Choose a doctor and select a time slot
+            </div>
+          </div>
+
+          <div class="date-context-card px-3 py-2 text-end">
+            <div class="fw-bold">
+              {{ appointment.selectedDate }}
+            </div>
+            <div class="small text-muted">
+              {{
+                new Date(appointment.selectedDate).toLocaleDateString('en-US', {
+                  weekday: 'long'
+                })
+              }}
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column gap-2 px-2 doctors-list-div">
+          <DoctorAppointCard
+            v-for="doc in appointment.doctorsAvailability"
+            :key="doc.doctor.id"
+            :doctor="doc"
+            @slot-selected="openBookingModal"
+          />
+        </div>
+
+      </div>
+
+      <div class="col-lg-3 col-md-4 border-start bg-white  sticky-top p-3">
+
+        <div class="mb-3">
+          <label class="hms-label">Search Doctor</label>
+          <input type="text" class="form-control" placeholder="Type name..." />
+        </div>
+
+        <div class="mb-3">
+          <label class="hms-label">Department</label>
+          <select class="form-select">
+            <option>All</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="hms-label">Availability</label>
+          <select class="form-select">
+            <option>All</option>
+            <option>Morning</option>
+            <option>Afternoon</option>
+            <option>Evening</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+
+    <BookingModal  :show-modal="showModal"  :selected-doctor="selectedDoctor"  :selected-slot="selectedSlot" :slot-session="slotSession" v-model:appointment-type="appointmentType"  @close="showModal = false"  @confirm="confirmBooking"  @cancelAppointment="cancelMyAppointment" 
+    />
+
+  </div>
+</template>

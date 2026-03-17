@@ -18,7 +18,7 @@
 
 </script>
 <template>
-    <div class="bg-danger-subtle doctor-appoint-card container mb-3 py-3">
+    <div class="bg-white doctor-appoint-card  mb-3 py-1">
         <div class="card-body border-bottom">
             <div class="d-flex align-items-center gap-3 appointment-doctor-card-header">
                 <img :src="doctor.doctor.profile_image" />
@@ -28,7 +28,7 @@
                     <div class="text-muted small">
                         {{ doctor.doctor.specialization }}
                         <span v-if="doctor.doctor.roles">
-                        • {{ doctor.doctor.roles }}
+                        , {{ doctor.doctor.roles }}
                         </span>
                     </div>
 

@@ -38,6 +38,8 @@ body {
 .badge-soft-warning { background: #fef7e0; color: #e79301; }
 .badge-soft-danger { background: #fce8e6; color: #d93025; }
 .badge-soft-primary { background: #e8f0fe; color: #1a73e8; }
+.badge-soft-secondary { background: #dedef2; color: #000000; }
+.badge-soft-info { background: #91fff4; color: #000000; }
 
 /* tables */
 .table-hover3 tbody tr:hover {
@@ -341,6 +343,7 @@ body {
 
 .doctor-appoint-card {
   width: 100%;
+  
 }
 
 .booking-badge {
@@ -427,7 +430,7 @@ body {
 }
 
 .doctors-list-div{
-  max-height: 87vh;
+  max-height: 75.8vh;
   overflow-y:auto;
   overflow-x: hidden;
 }
