@@ -2,7 +2,7 @@
 import {RouterView } from 'vue-router';
 import { useAuthStore } from './stores/auth.store';
 import { onMounted } from 'vue';
-
+import AppToast from './components/common/AppToast.vue';
 const auth=useAuthStore();
 
 // onMounted(async()=>{
@@ -21,4 +21,5 @@ const auth=useAuthStore();
 
 <template>
   <RouterView/>
+  <AppToast/>
 </template>

@@ -7,9 +7,11 @@
     import BookingModal from '@/components/Patient/BookingModal.vue';
     import LoadingState from "@/components/common/LoadingState.vue"
     import AppointmentCardSkeleton from '@/components/Patient/AppointmentCardSkeleton.vue';
+    import { useToastStore } from '@/stores/toast.store';
 
     const appointment=useAppointmentStore()
     const route =useRoute()
+    const toast = useToastStore()
 
     onMounted(async()=>{
         const today = appointment.formatDate(appointment.today)
@@ -57,6 +59,7 @@
         slotSession.value=slot.session
     }
     async function confirmBooking(){
+      try {
         if (appointment.activeAppointment) {
             await appointment.rescheduleAppointment({appointment_id: appointment.activeAppointment.id,date: appointment.selectedDate,start_time: selectedSlot.value.time})
         }else{
@@ -67,6 +70,11 @@
                 type:appointmentType.value
             })
         }
+        toast.addToast({
+          message: 'Appointment booked successfully',
+          type: 'success'
+        })
+
         await appointment.fetchMyActiveAppointment()
         showModal.value = false
         selectedDoctor.value = null
@@ -75,16 +83,35 @@
         appointmentType.value = "opd"
 
         await appointment.fetchAllDoctorsAvailability(appointment.selectedDate)
+      } catch (error) {
+        toast.addToast({
+          title: 'Error',
+          message: 'Failed to book appointment',
+          type: 'error'
+        })
+      }
+        
     }
 
     async function cancelMyAppointment() {
         if (!appointment.activeAppointment) return
+        
+        try {
+          const confirmCancel = confirm("Are you sure you want to cancel?")
+          if (!confirmCancel) return
 
-        const confirmCancel = confirm("Are you sure you want to cancel?")
-        if (!confirmCancel) return
+          showModal.value = false
+          await appointment.cancelBookedAppointment(appointment.activeAppointment.id,{reason:"Cancelled by patient"})
+          toast.addToast({
+            message: 'Appointment Canceled successfully',
+            type: 'error'
+          })
 
-        await appointment.cancelBookedAppointment(appointment.activeAppointment.id,{reason:"Cancelled by patient"})
-        showModal.value = false
+        } catch (error) {
+          
+        }
+
+        
     }
 
 
