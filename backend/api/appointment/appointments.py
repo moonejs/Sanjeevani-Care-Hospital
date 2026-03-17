@@ -5,7 +5,7 @@ from extensions import db
 from flask import request
 from datetime import datetime, timedelta
 from models import Doctor,Appointment,Availability
-
+from utils.comman import is_doctor_bookable
 class PatientDoctorsAvailability(Resource):
 
     @auth_required("token")
@@ -38,7 +38,8 @@ class PatientDoctorsAvailability(Resource):
             availability = Availability.query.filter_by(
                 doctor_id=doctor.id,
                 date=date,
-                online_booking=True
+                online_booking=True,
+                
             ).first()
 
             if not availability:
@@ -54,6 +55,8 @@ class PatientDoctorsAvailability(Resource):
                         request.host_url + "uploads/doctors/profile/" + doctor.profile_image
                         if doctor.profile_image else None
                     ),
+                    "is_bookable": is_doctor_bookable(doctor),
+                    "is_blocked": doctor.is_blocked,
                     "department": doctor.department.name if doctor.department else None
                 },
                 "sessions": {

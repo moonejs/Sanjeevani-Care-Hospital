@@ -119,6 +119,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             console.log(err);
             return
         }finally{
+            await delay(3000)
             loading.value=false
         }
     }

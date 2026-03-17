@@ -1,11 +1,12 @@
 <script setup>
-    import DateBox from '@/components/common/DateBox.vue';
     import { useAppointmentStore } from '@/stores/appointment.store';
     import DoctorAppointCard from '@/components/Patient/DoctorAppointCard.vue';
     import TableTopBox from '@/components/Doctor/TableTopBox.vue';
     import { onMounted,ref,nextTick } from 'vue';
     import { useRoute } from 'vue-router';
     import BookingModal from '@/components/Patient/BookingModal.vue';
+    import LoadingState from "@/components/common/LoadingState.vue"
+    import AppointmentCardSkeleton from '@/components/Patient/AppointmentCardSkeleton.vue';
 
     const appointment=useAppointmentStore()
     const route =useRoute()
@@ -88,27 +89,6 @@
 
 
 </script>
-
-<!-- <template>
-    <div class="">
-        
-        <div class="search-box bg-success">
-            
-        </div>
-        <div class="date-section bg-warning">
-            <TableTopBox label="Today" @selected-date="onDateSelected"/>
-        </div>
-        <div class="appointment-section py-2 bg-info">
-            <h2 v-if="!appointment.doctorsAvailability.length">No Doctor Available</h2>
-            <DoctorAppointCard v-for="doc in appointment.doctorsAvailability" :id="`doctor-${doc.doctor.id}`" :key="doc.doctor.id" :doctor="doc" @slot-selected="openBookingModal" :class="doc.doctor.id == route.query.focus ? 'bg-secondary-subtle' :''"/>
-        </div>
-        <BookingModal :show-modal="showModal" :selected-doctor="selectedDoctor" :selected-slot="selectedSlot",
-        :slot-session="slotSession"
-         v-model:appointment-type="appointmentType" @close="showModal = false" @confirm="confirmBooking" @cancelAppointment="cancelMyAppointment" />
-
-    </div>
-</template>  -->
-
 <template>
   <div class="container-fluid">
     <div class="row">
@@ -141,12 +121,15 @@
         </div>
 
         <div class="d-flex flex-column gap-2 px-2 doctors-list-div">
-          <DoctorAppointCard
-            v-for="doc in appointment.doctorsAvailability"
-            :key="doc.doctor.id"
-            :doctor="doc"
-            @slot-selected="openBookingModal"
-          />
+          <LoadingState :loading="appointment.loading" type="skeleton" :count="4">
+            <template #skeleton>
+              <AppointmentCardSkeleton/>
+            </template>
+            <DoctorAppointCard  v-for="doc in appointment.doctorsAvailability" :key="doc.doctor.id" :doctor="doc" @slot-selected="openBookingModal"/>
+            <div v-if="!appointment.doctorsAvailability.length" >
+              <h2 class="text-muted mt-6 text-center">No Appointments found</h2>
+            </div>
+          </LoadingState>
         </div>
 
       </div>
