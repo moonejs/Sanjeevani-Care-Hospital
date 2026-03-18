@@ -14,9 +14,10 @@
         <td>{{ appointment.date }}</td>
         <td>{{ appointment.start_time }}</td>
         <td>{{ appointment.status }}</td>
-        <td>{{ appointment.type }}</td>
+        <td>{{ appointment.doctor.name }}</td>
         <td>{{ appointment.patient.name }}</td>
-        <td>{{ appointment.treatment?.diagnosis || 'No Diagnosis'}}</td>
+        <td>{{ appointment.type }}</td>
+        <td>{{ appointment.doctor.department || 'No Diagnosis'}}</td>
         
         <td>{{ appointment.treatment?.follow_up_date || 'No Follow up Date'}}</td>
         <td>

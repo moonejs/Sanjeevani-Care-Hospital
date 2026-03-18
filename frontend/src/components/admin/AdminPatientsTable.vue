@@ -10,6 +10,13 @@
     
     const adminStore=useAdminStore()
 
+    defineProps({
+        patients:{
+            type: Array,
+            default: () => []
+
+        }
+    })
     onMounted(async()=>{
         await adminStore.fetchPatients()
     })
@@ -26,7 +33,7 @@
             <BaseTableHead :t-head="tHead"/>
         </template>
         <template #body>
-            <AdminPatientsRow v-for="(patient,index) in adminStore.patientList" :key="index" :index="
+            <AdminPatientsRow v-for="(patient,index) in patients" :key="index" :index="
             index" :patient="patient" @view="emit('view',patient)"/>
         </template>
     

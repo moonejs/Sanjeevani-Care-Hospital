@@ -8,7 +8,7 @@
         appointments:Array
     })
     const emit=defineEmits(['view'])
-    const tHead=ref(["Date","Time","Status","Type","Patient Name","Diagnosis","Follow_up_date","Actions"])
+    const tHead=ref(["Date","Time","Status","Doctor Name","Patient Name","Type","Department","Follow_up_date","Actions"])
 </script>
 <template>
     <BaseTable>

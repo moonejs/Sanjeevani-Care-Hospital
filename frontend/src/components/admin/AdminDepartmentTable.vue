@@ -6,7 +6,15 @@
     import { useDepartmentStore } from '@/stores/department.store';
     
     import { onMounted } from 'vue';
-    
+
+    defineProps({
+        departments:{
+            type: Array,
+            default: () => []
+        }
+    })
+
+
     const tHead=["Photo","Department Name","Email","Phone","Emergency Available","Appointment Status","Actions"]
     
     const departmentStore=useDepartmentStore()
@@ -27,7 +35,7 @@
             <BaseTableHead :t-head="tHead"/>
         </template>
         <template #body>
-            <AdminDepartmentRow v-for="(dep,index) in departmentStore.departmentList" :key="index" :index="
+            <AdminDepartmentRow v-for="(dep,index) in departments" :key="index" :index="
             index" :department="dep" @view="emit('view',dep)"/>
         </template>
     

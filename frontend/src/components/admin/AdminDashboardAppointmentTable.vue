@@ -6,7 +6,20 @@
     import BaseTableHead from '../layout/BaseTableHead.vue';
     import { useAdminStore } from '@/stores/admin.store';
     import Loading from '../common/Loading.vue';
+    import { useSearchFilter } from '@/utils/useSearchFilter';
+    import { storeToRefs } from 'pinia';
+
     const adminStore=useAdminStore()
+
+    
+    const appointmentList = computed(() => 
+        adminStore.dashboard.upcoming_appointments || []
+    )
+    const { searchQuery, filteredData } = useSearchFilter(
+        appointmentList,
+        ['doctor_name','patient_name'],
+        
+    )
 
     const type=ref('today')
     const tHead=["Department","Doctor","Patient","Time","Date","Type","Slot","Status","Action"]
@@ -21,7 +34,7 @@
 <template>
     <BaseTable>
         <template #caption>
-            <DoctorDashTableCaption title="Upcoming Appointments "   @today-or-week="showTodayOrWeek" stats="navs" :table-stats-arr="tableStatsArr"/>
+            <DoctorDashTableCaption title="Upcoming Appointments "   @today-or-week="showTodayOrWeek" stats="navs" :table-stats-arr="tableStatsArr" v-model:searchQuery="searchQuery"/>
         </template>
         <template #head>
             <BaseTableHead :t-head="tHead"/>
@@ -32,7 +45,7 @@
             <template v-if="!adminStore.loading">
                 <h2 v-if="adminStore.dashboard.upcoming_appointments.length === 0" class="text-muted position-absolute ms-10 mt-4">No Upcoming Appointments</h2>
                 
-                <AdminDashboardAppointmentRow v-else v-for="(app, index) in adminStore.dashboard.upcoming_appointments" :key="index" :index="index" :appointment="app"/>
+                <AdminDashboardAppointmentRow v-else v-for="(app, index) in filteredData" :key="index" :index="index" :appointment="app"/>
             </template>
             
 
