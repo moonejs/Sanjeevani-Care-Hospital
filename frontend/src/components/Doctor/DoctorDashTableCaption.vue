@@ -2,21 +2,31 @@
     import TableNavigaionBox from '../common/TableNavigaionBox.vue';
     import TableStats from '../common/TableStats.vue';
     import SearchInput from '@/components/common/SearchInput.vue';
+    import DateFilter from '@/components/common/DateFilter.vue';
+    
     defineProps({
         title:String,
         navArray:Array,
         stats:String,
         tableStatsArr:Array,
         searchQuery:String,
-        placeholder:String
+        dateFilter:String,
+        placeholder:String,
+        class1:String,
+        class2:String,
+        isDate:Boolean
     })
-    const emit = defineEmits(['today-or-week', 'update:searchQuery'])
+    const emit = defineEmits(['today-or-week', 'update:searchQuery','update:dateFilter'])
 </script>
 <template>
     <div class="d-flex align-items-center justify-content-between mb-3 ">
-        <div class="d-flex gap-10 ">
+        <div class="d-flex gap-4 " :class="class2">
             <h5 class="m-0 fw-bold text-dark">{{ title }}</h5>
-            <SearchInput class="ms-12" :modelValue="searchQuery"@update:modelValue="(val) => emit('update:searchQuery', val)":placeholder="placeholder"/>
+            <SearchInput :class="class1" :modelValue="searchQuery"@update:modelValue="(val) => emit('update:searchQuery', val)":placeholder="placeholder"/>
+            <div v-if="isDate">
+                <DateFilter :modelValue="dateFilter" @update:modelValue="(val) => emit('update:dateFilter', val)" label="Filter by Date" />
+                
+            </div>
         </div>
         
         <div v-if="stats == 'title'" class="d-flex align-items-center">

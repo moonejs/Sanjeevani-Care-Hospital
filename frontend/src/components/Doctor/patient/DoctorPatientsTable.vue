@@ -4,12 +4,25 @@
     import DoctorDashTableCaption from '@/components/Doctor/DoctorDashTableCaption.vue'
     import DoctorPatientsRow from './DoctorPatientsRow.vue';
     import { ref } from 'vue'
+    import { useDoctorStore } from '@/stores/doctor.store'
+    import { useSearchFilter } from '@/utils/useSearchFilter';
+    import { storeToRefs } from 'pinia';
 
     defineProps({
-        patients: Array,
         total: Number,
         loading:Boolean
     })
+
+    const doctorStore=useDoctorStore()
+
+    const {patients} = storeToRefs(doctorStore)
+    const { searchQuery, filteredData } = useSearchFilter(
+        patients,
+        ['name'],
+        
+    )
+
+
 
     const tHead = ref(['Name','Age','Gender','Last Visit','Total Visits','Active','Action'])
 </script>
@@ -18,7 +31,7 @@
   <BaseTable>
     <template #caption>
 
-      <DoctorDashTableCaption title="Patients" stats="title" :table-stats-arr="[{ 'Total Patients': total }]"/>
+      <DoctorDashTableCaption title="Patients" stats="title" :table-stats-arr="[{ 'Total Patients': total }]" v-model:searchQuery="searchQuery" class1="ms-12 ps-12" class2="gap-12"/>
 
     </template>
 
@@ -33,7 +46,7 @@
         </td>
       </tr>
 
-      <DoctorPatientsRow v-for="(patient, index) in patients" :key="patient.patient_id" :patient="patient" :index="index" />
+      <DoctorPatientsRow v-for="(patient, index) in filteredData" :key="patient.patient_id" :patient="patient" :index="index" />
 
       <tr v-if="!loading && !patients.length">
         <td colspan="7" class="text-center text-muted">

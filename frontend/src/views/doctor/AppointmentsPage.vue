@@ -30,13 +30,11 @@
 
 <template>
     <div>
-        <div class="bg-info doctor-appointment-filter">
-            filter
-        </div>
+        
         <LoadingState :loading="appointment.loading">
 
             <div class="container-fluid" v-if="appointment.appointmentHistory.length !=0">
-                <DoctorAppointmentsPageTable :appointments="appointment.appointmentHistory" @view="openDetails" />
+                <DoctorAppointmentsPageTable  @view="openDetails" />
                 <Pagination :pagination="appointment.historyPagination" @change="changePage"/>
             </div>
             <h2 v-else class="text-muted text-center mt-10">No Appointment History</h2>

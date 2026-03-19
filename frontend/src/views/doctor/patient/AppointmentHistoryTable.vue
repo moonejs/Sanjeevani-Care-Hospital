@@ -1,11 +1,34 @@
 <script setup>
     import BaseTable from '@/components/layout/BaseTable.vue';
     import BaseTableHead from '@/components/layout/BaseTableHead.vue';
-    import { ref } from 'vue';
+    import { ref,computed } from 'vue';
     import Btn from '@/components/common/Btn.vue';
-    defineProps({
+    import DoctorDashTableCaption from '@/components/Doctor/DoctorDashTableCaption.vue';
+    
+  
+    import { useSearchFilter } from '@/utils/useSearchFilter';
+    import { useDoctorStore } from '@/stores/doctor.store'
+
+    const props=defineProps({
         appointments: Array
     })
+
+    const doctoStore=useDoctorStore()
+    const dateFilter=ref('')
+
+    const appointmentList = computed(() => 
+        doctoStore.selectedPatient.appointments || []
+    )
+
+    const { searchQuery, filteredData } = useSearchFilter(
+        appointmentList,
+        ['type','status '],
+        {
+          date:dateFilter
+        }
+        
+    )
+
 
     const tHead=ref(["Date","Time","Status","Type","Action"])
     const expandedId = ref(null)
@@ -18,7 +41,8 @@
 <template>
   <BaseTable>
     <template #caption>
-      <h5 class="mb-2">Appointment History</h5>
+      <DoctorDashTableCaption title="Appointment History" v-model:searchQuery="searchQuery" v-model:date-filter="dateFilter" :is-date="true"/>
+      <Btn  label="Clear" class="btn-primary "  @click="searchQuery = '';dateFilter=''"/>
     </template>
 
     <template #head>
@@ -26,7 +50,7 @@
     </template>
 
     <template #body >
-      <template  v-for="(appt, i) in appointments" :key="appt.id">
+      <template  v-for="(appt, i) in filteredData" :key="appt.id">
         
         <tr>
           <td>{{ i + 1 }}</td>

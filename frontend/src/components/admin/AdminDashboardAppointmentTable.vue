@@ -7,7 +7,6 @@
     import { useAdminStore } from '@/stores/admin.store';
     import Loading from '../common/Loading.vue';
     import { useSearchFilter } from '@/utils/useSearchFilter';
-    import { storeToRefs } from 'pinia';
 
     const adminStore=useAdminStore()
 
@@ -34,7 +33,7 @@
 <template>
     <BaseTable>
         <template #caption>
-            <DoctorDashTableCaption title="Upcoming Appointments "   @today-or-week="showTodayOrWeek" stats="navs" :table-stats-arr="tableStatsArr" v-model:searchQuery="searchQuery"/>
+            <DoctorDashTableCaption title="Upcoming Appointments "   @today-or-week="showTodayOrWeek" stats="navs" :table-stats-arr="tableStatsArr" v-model:searchQuery="searchQuery" class1="ms-12 ps-8"/>
         </template>
         <template #head>
             <BaseTableHead :t-head="tHead"/>

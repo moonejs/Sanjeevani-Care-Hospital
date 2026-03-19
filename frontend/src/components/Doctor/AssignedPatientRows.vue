@@ -20,7 +20,7 @@
 <template>
     <tr>
         <th scope="row">{{ index+1 }}</th>
-        <td>{{ patient.gender }}</td>
+        <td>{{ patient.name }}</td>
         <td>{{ patient.last_visit || 'Never Visited' }}</td>
         <td>{{ patient.visits }}</td>
         <td>

@@ -6,12 +6,21 @@
     import DoctorAppointmentRow from './DoctorAppointmentRow.vue'
     import BaseTable from '../layout/BaseTable.vue'
     import CompleteModal from '@/views/doctor/CompleteModal.vue'
+    import { useSearchFilter } from '@/utils/useSearchFilter';
+    import { storeToRefs } from 'pinia';
 
     const appointment = useAppointmentStore()
     const showCompleteModal=ref(false)
     const selectedPatient=ref(null)
     const selectedAppointmentId = ref(null)
     
+
+    const {appointmentListByDoctor} = storeToRefs(appointment)
+    const { searchQuery, filteredData } = useSearchFilter(
+        appointmentListByDoctor,
+        ['patient.name'],
+        
+    )
 
     const navArray=ref(["Today","This Week"])
     const tHead=ref(["Time","Slot","Patient","Status","Type","Action"])
@@ -47,7 +56,7 @@
 <template>
   <BaseTable>
     <template #caption>
-      <DoctorDashTableCaption  title="Upcoming Appointments" :nav-array="navArray" stats="navs" :table-stats-arr="tableStatsArr"/>
+      <DoctorDashTableCaption  title="Upcoming Appointments" :nav-array="navArray" stats="navs" :table-stats-arr="tableStatsArr" v-model:searchQuery="searchQuery" class1="ms-12 ps-8"/>
 
     </template>
 
@@ -58,7 +67,7 @@
     <template #body>
       <h2 class="text-muted position-absolute ms-9 mt-4" v-if="appointment.appointmentListByDoctor.length ==0">No Upcoming Appointments</h2>
       <DoctorAppointmentRow v-else
-      v-for="(app,index) in appointment.appointmentListByDoctor"
+      v-for="(app,index) in filteredData"
       :key="app.appointment_id"
       :appointment="app" :index="index"
       @confirm="updateStatus(app,'confirmed')"

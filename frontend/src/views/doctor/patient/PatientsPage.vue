@@ -17,9 +17,7 @@
 
 <template>
     <div>
-        <div class="bg-info doctor-appointment-filter">
-            filter
-        </div>
+        
         <LoadingState :loading="doctor.loading">
 
             <div class="container-fluid" v-if="doctor.patients.length !=0">
