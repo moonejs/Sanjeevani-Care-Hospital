@@ -23,11 +23,24 @@ export function useSearchFilter(data, fields, filters = {}) {
         }
 
         
+       
         Object.keys(filters).forEach(key => {
-            if (filters[key].value) {
+            const filterValue = filters[key].value
+
+            if (Array.isArray(filterValue) && filterValue.length > 0) {
+               
                 result = result.filter(item => {
                     const value = getNestedValue(item, key)
-                    return String(value) === String(filters[key].value)
+                    return filterValue
+                        .map(v => v.toLowerCase())
+                        .includes(String(value).toLowerCase())
+                })
+            } 
+            else if (filterValue) {
+           
+                result = result.filter(item => {
+                    const value = getNestedValue(item, key)
+                    return String(value) === String(filterValue)
                 })
             }
         })

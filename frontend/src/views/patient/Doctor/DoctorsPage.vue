@@ -8,14 +8,35 @@
     import { onMounted, ref, computed,nextTick } from "vue"
     import { useRouter,useRoute } from "vue-router"
 
+    import { useSearchFilter } from '@/utils/useSearchFilter';
+    import { storeToRefs } from 'pinia';
+    import SearchInput from '@/components/common/SearchInput.vue';
+    import CheckboxFilter from "@/components/common/CheckboxFilter.vue"
+
+
     const doctorStore = useDoctorStore()
     const router = useRouter()
     const route =useRoute()
     const appointment=useAppointmentStore()
-    const filters = ref({
-      department: null,
-      specialization: null
-    })
+ 
+    const {doctorsList}=storeToRefs(doctorStore)
+    const genderFilter = ref(['male', 'female'])
+    const bookingFilter =ref(['true','false'])
+    const emergencyFilter =ref(['true','false'])
+
+    const { searchQuery, filteredData } = useSearchFilter(
+        doctorsList,
+        ['name','room_number','specialization'],
+        {
+          gender: genderFilter,
+          is_bookable:bookingFilter,
+          emergency_available:emergencyFilter
+
+        }
+        
+    )
+
+
 
     onMounted(async() => {
       await doctorStore.fetchDoctors()
@@ -32,17 +53,6 @@
         })
       }
     })
-
-    const filteredDoctors = computed(() => {
-      let list = doctorStore.doctorsList
-      if (filters.value.department) {
-        list = list.filter(d => d.department === filters.value.department)
-      }
-      if (filters.value.specialization) {
-        list = list.filter(d => d.specialization === filters.value.specialization)
-      }
-      return list
-    })
     function openDoctorApptPage(id){
       router.push({
             name: "book-appointments",
@@ -56,11 +66,10 @@
       <div class="row">
 
         <div class="col-3">
-          <DoctorFilter
-            :departments="['Neurology','Orthopedic','Cardiology']"
-            :specializations="['Surgeon','Consultant','Physician']"
-            v-model="filters"
-          />
+          <SearchInput  v-model="searchQuery" placeholder="Search Doctors..."/>
+          <CheckboxFilter  v-model="genderFilter" :options="[{ l: 'Male', v: 'male' },{ l: 'Female', v: 'female' }]" label="Filter by Gender" name="gender"/>
+          <CheckboxFilter  v-model="bookingFilter" :options="[{ l: 'Open', v: 'true' },{ l: 'Close', v: 'false' }]" label="Filter by booking" name="booking"/>
+          <CheckboxFilter  v-model="emergencyFilter" :options="[{ l: 'Emergency', v: 'true' },{ l: 'Non Emergency', v: 'false' }]" label="Filter by Emergency" name="emergency" />
         </div>
 
         <div class="col-9 ">
@@ -71,9 +80,9 @@
             </template>
 
           
-            <DoctorCard v-for="doc in filteredDoctors" :key="doc.id" :doctor="doc"  :id="`doctor-${doc.id}`" class="mb-3 " :class="doc.id == route.query.focus ? 'bg-secondary-subtle' :''" @doctor-appt="openDoctorApptPage(doc.id)"/>
+            <DoctorCard v-for="doc in filteredData" :key="doc.id" :doctor="doc"  :id="`doctor-${doc.id}`" class="mb-3 " :class="doc.id == route.query.focus ? 'bg-secondary-subtle' :''" @doctor-appt="openDoctorApptPage(doc.id)"/>
 
-            <div v-if="!filteredDoctors.length" >
+            <div v-if="!filteredData.length" >
               <h2 class="text-muted mt-6 text-center">No doctors found</h2>
             </div>
           </LoadingState>

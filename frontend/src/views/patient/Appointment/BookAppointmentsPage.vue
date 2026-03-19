@@ -8,10 +8,21 @@
     import LoadingState from "@/components/common/LoadingState.vue"
     import AppointmentCardSkeleton from '@/components/Patient/AppointmentCardSkeleton.vue';
     import { useToastStore } from '@/stores/toast.store';
+    import { useSearchFilter } from '@/utils/useSearchFilter';
+    import SearchInput from '@/components/common/SearchInput.vue';
+    import { storeToRefs } from 'pinia';
 
     const appointment=useAppointmentStore()
     const route =useRoute()
     const toast = useToastStore()
+
+    const {doctorsAvailability} = storeToRefs(appointment)
+    const { searchQuery, filteredData } = useSearchFilter(
+        doctorsAvailability,
+        ['doctor.name'],
+        
+    )
+
 
     onMounted(async()=>{
         const today = appointment.formatDate(appointment.today)
@@ -132,6 +143,7 @@
               Choose a doctor and select a time slot
             </div>
           </div>
+          <SearchInput  v-model="searchQuery" placeholder="Search Doctors..."/>
 
           <div class="date-context-card px-3 py-2 text-end">
             <div class="fw-bold">
@@ -152,8 +164,8 @@
             <template #skeleton>
               <AppointmentCardSkeleton/>
             </template>
-            <DoctorAppointCard  v-for="doc in appointment.doctorsAvailability" :key="doc.doctor.id" :doctor="doc" @slot-selected="openBookingModal"/>
-            <div v-if="!appointment.doctorsAvailability.length" >
+            <DoctorAppointCard  v-for="doc in filteredData" :key="doc.doctor.id" :doctor="doc" @slot-selected="openBookingModal"/>
+            <div v-if="!filteredData.length" >
               <h2 class="text-muted mt-6 text-center">No Appointments found</h2>
             </div>
           </LoadingState>
@@ -161,31 +173,7 @@
 
       </div>
 
-      <div class="col-lg-3 col-md-4 border-start bg-white  sticky-top p-3">
-
-        <div class="mb-3">
-          <label class="hms-label">Search Doctor</label>
-          <input type="text" class="form-control" placeholder="Type name..." />
-        </div>
-
-        <div class="mb-3">
-          <label class="hms-label">Department</label>
-          <select class="form-select">
-            <option>All</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="hms-label">Availability</label>
-          <select class="form-select">
-            <option>All</option>
-            <option>Morning</option>
-            <option>Afternoon</option>
-            <option>Evening</option>
-          </select>
-        </div>
-
-      </div>
+      
 
     </div>
 
