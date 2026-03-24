@@ -14,30 +14,40 @@
 </script>
 
 <template>
-  <div class="bg-light doctor-mini-card p-3 mb-3 pointer animate-up-1 border-1 position-relative" @click="emit('select')">
-    <div class="d-flex align-items-center gap-3">
+  <div class="doctor-row border-bottom " @click="emit('select')">
+    <img :src="doctor.profile_image || '/doctor-placeholder.png'" class="avatar" />
 
-      <div class="doctor-avatar">
-        <img
-          :src="doctor.profile_image || '/doctor-placeholder.png'"
-          alt="Doctor"
-        />
+    <div class="flex-grow-1">
+      <div class="fw-medium">
+        Dr. {{ doctor.name }}
       </div>
-
-      
-      <div class="flex-grow-1">
-        <h5 class="mb-1 fw-semibold">
-          Dr. {{ doctor.name }}
-        </h5>
-
-        <p class="mb-0 text-muted small">
-          {{ doctor.specialization }}
-          <span v-if="doctor.roles">
-            • {{ doctor.roles }}
-          </span>
-        </p>
+      <div class="text-muted tiny">
+        {{ doctor.specialization }}
       </div>
-      <Badge :label="bookable ? 'Booking Open' : 'Booking closed'" :color="bookable ? 'success':'danger'" class="position-absolute top-0 end-0 mt-1 me-1"/>  
     </div>
+
+    <Badge :label="bookable ? 'Open' : 'Closed'" :color="bookable ? 'success' : 'danger'"/>
+    
   </div>
 </template>
+
+<style scoped>
+.doctor-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
+} 
+.doctor-row:hover {
+  background: var(--hms-card-hover);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+</style>

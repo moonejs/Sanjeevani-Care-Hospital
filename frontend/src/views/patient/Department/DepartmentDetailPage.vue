@@ -8,6 +8,11 @@
     import { Phone,Mail,MapPinHouse,Calendar } from 'lucide-vue-next';
     import DoctorMiniCard from '@/components/Patient/DoctorMiniCard.vue';
     import Badge from '@/components/common/Badge.vue';
+    import SearchInput from '@/components/common/SearchInput.vue';
+    import { storeToRefs } from 'pinia';
+    
+    import { useSearchFilter } from '@/utils/useSearchFilter';
+
     const department=useDepartmentStore()
     const route=useRoute()
     const router=useRouter()
@@ -18,6 +23,13 @@
         department.fetchDepartmentById(departmentId)
         doctor.fetchDoctorsByDepartment(departmentId)
     })
+
+    const { doctorsByDepartment }=storeToRefs(doctor)
+    const { searchQuery, filteredData } = useSearchFilter(
+        doctorsByDepartment,
+        ['name'],
+        
+    )
 
     function openDoctor(id) {
         router.push({
@@ -37,106 +49,144 @@
 </script>
 
 <template>
-    <div class="d-flex container-fluid">
+  <div class="container-fluid px-5 py-4">
 
-        <div class="departmentDetail-page-left container-fluid bg-success">
-            <h5 class="mb-3 fw-bold">Doctors in this Department</h5>
-
-            <div v-if="doctor.loading" class="text-muted">
-                Loading doctors...
-            </div>
-
-    
-            <div v-else-if="!doctorsList.length" class="text-muted">
-            No doctors available
-            </div>
-            <DoctorMiniCard v-for="doc in doctorsList" :key="doc.id" :doctor="doc" @select="openDoctor(doc.id)" class="mb-2 " />
-
-            
+    <div class="row g-5">
+      <div class="col-lg-4">
+        <div class="d-flex justify-content-between">
+            <h4 class="section-title ">Doctors</h4>
+            <SearchInput  class=""  v-model="searchQuery"  placeholder="Search doctors..."/>
         </div>
-        <div class="departmentDetail-page-right container-fluid bg-danger">
-            <div v-if="department.loading">
-                Loading department...
-            </div>
-
-            <div v-else-if="!department.selectedDepartment">
-                <p>No department found</p>
-            </div>
-            <div v-else>
-          <div class="d-flex align-items-center mb-4 mt-2">
-            <component v-if="departmentIcon" :is="departmentIcon" class="me-3 text-primary department-detail-icon"/>
-            <h1 class="mb-0 display-2">{{ department.selectedDepartment.name }}</h1>
-
-            <div v-if="department.selectedDepartment.emergency_available" class="ms-4">
-                <Badge label="Emergency Available" color="success"/>
-            </div>
-            <div v-else="department.selectedDepartment.emergency_available" class="ms-4">
-                <Badge label="Emergency Not Available" color="danger"/>
-            </div>
+        <div class="mt-4">
+          
+          <div v-if="doctor.loading" class="text-muted small">
+            Loading doctors...
+          </div>
+          <div v-else-if="!doctorsList.length" class="text-muted small">
+            No doctors available
           </div>
 
-          
-          <p class="fs-6">
+          <DoctorMiniCard v-for="doc in filteredData" :key="doc.id" :doctor="doc" @select="openDoctor(doc.id)" />
+
+        </div>
+
+      </div>
+      <div class="col-lg-8 " style="height: 37rem; overflow-y: auto;">
+
+        <div v-if="department.loading">Loading...</div>
+
+        <div v-else-if="!department.selectedDepartment">
+          No department found
+        </div>
+
+        <div v-else>
+          <div class="department-header mb-4">
+            <div class="d-flex align-items-center gap-4">
+              <div class="icon-wrapper-lg">
+                <component  v-if="departmentIcon"  :is="departmentIcon"  class="text-dark"/>
+              </div>
+
+              <div>
+                <h2 class="department-title mb-1">
+                  {{ department.selectedDepartment.name }}
+                </h2>
+
+                <Badge :label="department.selectedDepartment.emergency_available ? 'Emergency available' : 'No emergency service'" :color="department.selectedDepartment.emergency_available ? 'success' :'danger'"/>
+                
+              </div>
+            </div>
+          </div>
+          <p class="text-muted mb-5">
             {{ department.selectedDepartment.description }}
           </p>
-
-          <div class="bg-light d-flex gap-8 ">
-                <div v-if="department.selectedDepartment.services?.length" class="mt-4">
-                    <h5>Services Provided</h5>
-                    <ul>
-                    <li
-                        v-for="(service, i) in department.selectedDepartment.services"
-                        :key="i"
-                    >
-                        {{ service }}
-                    </li>
-                    </ul>
-                </div>
-                <div v-if="department.selectedDepartment.facilities?.length" class="mt-4">
-                    <h5>Facilities</h5>
-                    <ul>
-                    <li
-                        v-for="(facility, i) in department.selectedDepartment.facilities"
-                        :key="i"
-                    >
-                        {{ facility }}
-                    </li>
-                    </ul>
-                </div>
-          </div>
-          
-          <div class="bg-info d-flex gap-6">
-
-              <div class="mt-4">
-                    <h5>Contact</h5>
-                    <p v-if="department.selectedDepartment.phone">
-                      <span>
-                          <Phone :size="20"/>
-                        </span>
-                        {{ department.selectedDepartment.phone }}
-                    </p>
-                    <p v-if="department.selectedDepartment.email">
-                        <Mail :size="20"/>
-                        {{ department.selectedDepartment.email }}
-                    </p>
-                    <p v-if="department.selectedDepartment.building">
-                        <MapPinHouse :size="20"/>
-                        {{ department.selectedDepartment.building }}
-                        <span v-if="department.selectedDepartment.floor">
-                            
-                            , Floor {{ department.selectedDepartment.floor }}
-                        </span>
-                    </p>
-                </div>
-
-                <div v-if="department.selectedDepartment.opd_timing" class="mt-4">
-                    <Calendar :size="20" />
-                    {{ department.selectedDepartment.opd_timing}}
-                </div>
-              
+          <div class="row">
+            <div class="col-md-6">
+              <div class="">
+                <h5 class="text-muted">Services</h5>
+                <ul class="clean-list">
+                  <li v-for="(s, i) in department.selectedDepartment.services" :key="i">
+                    {{ s }}
+                  </li>
+                </ul>
+              </div>
             </div>
-        </div>
+
+            <div class="col-md-6">
+              <div class="mt-1">
+                <h5 class="text-muted">Facilities</h5>
+                <ul class="clean-list">
+                  <li v-for="(f, i) in department.selectedDepartment.facilities" :key="i">
+                    {{ f }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+          <hr>
+          <div class="mt-4">
+            <h6 class="section-title">Contact</h6>
+
+            <div class="row text-muted small">
+
+              <div class="col-md-4" v-if="department.selectedDepartment.phone" style="font-size: 0.85rem;">
+                
+                <Phone :size="20"/>
+                {{ department.selectedDepartment.phone }}
+            
+              </div>
+
+              <div class="col-md-4" v-if="department.selectedDepartment.email">
+                <Mail :size="20"/>
+                {{ department.selectedDepartment.email }}
+              </div>
+
+              <div class="col-md-4" v-if="department.selectedDepartment.building">
+                 <MapPinHouse :size="20"/>
+
+                {{ department.selectedDepartment.building }}
+                <span v-if="department.selectedDepartment.floor">
+                    
+                  , Floor {{ department.selectedDepartment.floor }}
+                </span>
+              </div>
+
+            </div>
+          </div>
 
         </div>
+
+      </div>
+
     </div>
+
+  </div>
 </template>
+
+<style scoped>
+.clean-list {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.clean-list li {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 6px;
+}
+.icon-wrapper-lg {
+  width: 64px;
+  height: 64px;
+  background: #f3f4f6;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-wrapper-lg svg {
+  width: 32px;
+  height: 32px;
+}
+
+</style>
