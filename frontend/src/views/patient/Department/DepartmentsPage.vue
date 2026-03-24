@@ -39,24 +39,35 @@
 
 </script>
 
+
 <template>
-    <div>
-        <div class="container ms-12 ps-10">
-            <SearchInput class="w-25"  v-model="searchQuery" placeholder="Search Departments..."/>
-        </div>
-            <LoadingState :loading="department.loading">
-            <div v-if="department.departmentList.length == 0" class="empty-state">
-                <h2>No departments Found</h2>
-            </div>
-            <div v-else class="main bg-danger-subtle container-fluid mt-3 ">
-                <div  class="row mb-3">
-                    <div class="col-2" v-for="dept in filteredData" :key="dept.id">
-                        <ProfileCard type="department" :profile="dept" @select="openDepartmentPage(dept.id)" />
-                    </div>
-                </div>
-            </div>
-            </LoadingState>
-            
-    </div>
+  <div class="container-fluid px-4 py-3">
+
     
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h4 class="fw-semibold mb-0">Departments</h4>
+        <small class="text-muted">Browse hospital departments</small>
+      </div>
+
+      <SearchInput  class="w-25"  v-model="searchQuery"  placeholder="Search departments..." 
+      />
+    </div>
+
+    
+    <LoadingState :loading="department.loading">
+
+      <div v-if="filteredData.length === 0" class="text-center py-5">
+        <h5 class="text-muted">No departments found</h5>
+      </div>
+
+      
+      <div v-else class="row g-4">
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6"v-for="dept in filteredData" :key="dept.id">
+          <ProfileCard type="department" :profile="dept" @select="openDepartmentPage(dept.id)" />
+        </div>
+      </div>
+
+    </LoadingState>
+  </div>
 </template>
