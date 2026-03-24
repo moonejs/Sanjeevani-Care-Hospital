@@ -1,74 +1,109 @@
 <script setup>
-    import Btn from '@/components/common/Btn.vue'
-    import { useRouter } from 'vue-router'
+import Btn from '@/components/common/Btn.vue'
+import { useRouter } from 'vue-router'
+import { useAppointmentStore } from '@/stores/appointment.store'
+import Badge from '../common/Badge.vue'
+import { useToastStore } from '@/stores/toast.store';
+const toast = useToastStore()
 
-    defineProps({
-        appointment: Object,
-        count: Number,
-        loading: Boolean
-    })
+const appointmentStore = useAppointmentStore()
 
-    const router = useRouter()
+const props = defineProps({
+  appointment: Object,
+  count: Number,
+  loading: Boolean
+})
 
-    function openMyAppointments(){
-        router.push('/appointments')
-    }
+async function handleCancel() {
+  if (!props.appointment?.appointment_id) return
+  toast.addToast({
+          message: 'Appointment Cancelled Succesfully',
+          type: 'success'
+        })
+  try {
+    await appointmentStore.cancelBookedAppointment(
+      props.appointment.appointment_id,
+      { reason: "Cancelled by patient" }
+    )
+    
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const router = useRouter()
+
+function openMyAppointments() {
+  router.push('/appointments')
+}
+
+
+function getStatusColor() {
+  if (props.appointment.status === 'confirmed') return 'success'
+  if (props.appointment.status === 'pending') return 'warning'
+  if (props.appointment.status === 'cancelled') return 'danger'
+
+  return 'primary'
+}
 </script>
 
 <template>
-  <div class=" bg-success shadow-sm mb-4">
-    <div class="card-body">
+  <div class="ga-card  p-3 mb-3">
 
-      <h5 class="card-title mb-3">Your Next Appointment</h5>
+    <div v-if="loading" class="text-muted small">
+      Loading...
+    </div>
 
-      <div v-if="loading" class="text-muted">
-        Loading...
-      </div>
+    <div v-else-if="appointment">
 
-      <div v-else-if="appointment">
-        <p class="fw-bold mb-1">
-          {{ appointment.doctor.name }}
-          <span class="text-muted">
-            ({{ appointment.doctor.department }})
-          </span>
-        </p>
+      
+      <div class="d-flex justify-content-between align-items-start mb-2">
 
-        <p class="mb-1">
-          {{ appointment.date }} · {{ appointment.time }}
-        </p>
-
-        <p class="mb-3">
-          Status:
-          <span class="badge bg-success">
-            {{ appointment.status }}
-          </span>
-        </p>
-        <p class="mb-3">
-          Type:
-          <span class="badge bg-success">
-            {{ appointment.type }}
-          </span>
-        </p>
-
-        <div class="d-flex gap-2">
-          <Btn label="View Details" class="btn-outline-primary btn-sm" @click="" />
-          <Btn label="Cancel" class="btn-outline-danger btn-sm" />
-        </div>
-
-        <div v-if="count > 0" class="mt-3 text-primary">
-          You have {{ count }} more upcoming appointment{{ count > 1 ? 's' : '' }}
-          <div>
-            <button class="btn btn-link p-0" @click="openMyAppointments">
-              View all
-            </button>
+        <div>
+          <div class="fw-semibold">
+            {{ appointment.doctor.name }}
+            <span class="text-muted">
+              ({{ appointment.doctor.department }})
+            </span>
           </div>
         </div>
+
+       <Badge :label="appointment.status" :color="getStatusColor()" />
+        
+
       </div>
 
-      <div v-else class="text-muted">
-        No upcoming appointments
+      
+      <div class="small text-muted mb-2">
+        {{ appointment.date }} • {{ appointment.time }}
       </div>
+
+      
+      <div class="small mb-3">
+        Type:
+        <span class="text-muted">
+          {{ appointment.type }}
+        </span>
+      </div>
+
+      
+      <div class="d-flex gap-2">
+        <Btn v-if="appointment.status != 'confirmed'"
+          label="Cancel" 
+          class="btn-outline-danger btn-sm" 
+          @click="handleCancel"
+        />
+      </div>
+
+      
+      
 
     </div>
+
+    <div v-else class="text-muted small">
+      No upcoming appointments
+    </div>
+
   </div>
 </template>
+

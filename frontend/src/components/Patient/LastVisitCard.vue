@@ -1,44 +1,56 @@
 <script setup>
     import Btn from '@/components/common/Btn.vue'
+    import { useRouter } from 'vue-router';
 
-    defineProps({
+    const router=useRouter()
+
+    function viewAppointments(){
+      router.push({
+        name: "my-appointments"
+      })
+    }
+    const props=defineProps({
         visit: Object,
         loading: Boolean
     })
 </script>
-
 <template>
-  <div class="bg-danger-subtle shadow-sm">
-    <div class="card-body">
+  <div class="ga-card visit-card p-3">
 
-      <h5 class="card-title mb-3">Last Visit Summary</h5>
+    <div v-if="loading" class="text-muted small">
+      Loading...
+    </div>
 
-      <div v-if="loading" class="text-muted">
-        Loading...
+    <div v-else-if="visit">
+
+      <div class="mb-2">
+        <span class="text-muted small">Diagnosis:</span><br/>
+        <span>{{ visit.diagnosis }}</span>
       </div>
 
-      <div v-else-if="visit">
-        <p><b>Diagnosis:</b> {{ visit.diagnosis }}</p>
-
-        <p v-if="visit.medicines?.length">
-          <b>Medicines:</b>
-          <span v-for="(m, i) in visit.medicines" :key="i">
-            {{ m.name }}{{ i < visit.medicines.length - 1 ? ', ' : '' }}
-          </span>
-        </p>
-
-        <p v-if="visit.follow_up_date">
-          <b>Follow-up:</b> {{ visit.follow_up_date }}
-        </p>
-
-        <Btn label="View all records" class="btn-outline-secondary btn-sm mt-2"
-        />
+      <div v-if="visit.medicines?.length" class="mb-2">
+        <span class="text-muted small">Medicines:</span><br/>
+        <span>
+          {{ visit.medicines.map(m => m.name).join(', ') }}
+        </span>
       </div>
 
-      <div v-else class="text-muted">
-        No previous visits found
+      <div v-if="visit.follow_up_date" class="mb-2">
+        <span class="text-muted small">Follow-up:</span><br/>
+        <span>{{ visit.follow_up_date }}</span>
       </div>
+
+      <Btn 
+        label="View all records" 
+        class="btn-outline-secondary btn-sm mt-2"
+        @click="viewAppointments"
+      />
 
     </div>
+
+    <div v-else class="text-muted small">
+      No previous visits found
+    </div>
+
   </div>
 </template>

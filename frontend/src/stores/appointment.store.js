@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { saveDoctorAvailabilityApi,fetchDoctorAvailabilityApi,fetchAllDoctorsAvailabilityApi,bookAppointmentApi,fetchAppointmentsByDoctorApi,updateAppointmentStatusApi,completeAppointmentApi,fetchDoctorAppointmentsHistoryApi,rescheduleAppointmentApi,cancelBookedAppointmentApi } from '@/api/appointment'
-
+import { usePatientStore } from './patient.store'
 import { fetchPatientAppointmentsHistoryApi } from '@/api/appointment'
 
 import { useDoctorStore } from './doctor.store'
@@ -242,6 +242,12 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         try {
             const res =await cancelBookedAppointmentApi(appointment_id,data)
             await fetchMyActiveAppointment()
+
+            const patientStore = usePatientStore()
+            
+            patientStore.nextAppointment = null
+            patientStore.upcomingCount = 0
+
             await fetchAllDoctorsAvailability(selectedDate.value)
             console.log(res);
             
