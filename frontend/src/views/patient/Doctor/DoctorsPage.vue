@@ -7,6 +7,7 @@
     import { useAppointmentStore } from "@/stores/appointment.store"
     import { onMounted, ref, computed,nextTick } from "vue"
     import { useRouter,useRoute } from "vue-router"
+    import { PersonStanding, PersonStandingIcon } from 'lucide-vue-next';
 
     import { useSearchFilter } from '@/utils/useSearchFilter';
     import { storeToRefs } from 'pinia';
@@ -60,34 +61,56 @@
         })
     }
   </script>
-
   <template>
-    <div class="container-fluid mt-3">
-      <div class="row">
+  <div class="container-fluid mt-3">
+    <div class="row g-3">
+      <div class="col-lg-3 col-md-4">
 
-        <div class="col-3">
-          <SearchInput  v-model="searchQuery" placeholder="Search Doctors..."/>
-          <CheckboxFilter  v-model="genderFilter" :options="[{ l: 'Male', v: 'male' },{ l: 'Female', v: 'female' }]" label="Filter by Gender" name="gender"/>
-          <CheckboxFilter  v-model="bookingFilter" :options="[{ l: 'Open', v: 'true' },{ l: 'Close', v: 'false' }]" label="Filter by booking" name="booking"/>
-          <CheckboxFilter  v-model="emergencyFilter" :options="[{ l: 'Emergency', v: 'true' },{ l: 'Non Emergency', v: 'false' }]" label="Filter by Emergency" name="emergency" />
+        <div class="filter-panel">
+          <SearchInput v-model="searchQuery" placeholder="Search doctors..." class="mb-3"/>
+
+          <div class="filter-group">
+            <div class="filter-title">Gender</div>
+            <CheckboxFilter  v-model="genderFilter" :options="[  { l: 'Male', v: 'male' },  { l: 'Female', v: 'female' }]" name="gender"/>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-title">Booking</div>
+            <CheckboxFilter  v-model="bookingFilter" :options="[  { l: 'Open', v: 'true' },  { l: 'Close', v: 'false' }]" name="booking"/>
+          </div>
+          <div class="filter-group">
+            <div class="filter-title">Emergency</div>
+            <CheckboxFilter  v-model="emergencyFilter" :options="[  { l: 'Emergency', v: 'true' },  { l: 'Non Emergency', v: 'false' }]" name="emergency"/>
+          </div>
+
         </div>
-
-        <div class="col-9 ">
-          <LoadingState :loading="doctorStore.loading" type="skeleton" :count="4">
-            
-            <template #skeleton>
-              <DoctorCardSkeleton />
-            </template>
-
+      </div>
+      <div class="col-lg-9 col-md-8">
+        <LoadingState :loading="doctorStore.loading" type="skeleton" :count="4">
           
-            <DoctorCard v-for="doc in filteredData" :key="doc.id" :doctor="doc"  :id="`doctor-${doc.id}`" class="mb-3 " :class="doc.id == route.query.focus ? 'bg-secondary-subtle' :''" @doctor-appt="openDoctorApptPage(doc.id)"/>
+          <template #skeleton>
+            <DoctorCardSkeleton />
+          </template>
 
-            <div v-if="!filteredData.length" >
-              <h2 class="text-muted mt-6 text-center">No doctors found</h2>
+          <div class="doctors-list-div">
+
+            <DoctorCard v-for="doc in filteredData" :key="doc.id" :doctor="doc"  :id="`doctor-${doc.id}`" class="mb-2":class="doc.id == route.query.focus ? 'bg-light border rounded' : ''"@doctor-appt="openDoctorApptPage(doc.id)"/>
+
+          </div>
+          <div v-if="!filteredData.length" class="text-center py-5">
+            <div style="font-size: 24px;">
+              <PersonStandingIcon :size="25"/>
             </div>
-          </LoadingState>
-        </div>
+            <div class="fw-medium mt-2">No doctors found</div>
+            <div class="text-muted small">
+              Try adjusting filters or search query
+            </div>
+          </div>
+
+        </LoadingState>
 
       </div>
+
     </div>
-  </template>
+  </div>
+</template>

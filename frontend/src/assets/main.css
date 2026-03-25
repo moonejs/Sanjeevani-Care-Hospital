@@ -40,7 +40,7 @@ body {
 .badge-soft-danger { background: #fce8e6; color: #d93025; }
 .badge-soft-primary { background: #e8f0fe; color: #1a73e8; }
 .badge-soft-secondary { background: #dedef2; color: #000000; }
-.badge-soft-info { background: #91fff4; color: #000000; }
+.badge-soft-info { background: #91fff4b5; color: #000000; }
 
 /* tables */
 .table-hover3 tbody tr:hover {
@@ -416,19 +416,9 @@ body {
   cursor: pointer;
 }
 
-.doctor-card {
-  width: 62vw;
-}
-.doctor-card-badge1 {
-  bottom: 8rem;
-  right: 10rem;
-}
 
-.doctor-card-img img {
-  height: 23rem;
-  width: 100%;
-  object-fit: cover;
-}
+
+
 
 .doctors-list-div{
   max-height: 75.8vh;

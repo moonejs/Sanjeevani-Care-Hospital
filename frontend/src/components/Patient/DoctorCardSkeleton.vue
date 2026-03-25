@@ -3,7 +3,7 @@
     <div class="row g-0">
 
       <div class="col-md-4 placeholder-glow p-3">
-        <span class="placeholder col-12 rounded-start-2" style="height:21rem;"></span>
+        <span class="placeholder col-12 rounded-start-2" style="height:19rem;"></span>
       </div>
 
       
@@ -61,8 +61,8 @@
         <div class="placeholder-glow mb-2">
           <span class="placeholder col-6"></span>
         </div>
-        <div class="placeholder-glow mt-5">
-          <span class="placeholder col-3 rounded-1" style="height: 38px;"></span>
+        <div class="placeholder-glow mt-2">
+          <span class="placeholder col-3 " style="height: 30px;"></span>
         </div>
       </div>
 
