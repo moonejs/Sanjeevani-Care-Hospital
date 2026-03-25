@@ -29,25 +29,12 @@
 
 <template>
   <LoadingState :loading="patient.loading">
-      <div class="container-fluid" v-if="patient.patientAppointmentHistory.length !=0">
-      
-      <PatientAppointmentsTable
-        :appointments="patient.patientAppointmentHistory"
-        :loading="patient.loading"
-        @view="openDetails"
-      />
+    <div class="container-fluid history-page-p" v-if="patient.patientAppointmentHistory.length !=0">
+        <PatientAppointmentsTable :appointments="patient.patientAppointmentHistory" :loading="patient.loading" @view="openDetails"/>
 
-      <Pagination
-        :pagination="patient.historyPagination"
-        @change="changePage"
-      />
+        <Pagination :pagination="patient.historyPagination" @change="changePage"/>
 
-      <AppointmentDetailsOffcanvas
-        :show="showDetails"
-        :appointment="selectedAppointment"
-        @close="showDetails = false",
-        owner="patient"
-      />
+        <AppointmentDetailsOffcanvas :show="showDetails" :appointment="selectedAppointment" @close="showDetails = false", owner="patient" />
     </div>
     <div v-else>
       <h2 class="text-muted text-center mt-10 ">No Appointments Found</h2>
@@ -55,3 +42,10 @@
   </LoadingState>
   
 </template>
+
+<style scoped>
+.history-page-p{
+  height: 40rem ;
+  overflow-y: hidden;
+}
+</style>

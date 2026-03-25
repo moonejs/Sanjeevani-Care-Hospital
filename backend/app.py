@@ -11,7 +11,8 @@ from flask_security import SQLAlchemyUserDatastore
 import extensions
 from celery_app import celery, init_celery
 import os
-
+from tasks import generate_appointment_pdf
+from celery.result import AsyncResult
 
 app=Flask(__name__)
 app.config.from_object(Config)
@@ -53,6 +54,31 @@ def doctor_profile_image(filename):
 def download_file(filename):
     return send_from_directory("exports", filename, as_attachment=True)
 
+@app.route("/export-appointment/<int:id>")
+def export_appointment(id):
+    task = generate_appointment_pdf.delay(id)
+    return {"task_id": task.id}
+
+@app.route("/export-status/<task_id>")
+def export_status(task_id):
+    task = celery.AsyncResult(task_id)   
+
+    print("STATE:", task.state)
+    print("RESULT:", task.result)
+
+    if task.state == "PENDING":
+        return {"status": "pending"}
+
+    elif task.state == "SUCCESS":
+        return {
+            "status": "completed",
+            "filename": task.result.get("filename")
+        }
+
+    elif task.state == "FAILURE":
+        return {"status": "failed"}
+
+    return {"status": task.state}
 def create_database():
     with app.app_context():
             

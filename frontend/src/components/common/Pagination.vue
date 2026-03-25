@@ -1,4 +1,4 @@
-<script setup>
+  <script setup>
 defineProps({
   pagination: Object
 })

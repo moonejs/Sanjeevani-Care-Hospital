@@ -14,18 +14,20 @@
         placeholder:String,
         class1:String,
         class2:String,
+        class3:String,
         isDate:Boolean
     })
     const emit = defineEmits(['today-or-week', 'update:searchQuery','update:dateFilter'])
 </script>
 <template>
     <div class="d-flex align-items-center justify-content-between mb-3 ">
-        <div class="d-flex gap-4 " :class="class2">
-            <h5 class="m-0 fw-bold text-dark">{{ title }}</h5>
-            <SearchInput :class="class1" :modelValue="searchQuery"@update:modelValue="(val) => emit('update:searchQuery', val)":placeholder="placeholder"/>
-            <div v-if="isDate">
-                <DateFilter :modelValue="dateFilter" @update:modelValue="(val) => emit('update:dateFilter', val)" label="Filter by Date" />
-                
+        <div class="d-flex gap-4  " :class="class2">
+            <h4 class="m-0 fw-bold text-dark">{{ title }}</h4>
+            <div :class="class3">
+                <div v-if="isDate">
+                    <DateFilter :modelValue="dateFilter" @update:modelValue="(val) => emit('update:dateFilter', val)"  />  
+                </div>
+                <SearchInput :class="class1" :modelValue="searchQuery"@update:modelValue="(val) => emit('update:searchQuery', val)":placeholder="placeholder"/>
             </div>
         </div>
         

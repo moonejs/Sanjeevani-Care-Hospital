@@ -6,6 +6,7 @@ from datetime import datetime,timedelta
 from utils.email_utils import send_email
 
 
+
 @celery.task(bind=True)
 def export_patient_treatments(self, patient_id):
 
@@ -33,16 +34,15 @@ def export_patient_treatments(self, patient_id):
         ])
 
         for appointment in patient.appointments:
-            if appointment.treatment:
-                writer.writerow([
-                    patient.name,
-                    appointment.doctor.name,
-                    appointment.appointment_date,
-                    appointment.start_time,
-                    appointment.treatment.diagnosis,
-                    appointment.treatment.notes,
-                    appointment.treatment.medicines
-                ])
+            writer.writerow([
+                patient.name,
+                appointment.doctor.name,
+                appointment.appointment_date,
+                appointment.start_time,
+                appointment.treatment.diagnosis if appointment.treatment else "",
+                appointment.treatment.notes if appointment.treatment else "",
+                appointment.treatment.medicines if appointment.treatment else ""
+            ])
 
     return {
         "status": "completed",
@@ -155,3 +155,145 @@ def send_monthly_doctor_reports():
         )
 
     return "Monthly reports sent successfully"
+
+
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+import os
+
+@celery.task(bind=True)
+def generate_appointment_pdf(self, appointment_id):
+
+    appointment = Appointment.query.get(appointment_id)
+
+    if not appointment:
+        return {"status": "failed"}
+
+    EXPORT_FOLDER = os.path.join(os.getcwd(), "exports")
+    os.makedirs(EXPORT_FOLDER, exist_ok=True)
+
+    filename = f"appointment_{appointment_id}.pdf"
+    file_path = os.path.join(EXPORT_FOLDER, filename)
+
+    doc = SimpleDocTemplate(file_path, pagesize=A4,
+                            rightMargin=40, leftMargin=40,
+                            topMargin=40, bottomMargin=30)
+
+    styles = getSampleStyleSheet()
+
+    
+    title_style = ParagraphStyle(
+        'title',
+        parent=styles['Heading1'],
+        alignment=1,
+        textColor=colors.white,
+        fontSize=18
+    )
+
+    section_style = ParagraphStyle(
+        'section',
+        parent=styles['Heading3'],
+        textColor=colors.HexColor("#2E86C1"),
+        spaceAfter=10
+    )
+
+    normal_style = styles['Normal']
+
+    elements = []
+
+    
+    header = Table([["CityCare Hospital - Appointment Bill"]],
+                   colWidths=[450])
+    header.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#2E86C1")),
+        ("TEXTCOLOR", (0, 0), (-1, -1), colors.white),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("FONTNAME", (0, 0), (-1, -1), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 16),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
+    ]))
+
+    elements.append(header)
+    elements.append(Spacer(1, 20))
+
+    
+    elements.append(Paragraph("Patient Information", section_style))
+
+    details = [
+        ["Patient", appointment.patient.name],
+        ["Doctor", f"Dr. {appointment.doctor.name}"],
+        ["Department", appointment.doctor.department.name if appointment.doctor and appointment.doctor.department else "N/A"],
+    ]
+
+    table = Table(details, colWidths=[120, 300])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#F2F4F4")),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("PADDING", (0, 0), (-1, -1), 8),
+    ]))
+
+    elements.append(table)
+    elements.append(Spacer(1, 20))
+
+   
+    elements.append(Paragraph("Appointment Details", section_style))
+
+    appt_data = [
+        ["Date", "Time", "Status"],
+        [str(appointment.appointment_date), str(appointment.start_time), appointment.status.capitalize()],
+    ]
+
+    appt_table = Table(appt_data, colWidths=[140, 140, 140])
+    appt_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#D6EAF8")),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("PADDING", (0, 0), (-1, -1), 8),
+    ]))
+
+    elements.append(appt_table)
+    elements.append(Spacer(1, 20))
+
+    if appointment.treatment:
+        elements.append(Paragraph("Treatment Details", section_style))
+
+        elements.append(Paragraph(f"<b>Diagnosis:</b> {appointment.treatment.diagnosis}", normal_style))
+        elements.append(Paragraph(f"<b>Notes:</b> {appointment.treatment.notes}", normal_style))
+        elements.append(Spacer(1, 20))
+
+
+    elements.append(Paragraph("Billing Summary", section_style))
+
+    fee = 500
+
+    bill_data = [
+        ["Consultation Fee", f"₹{fee}"],
+        ["Total Amount", f"₹{fee}"],
+    ]
+
+    bill_table = Table(bill_data, colWidths=[300, 120])
+    bill_table.setStyle(TableStyle([
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("BACKGROUND", (0, -1), (-1, -1), colors.HexColor("#D5F5E3")),
+        ("FONTNAME", (0, -1), (-1, -1), "Helvetica-Bold"),
+        ("PADDING", (0, 0), (-1, -1), 8),
+    ]))
+
+    elements.append(bill_table)
+
+   
+    elements.append(Spacer(1, 30))
+    elements.append(Paragraph(
+        "Thank you for visiting CityCare Hospital. Wishing you good health!",
+        ParagraphStyle(name="footer", alignment=1, textColor=colors.grey)
+    ))
+
+    doc.build(elements)
+
+    return {
+        "status": "completed",
+        "filename": filename
+    }

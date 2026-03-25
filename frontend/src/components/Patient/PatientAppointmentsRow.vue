@@ -1,5 +1,6 @@
 <script setup>
     import Btn from '@/components/common/Btn.vue'
+    import Badge from '../common/Badge.vue';
 
     defineProps({
         appointment: Object,
@@ -16,19 +17,14 @@
     <td>{{ appointment.time }}</td>
     <td>{{ appointment.doctor.name }}</td>
     <td>{{ appointment.department.name }}</td>
-    <td>{{ appointment.type }}</td>
+    <td class="text-uppercase">{{ appointment.type }}</td>
     <td>
-      <span
-        class="badge"
-        :class="{
-          'bg-warning': appointment.status === 'pending',
-          'bg-primary': appointment.status === 'confirmed',
-          'bg-success': appointment.status === 'completed',
-          'bg-danger': appointment.status === 'cancelled'
-        }"
-      >
-        {{ appointment.status }}
-      </span>
+      <Badge :label="appointment.status" :color="
+        appointment.status === 'pending' ? 'warning' :
+        appointment.status === 'confirmed' ? 'primary' :
+        appointment.status === 'completed' ? 'success' :
+        appointment.status === 'cancelled' ? 'danger' : 'secondary'
+      "/>
     </td>
     <td>
       <Btn label="View" class="btn-outline-primary btn-sm" @click="emit('view')" />
