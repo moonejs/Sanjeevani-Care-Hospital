@@ -18,7 +18,7 @@
 
 </script>
 <template>
-    <div class="bg-white doctor-appoint-card   mb-3 py-1" v-if="doctor.doctor.is_bookable">
+    <div class=" doctor-appoint-card v rounded-start-1   mb-3 py-1" v-if="doctor.doctor.is_bookable">
         <div class="card-body border-bottom">
             <div class="d-flex align-items-center gap-3 appointment-doctor-card-header">
                 <img :src="doctor.doctor.profile_image" />
@@ -54,3 +54,13 @@
         
     </div>
 </template>
+
+<style scoped>
+.v:hover{
+    background-color: #f1f3f5;
+}
+.v{
+    border-left: 3px solid #242E4C;
+    
+}
+</style>

@@ -34,9 +34,10 @@
             </a>
             <ul class="dropdown-menu custom-dropdown">
               <li>
-                <NavLink label="Book Appointment" route="/patient/appointments/new" class="mb-2"/>
+                <NavLink label="Book Appointment" route="/patient/appointments/new" />
               </li>
-              <li><hr class="dropdown-divider"></li>
+              
+              <li><hr class="dropdown-divider "></li>
               <li>
                 <NavLink label="My Appointments" route="/patient/appointments"/>
               </li>
@@ -87,6 +88,7 @@
   border: 1px solid var(--hms-bg-canvas);
   border-radius: 10px;
   padding: 10px;
+  background-color: #f0f2f4;
 }
 
 

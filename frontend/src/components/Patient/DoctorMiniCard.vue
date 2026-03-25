@@ -14,7 +14,7 @@
 </script>
 
 <template>
-  <div class="doctor-row border-bottom " @click="emit('select')">
+  <div class="doctor-row border-bottom rounded-1 mb-2 px-1 " @click="emit('select')">
     <img :src="doctor.profile_image || '/doctor-placeholder.png'" class="avatar" />
 
     <div class="flex-grow-1">
@@ -33,6 +33,8 @@
 
 <style scoped>
 .doctor-row {
+  border-left: 4px solid #151616;
+  
   display: flex;
   align-items: center;
   gap: 12px;

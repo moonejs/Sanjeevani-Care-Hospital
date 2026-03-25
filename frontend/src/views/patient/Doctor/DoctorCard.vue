@@ -49,7 +49,7 @@
 </script>
 
 <template>
-  <div class=" doctor-card mb-4 animate-up-1 border bg-white-subtle  rounded-1 position-relative ">
+  <div class=" doctor-card mb-4 animate-up-1 border   rounded-1 position-relative ">
     <div class="row g-0">
       
       <div class="col-md-4 doctor-card-img ">
@@ -150,6 +150,7 @@
 <style scoped>
 .doctor-card {
   width: 57vw;
+  
 }
 .doctor-card:hover{
   background-color: var(--hms-card-hover);

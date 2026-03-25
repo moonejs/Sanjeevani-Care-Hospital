@@ -23,19 +23,6 @@
     } 
 </script>
 
-<!-- <template>
-    <div class="d-flex align-items-end gap-6" >
-        <div  class="table-top-box bg-info d-flex justify-content-center align-items-center" @click="selectToday">
-            <h2>Today</h2>
-            
-        </div>
-        <div class="d-flex gap-4">
-            <DateBox  v-for="value in appointment.days" :day="value.day" @select="selectDate"  :date="value.date" :fullDate="value.fullDate"/>
-        </div>
-    </div>
-
-</template> -->
-
 <template>
   <div class="">
     <div class="sidebar-header">
@@ -48,17 +35,9 @@
 
     <div class="py-2 pb-3 date " >
        <div
-    v-for="value in appointment.days"
-    :key="value.fullDate"
-    :class="{ active: appointment.selectedDate === value.fullDate }"
-  >
+    v-for="value in appointment.days" :key="value.fullDate" :class="{ active: appointment.selectedDate === value.fullDate }">
 
-    <DateBox
-      :day="value.day"
-      :date="value.date"
-      :fullDate="value.fullDate"
-      @select="selectDate"
-    />
+    <DateBox :day="value.day" :date="value.date" :fullDate="value.fullDate" @select="selectDate"/>
 
   </div>
 
@@ -85,10 +64,10 @@
 }
 
 .date :hover{
-  background-color: #e8f0fe;
+  background-color: #f1f3f5;
 }
 .active{
-  background:#ddeaff;
-  border-left:3px solid #1a73e8;
+  background-color: #f1f3f5;
+  border-left: 3px solid #242E4C;
 }
 </style>

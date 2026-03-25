@@ -86,34 +86,27 @@ body {
 }
 
 
-
-
-
-
-
-
-/* Google-style Global Input Refinement */
 .form-control, .form-select {
     border: 1px solid #dadce0; /* Google's signature border color */
     border-radius: 4px;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     color: #3c4043;
-    background-color: #fff;
+    background-color: #F0F2F4;
     transition: border-color 0.2s, box-shadow 0.2s;
     box-shadow: none !important; /* Remove Bootstrap shadow */
 }
 
 /* Google Focus State: Thin blue border with no glow */
 .form-control:focus, .form-select:focus {
-    border-color: #1a73e8; 
-    background-color: #fff;
+    border-color: #242E4C; 
+    background-color: #F0F2F4;
     outline: 0;
 }
 
 /* Google-style Readonly/Disabled State */
 .form-control:disabled, .form-select:disabled {
-    background-color: #f8f9fa;
+    background-color: #F0F2F4;
     border-color: #e8eaed;
     color: #80868b;
 }

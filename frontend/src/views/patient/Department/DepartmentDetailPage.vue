@@ -49,7 +49,7 @@
 </script>
 
 <template>
-  <div class="container-fluid px-5 py-4">
+  <div class="container-fluid px-5 py-4 vi">
 
     <div class="row g-5">
       <div class="col-lg-4">

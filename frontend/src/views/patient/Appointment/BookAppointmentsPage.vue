@@ -131,7 +131,7 @@
   <div class="container-fluid">
     <div class="row">
       
-      <div class="col-md-3 col-lg-2 bg-white border-end  sticky-top">
+      <div class="col-md-3 col-lg-2  border-end  sticky-top">
         <TableTopBox label="Today" @selected-date="onDateSelected"/>
       </div>
       
