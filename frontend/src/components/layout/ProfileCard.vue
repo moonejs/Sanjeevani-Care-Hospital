@@ -16,7 +16,7 @@
 
 <template>
   <div 
-    class="card department-card h-100 border-0 shadow-sm animate-up-2"
+    class=" department-card h-100  rounded-1 shadow-sm animate-up-2"
     @click="emit('select')"
   >
     <div class="card-body text-center">
@@ -35,7 +35,8 @@
 <style scoped>
 .department-card {
   cursor: pointer;
-  border-radius: 11px;
+  background-color: #f0f2f4;
+  border-left: 4px solid #151616;
   transition: all 0.2s ease;
 }
 
@@ -44,7 +45,7 @@
 .icon-wrapper {
   width: 56px;
   height: 56px;
-  background-color: #f1f5f9;
+  
   border-radius: 50%;
   display: flex;
   align-items: center;
