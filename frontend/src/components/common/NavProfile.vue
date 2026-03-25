@@ -34,7 +34,7 @@
     
 </script>
 
-<template>
+<!-- <template>
     <div class="dropstart">
         <a class="d-flex align-items-center gap-2 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <h3>{{ name }}</h3>
@@ -50,4 +50,71 @@
             </li>
         </ul>
     </div>
+</template> -->
+
+<template>
+  <div class="dropdown">
+    <div class="profile-trigger d-flex align-items-center gap-2"data-bs-toggle="dropdown">
+      <span class="profile-name">{{ name }}</span>
+      <i class="fa-solid fa-circle-user profile-icon"></i>
+    </div>
+
+    <ul class="dropdown-menu profile-dropdown dropdown-menu-end">
+
+      <li>
+        <NavLink label="Profile" :route="`/${role}/profile`"/>
+      </li>
+
+      <li><hr class="dropdown-divider"></li>
+
+      <li>
+        <button class="dropdown-item logout-btn" @click="logout">
+          Logout
+        </button>
+      </li>
+
+    </ul>
+  </div>
 </template>
+
+<style scoped>
+
+.profile-trigger {
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.profile-trigger:hover {
+  background-color: #f1f3f5;
+}
+
+
+.profile-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+
+.profile-icon {
+  font-size: 1.6rem;
+}
+
+
+.profile-dropdown {
+  border: 1px solid #e9ecef;
+  border-radius: 2px;
+  padding: 6px;
+  min-width: 180px;
+}
+
+.logout-btn {
+  border-radius: 6px;
+}
+
+.logout-btn:hover {
+  background-color: #ffe3e3;
+  color: #c92a2a;
+}
+</style>
