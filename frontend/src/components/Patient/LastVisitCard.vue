@@ -15,7 +15,7 @@
     })
 </script>
 <template>
-  <div class="ga-card visit-card p-3">
+  <div class="border-top rounded-start-2 border-bottom border-end visit-card p-3">
 
     <div v-if="loading" class="text-muted small">
       Loading...
@@ -40,11 +40,7 @@
         <span>{{ visit.follow_up_date }}</span>
       </div>
 
-      <Btn 
-        label="View all records" 
-        class="btn-outline-secondary btn-sm mt-2"
-        @click="viewAppointments"
-      />
+      <Btn label="View all records" class="btn-outline-secondary btn-sm mt-2"@click="viewAppointments"/>
 
     </div>
 
@@ -54,3 +50,11 @@
 
   </div>
 </template>
+
+<style scoped>
+.visit-card {
+  border-left: 4px solid #151616;
+  background-color: #f0f2f4;
+}
+
+</style>

@@ -498,9 +498,7 @@ body {
 }
 
 /* visit accent */
-.visit-card {
-  border-left: 4px solid #34a853;
-}
+
 
 /* subtle spacing fix */
 .ga-card + .ga-card {

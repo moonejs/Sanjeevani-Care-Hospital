@@ -48,7 +48,7 @@ function getStatusColor() {
 </script>
 
 <template>
-  <div class="ga-card  p-3 mb-3">
+  <div class="visit-card  rounded-start-2  border-top border-end p-3 mb-3">
 
     <div v-if="loading" class="text-muted small">
       Loading...
@@ -107,3 +107,10 @@ function getStatusColor() {
   </div>
 </template>
 
+<style scoped>
+.visit-card {
+  border-left: 4px solid #151616;
+  
+}
+
+</style>
