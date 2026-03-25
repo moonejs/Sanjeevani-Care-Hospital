@@ -128,6 +128,7 @@ export const usePatientStore=defineStore('patient',()=>{
         loadingPdf.value = true
 
         try {
+            await delay(3000)
             const res = await fetch(`http://127.0.0.1:5000/export-appointment/${appointmentId}`)
             const data = await res.json()
 

@@ -2,9 +2,11 @@
     import Btn from '@/components/common/Btn.vue'
     import { usePatientStore } from '@/stores/patient.store';
     import Badge from '@/components/common/Badge.vue';
+    import { useToastStore } from '@/stores/toast.store';
 
     const patientStore=usePatientStore()
-    
+    const toast = useToastStore()
+
     import { watch,onMounted } from 'vue';
     const props = defineProps({
         show: Boolean,
@@ -37,8 +39,22 @@
     )
 
     async function downloadPdf(){
-    await patientStore.downloadPdf(props.appointment.id)
-  }
+      try {
+        await patientStore.downloadPdf(props.appointment.id)
+        
+        toast.addToast({
+          message: 'Pdf Report Downloaded successfully',
+          type: 'success'
+        })
+        
+      } catch (error) {
+        toast.addToast({
+          title: 'Error',
+          message: 'Failed to Download Appointment Report',
+          type: 'error'
+        })
+      }
+    }
     
 
 </script>
@@ -156,7 +172,7 @@
     </div>
     <div class="offcanvas-footer border-top p-3 d-flex gap-2">
 
-      <Btn :label="patientStore.loadingPdf ? 'Generating...' : 'Download Report'" class="btn-outline-primary btn-sm" @click="downloadPdf"/>
+      <Btn :label="patientStore.loadingPdf ? 'Generating...' : 'Download Report'" :loader="patientStore.loadingPdf" class="btn-outline-primary btn-sm" @click="downloadPdf"/>
 
       <Btn label="Close" class="btn-outline-dark btn-sm" @click="emit('close')" />
 
