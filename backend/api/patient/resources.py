@@ -52,7 +52,7 @@ class PatientProfile(Resource):
         image_url = None
         
         if patient.profile_image:
-            image_url = f"/uploads/patients/profile/{patient.profile_image}"
+            image_url = request.host_url + f"uploads/patients/profile/{patient.profile_image}"
         
         return{
             "name": patient.name,

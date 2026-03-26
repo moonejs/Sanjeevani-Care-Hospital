@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed,reactive, capitalize } from 'vue';
+import { ref, computed,reactive, watch,onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth.store';
 import { usePatientStore } from '@/stores/patient.store';
@@ -17,6 +17,8 @@ const router=useRouter()
 const auth=useAuthStore()
 const patientStore=usePatientStore()
 
+
+
 const form = reactive({
   name: "",
   age: "",
@@ -28,7 +30,8 @@ const form = reactive({
   blood_group: "",
   emergency_contact_name: "",
   emergency_contact_number: "",
-  profile_image: null
+  profile_image: null,
+  profile_image_url: null 
 })
 
 const nameField = useField( computed(() => form.name),[required(), minLength(3),maxLength(40)])
@@ -55,15 +58,19 @@ function onImageChange(e) {
   const file = e.target.files[0]
   if (!file) return
   form.profile_image = file
+  form.profile_image_url = URL.createObjectURL(file) 
 }
 
 async function submitForm() {
     const formData= new FormData()
+    console.log("SUBMIT CLICKED")
+    Object.entries(form).forEach(([k, v]) => {
+      if (k === "profile_image_url") return
 
-    Object.entries(form).forEach(([k,v])=>{
-        if(v){
-            formData.append(k,v)
-        }
+
+      if (v !== null && v !== undefined && v !== "") {
+        formData.append(k, v)
+      }
     })
 
   try {
@@ -76,6 +83,27 @@ async function submitForm() {
   }
 }
 
+onMounted(async () => {
+  await patientStore.fetchPatientProfile()
+
+  const p = patientStore.profile
+  if (!p) return
+
+  Object.assign(form, {
+    name: p.name || "",
+    age: p.age || "",
+    gender: p.gender || "",
+    contact: p.contact || "",
+    address: p.address || "",
+    height_cm: p.height_cm || "",
+    weight_kg: p.weight_kg || "",
+    blood_group: p.blood_group || "",
+    emergency_contact_name: p.emergency_contact_name || "",
+    emergency_contact_number: p.emergency_contact_number || "",
+  })
+
+  form.profile_image_url = p.profile_image
+})
 
 
 
@@ -125,6 +153,14 @@ async function submitForm() {
         <BaseLabel label="Contact" />
         <BaseInput type="Number" v-model.trim="form.contact" placeholder="012-345-6789" group="+91" :start="true" :error=" contactField.error.value" :valid=" contactField.valid.value" :show="contactField.show.value"/>
       </div>
+      <div class="col-3">
+        <div class="doctor-profile-img mt-6 pt-4 me-5">
+              <img v-if="form.profile_image_url":src="form.profile_image_url"class="img-thumbnail"/>
+
+        </div>
+        <BaseLabel label="Profile Photo" />
+        <input type="file" class="form-control" @change="onImageChange" />
+      </div>
       
     </div>
 
@@ -155,10 +191,7 @@ async function submitForm() {
     </div>
 
     <div class="row mt-3">
-      <div class="col-3">
-        <BaseLabel label="Profile Photo" />
-        <input type="file" class="form-control" @change="onImageChange" />
-      </div>
+      
       <div class="col-3">
         <BaseLabel label="Emergency Contact Details"/>
         <div>
@@ -172,12 +205,16 @@ async function submitForm() {
             <BaseInput v-model.trim="form.emergency_contact_number":error="emgContactField.error.value":valid="emgContactField.valid.value":show="emgContactField.show.value" placeholder="012-345-6789" group="+91" :start="true" />
         </div>
       </div>
+      <div class="col-4 ms-8 ">
+
+        <Btn class="btn btn-primary btn mt-6 ms-9 "
+        :disabled="!isValid"
+        @click="submitForm"
+        label="Update Profile" />
+      </div>
     </div>
 
-    <Btn class="btn btn-primary mt-4"
-      :disabled="!isValid"
-      @click="submitForm"
-      label="Update Profile" />
+    
   </div>
     
 </template>

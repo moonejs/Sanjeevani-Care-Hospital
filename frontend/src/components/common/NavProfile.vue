@@ -62,7 +62,7 @@
     <ul class="dropdown-menu profile-dropdown dropdown-menu-end">
 
       <li>
-        <NavLink label="Profile" :route="`/${role}/profile`"/>
+        <NavLink label="Profile" :route="`/${auth.role}/profile`"/>
       </li>
 
       <li><hr class="dropdown-divider"></li>

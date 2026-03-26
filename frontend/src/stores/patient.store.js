@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { fetchPatientDashboardDataApi,updatepatientProfileApi,exportPatientTreatmentApi,checkExportStatusApi } from "@/api/patient";
+import { fetchPatientDashboardDataApi,updatepatientProfileApi,exportPatientTreatmentApi,checkExportStatusApi,patientData } from "@/api/patient";
 import { fetchPatientAppointmentsHistoryApi } from "@/api/appointment";
 import { delay } from "@/utils/comman";
 
@@ -15,6 +15,7 @@ export const usePatientStore=defineStore('patient',()=>{
     const patientAppointmentHistory=ref([])
     const exportLoading = ref(false)
     const loadingPdf = ref(false)
+    const profile = ref(null)
 
     async function fetchPatientDashboardData(){
         loading.value=true
@@ -68,7 +69,7 @@ export const usePatientStore=defineStore('patient',()=>{
         try {
             const res =await updatepatientProfileApi(data)
             console.log(res);
-            
+            await fetchPatientProfile()
         } catch (err) {
             console.log(err);
             error.value=err
@@ -161,6 +162,22 @@ export const usePatientStore=defineStore('patient',()=>{
             loadingPdf.value = false
         }
     }
+
+    async function fetchPatientProfile(){
+    loading.value = true
+    error.value = null
+
+    try {
+        const res = await patientData()
+        profile.value = res.data
+        console.log("PROFILE DATA:", res.data)
+    } catch (err) {
+        error.value = err
+        console.log(err)
+    } finally {
+        loading.value = false
+    }
+}
     return {
         loading,
         error,
@@ -175,6 +192,8 @@ export const usePatientStore=defineStore('patient',()=>{
         exportPatientTreatment,
         exportLoading,
         downloadPdf,
-        loadingPdf
+        loadingPdf,
+        fetchPatientProfile,
+        profile
     }
 })
