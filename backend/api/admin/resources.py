@@ -3,7 +3,7 @@ from flask_security import auth_required, roles_required
 from flask_login import current_user
 from flask import request
 from datetime import date, timedelta, datetime
-from models import Doctor, Patient, Appointment
+from models import Doctor, Patient, Appointment,Department
 from sqlalchemy import func
 from extensions import db
 class AdminDashboard(Resource):
@@ -22,7 +22,8 @@ class AdminDashboard(Resource):
         doctors_count = Doctor.query.count()
         patients_count = Patient.query.count()
         appointments_count = Appointment.query.count()
-
+        departments_count = Department.query.count()
+        
         today_appointments = Appointment.query.filter(
             Appointment.appointment_date == today
         ).count()
@@ -83,6 +84,7 @@ class AdminDashboard(Resource):
                 "doctors": doctors_count,
                 "patients": patients_count,
                 "appointments": appointments_count,
+                "departments": departments_count,
                 "today_appointments": today_appointments,
                 "pending_appointments": pending_appointments
             },

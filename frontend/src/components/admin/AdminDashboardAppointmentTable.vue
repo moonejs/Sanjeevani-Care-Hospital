@@ -33,7 +33,7 @@
 <template>
     <BaseTable>
         <template #caption>
-            <DoctorDashTableCaption title="Upcoming Appointments "   @today-or-week="showTodayOrWeek" stats="navs" :table-stats-arr="tableStatsArr" v-model:searchQuery="searchQuery" class1="ms-12 ps-8"/>
+            <DoctorDashTableCaption title="Upcoming Appointments "   @today-or-week="showTodayOrWeek" stats="navs" :table-stats-arr="tableStatsArr" v-model:searchQuery="searchQuery" class1="ms-12 ps-8" class2="" class3="me-3"/>
         </template>
         <template #head>
             <BaseTableHead :t-head="tHead"/>
