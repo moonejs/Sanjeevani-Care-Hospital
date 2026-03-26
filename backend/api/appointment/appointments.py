@@ -6,14 +6,17 @@ from flask import request
 from datetime import datetime, timedelta
 from models import Doctor,Appointment,Availability
 from utils.comman import is_doctor_bookable
+import pytz
 class PatientDoctorsAvailability(Resource):
 
     @auth_required("token")
     @roles_accepted("patient")
     def get(self):
         date_str = request.args.get("date")
-        today = datetime.now().date()
-        now = datetime.now().time()
+        IST = pytz.timezone('Asia/Kolkata')
+
+        current_time = datetime.now(IST)
+        today = current_time.date()
 
         if not date_str:
             return {"message": "date is required"}, 400
@@ -87,23 +90,27 @@ class PatientDoctorsAvailability(Resource):
 
                     
                     
+                    slot_dt = IST.localize(datetime.combine(date, slot))
                     if my_booking:
                         status = "booked_by_me"
                     elif booked >= availability.morning_max_patients:
                         status = "full"
                     elif booked > 0:
                         status = "partial"
-                    elif date == today and slot <= now:
+                    elif date == today and slot_dt <= current_time:
                         status = "past"
                     else:
                         status = "available"
-
+                        
+                   
 
                     doctor_data["sessions"]["morning"].append({
                         "time": slot.strftime("%H:%M"),
                         "booked": booked,
                         "max": availability.morning_max_patients,
-                        "status": status
+                        "status": status,
+                        "appointment_id": my_booking.id if my_booking else None,
+                        "appointment_status": my_booking.status if my_booking else None 
                     })
 
           
@@ -127,6 +134,7 @@ class PatientDoctorsAvailability(Resource):
                                 ).first()
 
                     
+                    slot_dt = IST.localize(datetime.combine(date, slot))
                     
                     if my_booking:
                         status = "booked_by_me"
@@ -134,7 +142,7 @@ class PatientDoctorsAvailability(Resource):
                         status = "full"
                     elif booked > 0:
                         status = "partial"
-                    elif date == today and slot <= now:
+                    elif date == today and slot_dt <= current_time:
                         status = "past"
                     else:
                         status = "available"
@@ -143,7 +151,9 @@ class PatientDoctorsAvailability(Resource):
                         "time": slot.strftime("%H:%M"),
                         "booked": booked,
                         "max": availability.afternoon_max_patients,
-                        "status": status
+                        "status": status,
+                        "appointment_id": my_booking.id if my_booking else None,
+                        "appointment_status": my_booking.status if my_booking else None 
                     })
 
         
@@ -167,14 +177,14 @@ class PatientDoctorsAvailability(Resource):
                                 ).first()
 
                     
-                    
+                    slot_dt = IST.localize(datetime.combine(date, slot))
                     if my_booking:
                         status = "booked_by_me"
                     elif booked >= availability.evening_max_patients:
                         status = "full"
                     elif booked > 0:
                         status = "partial"
-                    elif date == today and slot <= now:
+                    elif date == today and slot_dt <= current_time:
                         status = "past"
                     else:
                         status = "available"
@@ -183,7 +193,9 @@ class PatientDoctorsAvailability(Resource):
                         "time": slot.strftime("%H:%M"),
                         "booked": booked,
                         "max": availability.evening_max_patients,
-                        "status": status
+                        "status": status,
+                        "appointment_id": my_booking.id if my_booking else None,
+                        "appointment_status": my_booking.status if my_booking else None 
                     })
 
             response.append(doctor_data)
@@ -316,7 +328,7 @@ class PatientAppointmentBooking(Resource):
 
         db.session.add(appointment)
         db.session.commit()
-
+        print("BOOKING DOCTOR:", doctor_id) 
         return {
             "message": "Appointment booked successfully",
             "appointment_id": appointment.id,
@@ -380,7 +392,7 @@ class PatientCancelAppointment(Resource):
         appointment = Appointment.query.filter(
             Appointment.id == appointment_id,
             Appointment.patient_id == patient_id,
-            Appointment.status.in_(["pending", "confirmed"])
+            Appointment.status.in_(["pending"])
         ).first()
 
         if not appointment:

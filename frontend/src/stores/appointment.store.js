@@ -19,7 +19,9 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     const appointmentSummary = ref({ total: 0, pending: 0, confirmed: 0, completed: 0, cancelled: 0 })
     const appointmentHistory = ref([])
     const historyPagination = ref({ page: 1, per_page: 6, total: 0, pages: 1 })
-    const activeAppointment = ref(null)
+    const activeAppointments = ref([])
+    const isFirstLoad = ref(true)
+    const isRefreshing = ref(false)
     
 
     function formatDate(date) {
@@ -106,7 +108,11 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     }
 
     async function fetchAllDoctorsAvailability(date){
-        loading.value=true
+        if (isFirstLoad.value) {
+            loading.value = true   
+        } else {
+            isRefreshing.value = true  
+        }
         error.value=null
         try {
             const res=await fetchAllDoctorsAvailabilityApi(date)
@@ -119,13 +125,17 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             console.log(err);
             return
         }finally{
-            await delay(3000)
-            loading.value=false
-        }
+            if (isFirstLoad.value) {
+                await delay(4000)
+                isFirstLoad.value = false
+                loading.value = false
+            } else {
+                isRefreshing.value = false
+            }
+                    }
     }
 
     async function bookAppointment(data){
-        loading.value=true
         error.value=null
         try {
             const res=await bookAppointmentApi(data)
@@ -136,7 +146,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             console.log(error);
             
         }finally{
-            loading.value=false
+            
         }
     }
 
@@ -233,7 +243,9 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     async function fetchMyActiveAppointment() {
         const res = await fetchPatientAppointmentsHistoryApi({ page: 1, per_page: 5 })
 
-        activeAppointment.value =res.data.appointments.find(a =>["pending", "confirmed"].includes(a.status)) || null
+        activeAppointments.value = res.data.appointments.filter(a =>
+        ["pending", "confirmed"].includes(a.status)
+    )
     }
 
     async function cancelBookedAppointment(appointment_id,data){
@@ -282,9 +294,12 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         appointmentHistory,
         historyPagination,
         fetchDoctorAppointmentHistory,
-        activeAppointment,
+
         rescheduleAppointment,
         fetchMyActiveAppointment,
-        cancelBookedAppointment
+        cancelBookedAppointment,
+        isFirstLoad,
+        isRefreshing,
+        activeAppointments
     }
 })

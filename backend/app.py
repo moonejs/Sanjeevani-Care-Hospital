@@ -83,7 +83,6 @@ def create_database():
     with app.app_context():
             
         db.create_all()
-        
         patient_role = user_datastore.find_or_create_role(
             name="patient" , description= "Patient"
         )

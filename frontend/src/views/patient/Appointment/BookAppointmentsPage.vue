@@ -2,7 +2,7 @@
     import { useAppointmentStore } from '@/stores/appointment.store';
     import DoctorAppointCard from '@/components/Patient/DoctorAppointCard.vue';
     import TableTopBox from '@/components/Doctor/TableTopBox.vue';
-    import { onMounted,ref,nextTick } from 'vue';
+    import { onMounted, onUnmounted, ref, nextTick ,computed} from 'vue';
     import { useRoute } from 'vue-router';
     import BookingModal from '@/components/Patient/BookingModal.vue';
     import LoadingState from "@/components/common/LoadingState.vue"
@@ -15,6 +15,7 @@
     const appointment=useAppointmentStore()
     const route =useRoute()
     const toast = useToastStore()
+    let interval = null
 
     const {doctorsAvailability} = storeToRefs(appointment)
     const { searchQuery, filteredData } = useSearchFilter(
@@ -24,11 +25,18 @@
     )
 
 
-    onMounted(async()=>{
+    onMounted(async () => {
         const today = appointment.formatDate(appointment.today)
         appointment.selectedDate = today
-        await appointment.fetchAllDoctorsAvailability(today)
+
+        await fetchDoctorsByDate(today)
         await appointment.fetchMyActiveAppointment()
+
+      
+        interval = setInterval(() => {
+            fetchDoctorsByDate(appointment.selectedDate)
+        }, 5000)
+
         if(route.query.focus){
             await nextTick()
             const el = document.getElementById(
@@ -41,6 +49,9 @@
             })
         }
     })
+    onUnmounted(() => {
+        clearInterval(interval)
+    })
 
     async function fetchDoctorsByDate(date) {
         const res = await appointment.fetchAllDoctorsAvailability(date)
@@ -52,7 +63,12 @@
     const selectedSlot = ref(null)
     const appointmentType = ref('opd')
     const slotSession = ref("")
-    
+
+    const existingAppointment = computed(() =>
+      appointment.activeAppointments.find(
+        a => a.doctor.id === selectedDoctor.value?.doctor?.id
+      )
+    )
 
     function onDateSelected(date){
         if (!date) return
@@ -63,67 +79,96 @@
     }
 
 
-    function openBookingModal({ doctor, slot }) {
+    async function openBookingModal({ doctor, slot }) {
+      await appointment.fetchMyActiveAppointment()
         selectedDoctor.value = doctor
         selectedSlot.value = slot.slot
         showModal.value = true
         slotSession.value=slot.session
     }
     async function confirmBooking(){
-      try {
-        if (appointment.activeAppointment) {
-            await appointment.rescheduleAppointment({appointment_id: appointment.activeAppointment.id,date: appointment.selectedDate,start_time: selectedSlot.value.time})
-        }else{
-            await appointment.bookAppointment({
-                doctor_id:selectedDoctor.value.doctor.id,
-                date:appointment.selectedDate,
-                start_time:selectedSlot.value.time,
-                type:appointmentType.value
-            })
-        }
-        toast.addToast({
-          message: 'Appointment booked successfully',
-          type: 'success'
-        })
-
-        await appointment.fetchMyActiveAppointment()
-        showModal.value = false
-        selectedDoctor.value = null
-        selectedSlot.value = null
-        slotSession.value = ""
-        appointmentType.value = "opd"
-
-        await appointment.fetchAllDoctorsAvailability(appointment.selectedDate)
-      } catch (error) {
-        toast.addToast({
-          title: 'Error',
-          message: 'Failed to book appointment',
-          type: 'error'
-        })
-      }
-        
-    }
-
-    async function cancelMyAppointment() {
-        if (!appointment.activeAppointment) return
-        
+    try {
+      if (existingAppointment.value) {
         try {
-          const confirmCancel = confirm("Are you sure you want to cancel?")
-          if (!confirmCancel) return
-
-          showModal.value = false
-          await appointment.cancelBookedAppointment(appointment.activeAppointment.id,{reason:"Cancelled by patient"})
+          await appointment.rescheduleAppointment({
+            appointment_id: existingAppointment.value.id,
+            date: appointment.selectedDate,
+            start_time: selectedSlot.value.time
+          })
           toast.addToast({
-            message: 'Appointment Canceled successfully',
+            message: 'Appointment Rescheduled successfully',
+            type: 'success'
+          })
+        } catch (error) {
+          toast.addToast({
+            title: 'Error',
+            message: 'Failed to book appointment',
             type: 'error'
           })
-
-        } catch (error) {
-          
         }
-
         
-    }
+      } else {
+        try {
+          await appointment.bookAppointment({
+            doctor_id: selectedDoctor.value.doctor.id,
+            date: appointment.selectedDate,
+            start_time: selectedSlot.value.time,
+            type: appointmentType.value
+          })
+          toast.addToast({
+            message: 'Appointment booked successfully',
+            type: 'success'
+          })
+        } catch (error) {
+          toast.addToast({
+            title: 'Error',
+            message: 'Failed to book appointment',
+            type: 'error'
+          })
+        }
+        
+      }
+
+
+    await appointment.fetchMyActiveAppointment()
+
+    showModal.value = false
+    selectedDoctor.value = null
+    selectedSlot.value = null
+    slotSession.value = ""
+    appointmentType.value = "opd"
+
+    await appointment.fetchAllDoctorsAvailability(appointment.selectedDate)
+
+  } catch (error) {
+    toast.addToast({
+      title: 'Error',
+      message: 'Failed to book appointment',
+      type: 'error'
+    })
+  }
+}
+
+    async function cancelMyAppointment(appointmentId) {
+  if (!appointmentId) return
+
+  try {
+    const confirmCancel = confirm("Are you sure you want to cancel?")
+    if (!confirmCancel) return
+
+    showModal.value = false
+
+    await appointment.cancelBookedAppointment(appointmentId, {
+      reason: "Cancelled by patient"
+    })
+
+    toast.addToast({
+      message: 'Appointment Canceled successfully',
+      type: 'error'
+    })
+
+  } catch (error) {}
+}
 
 
 </script>
@@ -159,12 +204,12 @@
           </div>
         </div>
 
-        <div class="d-flex flex-column gap-2 px-2 doctors-list-div">
+        <div class="d-flex flex-column gap-2  px-2 doctors-list-div">
           <LoadingState :loading="appointment.loading" type="skeleton" :count="4">
             <template #skeleton>
               <AppointmentCardSkeleton/>
             </template>
-            <DoctorAppointCard  v-for="doc in filteredData" :key="doc.doctor.id" :doctor="doc" @slot-selected="openBookingModal"/>
+            <DoctorAppointCard  v-for="doc in filteredData" :key="doc.doctor.id + '-' + appointment.selectedDate" :doctor="doc" @slot-selected="openBookingModal"/>
             <div v-if="!filteredData.length" >
               <h2 class="text-muted mt-6 text-center">No Appointments found</h2>
             </div>
@@ -177,7 +222,7 @@
 
     </div>
 
-    <BookingModal  :show-modal="showModal"  :selected-doctor="selectedDoctor"  :selected-slot="selectedSlot" :slot-session="slotSession" v-model:appointment-type="appointmentType"  @close="showModal = false"  @confirm="confirmBooking"  @cancelAppointment="cancelMyAppointment" 
+    <BookingModal  :show-modal="showModal"  :selected-doctor="selectedDoctor"  :selected-slot="selectedSlot" :slot-session="slotSession" v-model:appointment-type="appointmentType"  @close="showModal = false"  @confirm="confirmBooking"  @cancel-appointment="cancelMyAppointment" 
     />
 
   </div>
