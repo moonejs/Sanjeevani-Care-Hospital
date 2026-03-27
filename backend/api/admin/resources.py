@@ -227,3 +227,39 @@ class AdminAppointments(Resource):
                 "pages": pagination.pages
             }
         }, 200
+
+
+class AdminCancelAppointment(Resource):
+
+    @auth_required("token")
+    @roles_required("admin")
+    def put(self, appointment_id):
+
+        data = request.json
+        reason = data.get("reason", "Cancelled by admin")
+
+        appointment = Appointment.query.get(appointment_id)
+
+        if not appointment:
+            return {"message": "Appointment not found"}, 404
+
+        
+        if appointment.status == "completed":
+            return {"message": "Cannot cancel completed appointment"}, 400
+
+        today = date.today()
+        max_date = today + timedelta(days=7)
+
+        
+        if not (today <= appointment.appointment_date <= max_date):
+            return {"message": "Can only cancel today's or this week's appointments"}, 400
+
+       
+        appointment.status = "cancelled_by_admin"
+        appointment.cancel_reason = reason
+
+        db.session.commit()
+
+        return {
+            "message": "Appointment cancelled by admin"
+        }, 200

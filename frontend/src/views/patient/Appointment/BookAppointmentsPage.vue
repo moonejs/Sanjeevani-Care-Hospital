@@ -35,7 +35,7 @@
       
         interval = setInterval(() => {
             fetchDoctorsByDate(appointment.selectedDate)
-        }, 5000)
+        }, 25000)
 
         if(route.query.focus){
             await nextTick()
@@ -66,7 +66,9 @@
 
     const existingAppointment = computed(() =>
       appointment.activeAppointments.find(
-        a => a.doctor.id === selectedDoctor.value?.doctor?.id
+        a =>
+          a.doctor.id === selectedDoctor.value?.doctor?.id &&
+          a.appointment_date === appointment.selectedDate   
       )
     )
 
@@ -81,69 +83,121 @@
 
     async function openBookingModal({ doctor, slot }) {
       await appointment.fetchMyActiveAppointment()
+
         selectedDoctor.value = doctor
         selectedSlot.value = slot.slot
         showModal.value = true
         slotSession.value=slot.session
     }
-    async function confirmBooking(){
-    try {
-      if (existingAppointment.value) {
-        try {
-          await appointment.rescheduleAppointment({
-            appointment_id: existingAppointment.value.id,
-            date: appointment.selectedDate,
-            start_time: selectedSlot.value.time
-          })
-          toast.addToast({
-            message: 'Appointment Rescheduled successfully',
-            type: 'success'
-          })
-        } catch (error) {
-          toast.addToast({
-            title: 'Error',
-            message: 'Failed to book appointment',
-            type: 'error'
-          })
-        }
+//     async function confirmBooking(){
+//     try {
+//       await appointment.fetchMyActiveAppointment()
+      
+//       if (existingAppointment.value) {
+//         try {
+//           await appointment.rescheduleAppointment({
+//             appointment_id: existingAppointment.value.id,
+//             date: appointment.selectedDate,
+//             start_time: selectedSlot.value.time
+//           })
+//           toast.addToast({
+//             message: 'Appointment Rescheduled successfully',
+//             type: 'success'
+//           })
+//         } catch (error) {
+//           toast.addToast({
+//             title: 'Error',
+//             message: 'Failed to book appointment',
+//             type: 'error'
+//           })
+//         }
         
-      } else {
-        try {
-          await appointment.bookAppointment({
-            doctor_id: selectedDoctor.value.doctor.id,
-            date: appointment.selectedDate,
-            start_time: selectedSlot.value.time,
-            type: appointmentType.value
-          })
-          toast.addToast({
-            message: 'Appointment booked successfully',
-            type: 'success'
-          })
-        } catch (error) {
-          toast.addToast({
-            title: 'Error',
-            message: 'Failed to book appointment',
-            type: 'error'
-          })
-        }
+//       } else {
+//         try {
+//           await appointment.bookAppointment({
+//             doctor_id: selectedDoctor.value.doctor.id,
+//             date: appointment.selectedDate,
+//             start_time: selectedSlot.value.time,
+//             type: appointmentType.value
+//           })
+//           toast.addToast({
+//             message: 'Appointment booked successfully',
+//             type: 'success'
+//           })
+//         } catch (error) {
+//           toast.addToast({
+//             title: 'Error',
+//             message: 'Failed to book appointment',
+//             type: 'error'
+//           })
+//         }
         
-      }
+//       }
 
+
+//     await appointment.fetchMyActiveAppointment()
+
+//     showModal.value = false
+//     selectedDoctor.value = null
+//     selectedSlot.value = null
+//     slotSession.value = ""
+//     appointmentType.value = "opd"
+
+//     await appointment.fetchAllDoctorsAvailability(appointment.selectedDate)
+
+//   } catch (error) {
+//     toast.addToast({
+//       title: 'Error',
+//       message: 'Failed to book appointment',
+//       type: 'error'
+//     })
+//   }
+// }
+
+async function confirmBooking() {
+  try {
+    
+    const mySlot = Object.values(selectedDoctor.value.sessions)
+      .flat()
+      .find(slot => slot.appointment_id !== null)
+
+    if (mySlot) {
+      
+      await appointment.rescheduleAppointment({
+        appointment_id: mySlot.appointment_id,
+        date: appointment.selectedDate,
+        start_time: selectedSlot.value.time
+      })
+
+      toast.addToast({
+        message: 'Appointment Rescheduled successfully',
+        type: 'success'
+      })
+
+    } else {
+  
+      await appointment.bookAppointment({
+        doctor_id: selectedDoctor.value.doctor.id,
+        date: appointment.selectedDate,
+        start_time: selectedSlot.value.time,
+        type: appointmentType.value
+      })
+
+      toast.addToast({
+        message: 'Appointment booked successfully',
+        type: 'success'
+      })
+    }
 
     await appointment.fetchMyActiveAppointment()
+    await appointment.fetchAllDoctorsAvailability(appointment.selectedDate)
 
     showModal.value = false
-    selectedDoctor.value = null
-    selectedSlot.value = null
-    slotSession.value = ""
-    appointmentType.value = "opd"
-
-    await appointment.fetchAllDoctorsAvailability(appointment.selectedDate)
 
   } catch (error) {
     toast.addToast({
       title: 'Error',
-      message: 'Failed to book appointment',
+      message: 'Failed',
       type: 'error'
     })
   }

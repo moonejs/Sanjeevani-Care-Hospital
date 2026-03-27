@@ -72,7 +72,7 @@
 
 
 </script>
-<template>
+<!-- <template>
     <div class="bg-info">
         
         <div class="">
@@ -93,5 +93,95 @@
         </div>
     </LoadingState>
     <BlockModal @close="showModal = false" :show-modal="showModal" @block="blockDoctor" @unblock="unblockDoctor" :doctor="selectedDoctor"/>
+
+</template> -->
+
+<template>
+
+    <!-- TOP CONTROL BAR -->
+    <div class="container-fluid px-4 py-3">
+
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body d-flex flex-wrap align-items-center gap-2">
+
+                <!-- LEFT: TITLE -->
+                <h5 class="mb-0 me-auto">Doctors Management</h5>
+
+                <!-- ADD BUTTON -->
+                <Btn label="Add Doctor" class="btn-primary btn-sm" @click="openAddDoctor"/>
+
+            </div>
+
+            <!-- FILTER ROW -->
+            <div class="card-body border-top d-flex flex-wrap gap-2">
+
+                <!-- SEARCH -->
+                <div class="flex-grow-1" style="min-width: 200px;">
+                    <SearchInput  
+                        v-model="searchQuery" 
+                        placeholder="Search doctor, email, reg no..."
+                    />
+                </div>
+
+                <!-- FILTER -->
+                <div style="min-width: 180px;">
+                    <FilterDropdown  
+                        v-model="departmentFilter" 
+                        :options="['Cardiology', 'Ent', 'Orthopedic']" 
+                        label="All Departments"
+                    />
+                </div>
+
+                <!-- CLEAR -->
+                <Btn  
+                    label="Clear" 
+                    class="btn-outline-secondary btn-sm"
+                    @click="searchQuery = ''; departmentFilter = ''"
+                />
+
+            </div>
+        </div>
+
+        <!-- TABLE SECTION -->
+        <LoadingState :loading="doctorStore.loading">
+
+            <!-- EMPTY STATE -->
+            <div v-if="doctorStore.doctorsList.length == 0" 
+                 class="text-center py-5 text-muted">
+                <h5 class="fw-normal">No Registered Doctors Found</h5>
+                <small>Add doctors to get started</small>
+            </div>
+
+            <!-- TABLE -->
+            <div v-else class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <AdminDoctorsTable 
+                        @view="openDoctorDetails" 
+                        @block="openBlockDoctorModal" 
+                        @unblock="openBlockDoctorModal" 
+                        :doctors="filteredData"
+                    />
+                </div>
+            </div>
+
+        </LoadingState>
+
+    </div>
+
+    <!-- OFFCANVAS -->
+    <AdminDoctorDetailsOffCanvas 
+        :show="showDetails" 
+        :doctor="selectedDoctorDetails" 
+        @close="showDetails=false"
+    />
+
+    <!-- MODAL -->
+    <BlockModal 
+        @close="showModal = false" 
+        :show-modal="showModal" 
+        @block="blockDoctor" 
+        @unblock="unblockDoctor" 
+        :doctor="selectedDoctor"
+    />
 
 </template>

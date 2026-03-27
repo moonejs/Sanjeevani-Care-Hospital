@@ -20,36 +20,27 @@
       
 
     const isMySlot = computed(() => {
-      return props.selectedSlot?.status === "booked_by_me"
+      return props.selectedSlot?.appointment_id !== null
     })
 
     const isConfirmed = computed(() => {
       return props.selectedSlot?.appointment_status === "confirmed"
     })
 
-    const hasAppointmentWithDoctor = computed(() => {
-    
-      const fromStore = appointment.activeAppointments.find(
-        a => a.doctor.id === props.selectedDoctor?.doctor?.id
-      )
-
-      
-      const fromSlots = props.selectedDoctor?.sessions &&
-        Object.values(props.selectedDoctor.sessions)
-          .flat()
-          .some(slot => slot.status === "booked_by_me")
-
-      return fromStore || fromSlots
+    const hasAppointmentWithSameDoctor = computed(() => {
+      return Object.values(props.selectedDoctor?.sessions || {})
+        .flat()
+        .some(slot => slot.appointment_id !== null)
     })
 
-
     const isReschedule = computed(() => {
-      return hasAppointmentWithDoctor.value && !isMySlot.value
+      return hasAppointmentWithSameDoctor.value && !isMySlot.value
     })
           
     const myAppointmentId = computed(() => {
       return props.selectedSlot?.appointment_id
     })
+
     </script>
 
     <template>

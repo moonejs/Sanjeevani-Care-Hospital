@@ -9,7 +9,7 @@
     const stats = computed(() => adminStore.dashboard.stats || {})
     onMounted(async()=>{
         await adminStore.fetchAdminDashboardDetails("today")
-        // stats.value=adminStore.dashboard.stats
+        
     })
 
     

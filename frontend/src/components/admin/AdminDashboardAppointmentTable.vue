@@ -22,6 +22,7 @@
 
     const type=ref('today')
     const tHead=["Department","Doctor","Patient","Time","Date","Type","Slot","Status","Action"]
+
     async function showTodayOrWeek(range){
         await adminStore.fetchAdminDashboardDetails(range)
         // stats.value=adminStore.dashboard.stats        
@@ -29,6 +30,23 @@
     const tableStatsArr=computed(()=>{
         return [adminStore.appointmentSummary]
     })
+
+    async function cancelAppt(id){
+        console.log(id);
+        
+        try{
+            await adminStore.cancelAppointment(id)
+            await adminStore.fetchAdminDashboardDetails(adminStore.selectedRange)
+        }
+        catch (err){
+
+        }
+    }
+    
+
+
+
+
 </script>
 <template>
     <BaseTable>
@@ -44,7 +62,7 @@
             <template v-if="!adminStore.loading">
                 <h2 v-if="adminStore.dashboard.upcoming_appointments.length === 0" class="text-muted position-absolute ms-10 mt-4">No Upcoming Appointments</h2>
                 
-                <AdminDashboardAppointmentRow v-else v-for="(app, index) in filteredData" :key="index" :index="index" :appointment="app"/>
+                <AdminDashboardAppointmentRow v-else v-for="(app, index) in filteredData" :key="index" :index="index" :appointment="app" @cancel="cancelAppt" />
             </template>
             
 

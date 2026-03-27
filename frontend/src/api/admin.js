@@ -24,3 +24,11 @@ export const unblockDoctorApi = (doctorId) => {
 export const fetchAdminAppointmentsApi = (params) => {
   return api.get("/api/admin/appointments", { params })
 }
+
+
+
+export const cancelAppointmentApi = (appointmentId,reason) => {
+    return api.put(`api/admin/appointments/${appointmentId}/cancel`, {
+        reason
+    })
+}

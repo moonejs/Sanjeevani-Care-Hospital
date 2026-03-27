@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed ,watch} from 'vue'
-import { fetchAdminDashboardDetailsApi,fetchPatientsApi,blockDoctorApi,unblockDoctorApi,fetchAdminAppointmentsApi } from '@/api/admin'
+import { fetchAdminDashboardDetailsApi,fetchPatientsApi,blockDoctorApi,unblockDoctorApi,fetchAdminAppointmentsApi,cancelAppointmentApi } from '@/api/admin'
 import { delay } from '@/utils/comman'
 
 export const useAdminStore=defineStore('admin',()=>{
@@ -117,6 +117,23 @@ export const useAdminStore=defineStore('admin',()=>{
             loading.value = false
         }
     }
+
+    async function cancelAppointment(appointmentId, reason="Cancelled by admin") {
+        loading.value = true
+        error.value = null
+
+        try {
+            const res = await cancelAppointmentApi(appointmentId, reason )
+            console.log(res);
+            return res.data
+
+        } catch (err) {
+            error.value = err
+            throw err
+        } finally {
+            loading.value = false
+        }
+    }
     return {
         loading,
         error,
@@ -131,6 +148,7 @@ export const useAdminStore=defineStore('admin',()=>{
         adminAppointments,
         adminAppointmentsPagination,
         fetchAdminAppointments,
+        cancelAppointment
     }
 
 })

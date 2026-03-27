@@ -37,7 +37,7 @@
     </div>
 
     <div class="d-flex align-items-center justify-content-between border-top pt-2 mt-2" v-if="stats == 'navs'">
-        <TableNavigaionBox @today-or-week="(value) => emit('todayOrWeek', value)"/>
+        <TableNavigaionBox @today-or-week="(value) => emit('today-or-week', value)"/>
         <TableStats :table-stats="tableStatsArr" />
     </div>
 </template>
