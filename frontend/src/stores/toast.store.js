@@ -18,12 +18,13 @@ export const useToastStore = defineStore('toast', () => {
         
         setTimeout(() => {
             removeToast(id)
-        }, 3000)
+        }, 6000)
     }
 
     function removeToast(id) {
         toasts.value = toasts.value.filter(t => t.id !== id)
     }
+    
 
     return { toasts, addToast, removeToast }
 })

@@ -3,6 +3,7 @@
     import TableStats from '../common/TableStats.vue';
     import SearchInput from '@/components/common/SearchInput.vue';
     import DateFilter from '@/components/common/DateFilter.vue';
+    import FilterDropdown from '@/components/common/FilterDropdown.vue';
     
     defineProps({
         title:String,
@@ -15,9 +16,14 @@
         class1:String,
         class2:String,
         class3:String,
-        isDate:Boolean
+        class4:String,
+        isDate:Boolean,
+        isDropdown:Boolean,
+        filterDrop:String,
+        filterDropLabel:String,
+        filterDropOptions:Array
     })
-    const emit = defineEmits(['today-or-week', 'update:searchQuery','update:dateFilter'])
+    const emit = defineEmits(['today-or-week', 'update:searchQuery','update:dateFilter','update:filterDrop'])
 </script>
 <template>
     <div class="d-flex align-items-center justify-content-between mb-3 ">
@@ -27,7 +33,11 @@
                 <div v-if="isDate">
                     <DateFilter :modelValue="dateFilter" @update:modelValue="(val) => emit('update:dateFilter', val)"  />  
                 </div>
-                <SearchInput :class="class1" :modelValue="searchQuery"@update:modelValue="(val) => emit('update:searchQuery', val)":placeholder="placeholder"/>
+                <SearchInput :class="class1" :modelValue="searchQuery" @update:modelValue="(val) => emit('update:searchQuery', val)":placeholder="placeholder"/>
+                
+                <div v-if="isDropdown">
+                    <FilterDropdown :class="class4 " :modelValue="filterDrop" @update:modelValue="(val) => emit('update:filterDrop', val)" :options="filterDropOptions" :label="filterDropLabel"/>
+                </div>
             </div>
         </div>
         

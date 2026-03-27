@@ -159,9 +159,11 @@ export const useDoctorStore=defineStore('doctor',()=>{
         try {
             const res = await addDoctorApi(data)
             console.log(res);
+            return res.data
             
         } catch (err) {
             error.value=err
+            throw err
             console.log(err);
             
         }finally{

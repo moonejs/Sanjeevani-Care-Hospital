@@ -8,11 +8,10 @@
     const emit=defineEmits(['view','block','unblock'])
 </script>
 <template>
-    <tr>
+    <tr class="small">
         <th scope="row">{{ index+1 }}</th>
-        <td>sss</td>
         <td>{{ doctor?.registration_number }}</td>
-        <td>{{ doctor.name }}</td>
+        <td>Dr. {{ doctor.name }}</td>
         <td>{{ doctor.department}}</td>
         <td>{{ doctor.email}}</td>
         <td>{{ doctor.specialization}}</td>
@@ -23,7 +22,7 @@
             
         </td>
         <td>
-            <Btn label="View" class="btn-outline-primary btn-sm me-2" @click="emit('view')" />
+            <Btn label="View" class="btn-outline-secondary btn-sm me-2" @click="emit('view')" />
             <Btn v-if="doctor?.is_blocked"  label="Unblock" class="btn-outline-danger btn-sm " @click="emit('block')" />
             <Btn v-else label="Block" class="btn-outline-danger btn-sm " :disabled="!doctor?.can_block" @click="emit('unblock')"  />
             

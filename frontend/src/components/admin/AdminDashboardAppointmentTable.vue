@@ -60,7 +60,7 @@
             <Loading :loading="adminStore.loading" class="ms-2 mt-3 start-50 position-absolute" />
 
             <template v-if="!adminStore.loading">
-                <h2 v-if="adminStore.dashboard.upcoming_appointments.length === 0" class="text-muted position-absolute ms-10 mt-4">No Upcoming Appointments</h2>
+                <h4 v-if="adminStore.dashboard.upcoming_appointments.length === 0" class="text-muted position-absolute ms-10 mt-4">No Upcoming Appointments</h4>
                 
                 <AdminDashboardAppointmentRow v-else v-for="(app, index) in filteredData" :key="index" :index="index" :appointment="app" @cancel="cancelAppt" />
             </template>

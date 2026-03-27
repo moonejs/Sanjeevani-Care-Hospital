@@ -1,6 +1,7 @@
 <script setup>
     import Btn from '../common/Btn.vue';
     import { watch,onMounted } from 'vue';
+    import Badge from '../common/Badge.vue';
     const props=defineProps({
         show:Boolean,
         doctor:Object
@@ -42,57 +43,45 @@
     <div class="offcanvas-body" v-if="doctor">
       
       <div class="text-center mb-4">
-        <img
-          :src="doctor.profile_image"
-          class="rounded-circle border"
-          style="width: 100px; height: 100px; object-fit: cover"
-        />
+        <img :src="doctor.profile_image" class="rounded-circle border" style="width: 100px; height: 100px; object-fit: cover" />
         <h5 class="mt-2 mb-0">Dr. {{ doctor.name }}</h5>
         <small class="text-muted">{{ doctor.specialization }}</small>
-
+        
         <div class="mt-2">
-          <span class="badge bg-success" v-if="doctor.profile_completed">Profile Completed</span>
-          <span class="badge bg-warning text-dark" v-else>Profile Incomplete</span>
-
-          <span
-            class="badge ms-2"
-            :class="doctor.emergency_available ? 'bg-danger' : 'bg-secondary'"
-          >
-            {{ doctor.emergency_available ? 'Emergency Available' : 'Emergency Not Available' }}
-          </span>
+          <Badge :label="doctor.profile_completed ? 'Profile Completed' : 'profile Incomlete'" :color="doctor.profile_completed ? 'success':'warning'" class="me-3"/>
+          
+          <Badge :label="doctor.emergency_available ? 'Emergency Available' : 'Emergency Not Available'" :color="doctor.emergency_available ? 'primary':'danger'"/>
+          
         </div>
       </div>
 
-      
+      <hr>
+      <div class="mb-3 ">
+        <p> <span class="small fw-bold">Gender : </span>  <span class="small">{{ doctor.gender || 'Not Provided'}}</span> </p>
+        <p><span class="small fw-bold">Age : </span> <span class="small">{{ doctor.age || "Not Provided" }}</span></p>
+        <p><span class="small fw-bold">Email : </span> <span class="fw-bold small">{{ doctor.email }}</span></p>
+        <p><span class="small fw-bold">Contact : </span> <span class="small">{{ doctor.contact ?? 'Not Provided' }}</span></p>
+      </div>
+
+      <hr>
       <div class="mb-3">
-        <h6 class="fw-semibold border-bottom pb-1">Basic Info</h6>
-        <p><b>Gender:</b> {{ doctor.gender || 'Not Provided'}}</p>
-        <p><b>Age:</b> {{ doctor.age || "Not Provided" }}</p>
-        <p><b>Email:</b> {{ doctor.email }}</p>
-        <p><b>Contact:</b> {{ doctor.contact ?? 'Not Provided' }}</p>
+        <p><span class="small fw-bold">Department : </span> <span class="small">{{ doctor.department || 'Not Provided' }}</span></p>
+        <p><span class="small fw-bold">Roles : </span> <span class="small">{{ doctor.roles || 'Not Provided' }}</span></p>
+        <p><span class="small fw-bold">Qualification : </span> <span class="small">{{ doctor.qualification || 'Not Provided' }}</span></p>
+        <p><span class="small fw-bold">Experience (years) : </span> <span class="small">{{ doctor.experience_years ?? 'Not Provided' }}</span></p>
+        <p><span class="small fw-bold">Registration No : </span> <span class="small fw-bold">{{ doctor.registration_number || 'Not Provided' }}</span></p>
+      </div>
+
+      <hr>
+      <div class="mb-3">
+        <p><span class="small fw-bold">Room : </span> <span class="small">{{ doctor.room_number ?? 'Not Provided' }}</span></p>
+        <p><span class="small fw-bold">OPD Timing : </span> <span class="small">{{ doctor.opd_timing ?? 'Not Provided'}}</span></p>
+        <p><span class="small fw-bold">Consultation Fee (₹) : </span> <span class="small"> <mark>{{ doctor.consultation_fee ?? 'Not Provided'}}</mark></span></p>
       </div>
 
       
       <div class="mb-3">
-        <h6 class="fw-semibold border-bottom pb-1">Professional Info</h6>
-        <p><b>Department:</b> {{ doctor.department }}</p>
-        <p><b>Roles:</b> {{ doctor.roles }}</p>
-        <p><b>Qualification:</b> {{ doctor.qualification }}</p>
-        <p><b>Experience (years) :</b> {{ doctor.experience_years  ?? 'Not Provided' }}</p>
-        <p><b>Registration No:</b> {{ doctor.registration_number }}</p>
-      </div>
-
-      
-      <div class="mb-3">
-        <h6 class="fw-semibold border-bottom pb-1">Hospital Details</h6>
-        <p><b>Room:</b> {{ doctor.room_number ?? 'Not Provided' }}</p>
-        <p><b>OPD Timing:</b> {{ doctor.opd_timing ?? 'Not Provided'}}</p>
-        <p><b>Consultation Fee (₹):</b> {{ doctor.consultation_fee ?? 'Not Provided'}}</p>
-      </div>
-
-      
-      <div class="mb-3">
-        <h6 class="fw-semibold border-bottom pb-1">Languages</h6>
+        <h6 class="fw-semibold border-bottom pb-1 small">Languages</h6>
         <div class="d-flex flex-wrap gap-2">
           <span v-if="doctor.languages_spoken.length !=0" v-for="(lang, i) in doctor.languages_spoken" :key="i" class="badge bg-light text-dark border">
             {{ lang }}

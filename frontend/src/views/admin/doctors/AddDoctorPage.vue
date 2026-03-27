@@ -6,6 +6,8 @@
     import { useField } from "@/reusable/useField"
     import { required, minLength, maxLength,specialChar,hasCapital,hasDigit } from "@/utils/validators"
     import { useFormValidation } from "@/reusable/useFormValidation"
+    import { useToastStore } from '@/stores/toast.store';
+    
 
     import BaseInput from "@/components/Form/BaseInput.vue"
     import BaseLabel from "@/components/Form/BaseLabel.vue"
@@ -15,6 +17,7 @@
     const department = useDepartmentStore()
     const doctor = useDoctorStore()
     const loading = ref(false)
+    const toast = useToastStore()
 
     const form = reactive({
         email: "",
@@ -44,10 +47,27 @@
 
 
     async function submitForm() {
-        await doctor.addDoctor({
+      try {
+        const res = await doctor.addDoctor({
           ...form,
           email:`${form.email}@hospital.com`
         })
+        console.log(res);
+        router.push("/admin/doctors")
+        
+        toast.addToast({
+          message: res.message,
+          type: 'success'
+        })
+      } catch (error) {
+        toast.addToast({
+          message: 'Some Error Occured',
+          type: 'error'
+        })
+      }
+
+        
+
     }
 
 
