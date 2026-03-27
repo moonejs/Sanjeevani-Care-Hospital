@@ -11,7 +11,7 @@ from flask_security import SQLAlchemyUserDatastore
 import extensions
 from celery_app import celery, init_celery
 import os
-from tasks import generate_appointment_pdf
+from tasks import generate_appointment_pdf,export_all_doctors_csv, generate_doctor_profile_pdf
 from celery.result import AsyncResult
 
 app=Flask(__name__)
@@ -79,6 +79,19 @@ def export_status(task_id):
         return {"status": "failed"}
 
     return {"status": task.state}
+
+@app.route("/export-doctors")
+def export_doctors():
+    task = export_all_doctors_csv.delay()
+    return {"task_id": task.id}
+
+
+@app.route("/export-doctor/<int:id>")
+def export_doctor_profile(id):
+    task = generate_doctor_profile_pdf.delay(id)
+    return {"task_id": task.id}
+
+
 def create_database():
     with app.app_context():
             

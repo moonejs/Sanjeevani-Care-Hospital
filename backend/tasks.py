@@ -297,3 +297,184 @@ def generate_appointment_pdf(self, appointment_id):
         "status": "completed",
         "filename": filename
     }
+    
+    
+@celery.task(bind=True)
+def export_all_doctors_csv(self):
+
+    doctors = Doctor.query.all()
+
+    if not doctors:
+        return {"status": "error", "message": "No doctors found"}
+
+    os.makedirs("exports", exist_ok=True)
+
+    filename = "all_doctors.csv"
+    file_path = os.path.join("exports", filename)
+
+    with open(file_path, mode="w", newline="") as file:
+        writer = csv.writer(file)
+
+        writer.writerow([
+            "Name",
+            "Specialization",
+            "Contact",
+            "Age",
+            "Gender",
+            "Qualification",
+            "Experience (Years)",
+            "Fee",
+            "Department",
+            "Blocked"
+        ])
+
+        for d in doctors:
+            writer.writerow([
+                d.name,
+                d.specialization,
+                d.contact,
+                d.age,
+                d.gender,
+                d.qualification,
+                d.experience_years,
+                d.consultation_fee,
+                d.department.name if d.department else "",
+                "Yes" if d.is_blocked else "No"
+            ])
+
+    return {
+        "status": "completed",
+        "filename": filename
+    }
+    
+@celery.task(bind=True)
+def generate_doctor_profile_pdf(self, doctor_id):
+
+    import json
+
+    doctor = Doctor.query.get(doctor_id)
+
+    if not doctor:
+        return {"status": "failed"}
+
+    EXPORT_FOLDER = os.path.join(os.getcwd(), "exports")
+    os.makedirs(EXPORT_FOLDER, exist_ok=True)
+
+    filename = f"doctor_{doctor_id}_profile.pdf"
+    file_path = os.path.join(EXPORT_FOLDER, filename)
+
+    doc = SimpleDocTemplate(
+        file_path,
+        pagesize=A4,
+        rightMargin=40,
+        leftMargin=40,
+        topMargin=40,
+        bottomMargin=30
+    )
+
+    styles = getSampleStyleSheet()
+
+    # 🎨 Custom Styles
+    title_style = ParagraphStyle(
+        'title',
+        parent=styles['Heading1'],
+        alignment=1,
+        textColor=colors.white,
+        fontSize=18
+    )
+
+    section_title = ParagraphStyle(
+        'section',
+        parent=styles['Heading3'],
+        textColor=colors.HexColor("#2E86C1"),
+        spaceAfter=8
+    )
+
+    normal = styles["Normal"]
+
+    elements = []
+
+    # 🔷 HEADER
+    header = Table([[f"CityCare Hospital"]],
+                   colWidths=[450])
+    header.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#2E86C1")),
+        ("TEXTCOLOR", (0, 0), (-1, -1), colors.white),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("FONTNAME", (0, 0), (-1, -1), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 18),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
+    ]))
+
+    elements.append(header)
+    elements.append(Spacer(1, 15))
+
+    # 👨‍⚕️ DOCTOR NAME
+    elements.append(Paragraph(f"<b>Dr. {doctor.name}</b>", styles["Title"]))
+    elements.append(Spacer(1, 10))
+
+    # 🧾 BASIC INFO CARD
+    elements.append(Paragraph("Basic Information", section_title))
+
+    data = [
+        ["Specialization", doctor.specialization],
+        ["Experience", f"{doctor.experience_years} years"],
+        ["Consultation Fee", f"₹{doctor.consultation_fee}"],
+        ["Department", doctor.department.name if doctor.department else "N/A"],
+        ["Room Number", doctor.room_number],
+        ["Emergency Available", "Yes" if doctor.emergency_available else "No"],
+        ["Contact", doctor.contact],
+    ]
+
+    table = Table(data, colWidths=[180, 260])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#F4F6F6")),
+        ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
+        ("BOX", (0, 0), (-1, -1), 1, colors.HexColor("#D5DBDB")),
+        ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.grey),
+        ("PADDING", (0, 0), (-1, -1), 8),
+    ]))
+
+    elements.append(table)
+    elements.append(Spacer(1, 20))
+
+    # 🎓 QUALIFICATIONS (FIXED JSON ISSUE)
+    elements.append(Paragraph("Qualifications", section_title))
+
+    qualifications = []
+
+    try:
+        if doctor.qualification:
+            parsed = json.loads(doctor.qualification)
+            for q in parsed:
+                qualifications.append(
+                    f"{q.get('degree')} - {q.get('institution')} ({q.get('year')})"
+                )
+    except:
+        qualifications.append(doctor.qualification or "N/A")
+
+    for q in qualifications:
+        elements.append(Paragraph(f"• {q}", normal))
+
+    elements.append(Spacer(1, 20))
+
+    # 🧠 BIO
+    if doctor.bio:
+        elements.append(Paragraph("About Doctor", section_title))
+        elements.append(Paragraph(doctor.bio, normal))
+        elements.append(Spacer(1, 20))
+
+    # 📅 FOOTER
+    elements.append(Spacer(1, 30))
+    elements.append(Paragraph(
+        "Generated by CityCare Hospital Management System",
+        ParagraphStyle(name="footer", alignment=1, textColor=colors.grey)
+    ))
+
+    doc.build(elements)
+
+    return {
+        "status": "completed",
+        "filename": filename
+    }

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed ,watch} from 'vue'
-import { fetchAdminDashboardDetailsApi,fetchPatientsApi,blockDoctorApi,unblockDoctorApi,fetchAdminAppointmentsApi,cancelAppointmentApi } from '@/api/admin'
+import { fetchAdminDashboardDetailsApi,fetchPatientsApi,blockDoctorApi,unblockDoctorApi,fetchAdminAppointmentsApi,cancelAppointmentApi,exportDoctorsApi, exportDoctorProfileApi, checkExportStatusApi  } from '@/api/admin'
 import { delay } from '@/utils/comman'
 
 export const useAdminStore=defineStore('admin',()=>{
@@ -10,6 +10,8 @@ export const useAdminStore=defineStore('admin',()=>{
     const patientList=ref([])
     const adminAppointments = ref([])
     const adminAppointmentsPagination = ref({ page: 1, per_page: 10, total: 0, pages: 1 })
+    const exportLoading = ref(false)
+    const pdfLoading = ref(false)
 
 
     const dashboard = ref({
@@ -134,6 +136,86 @@ export const useAdminStore=defineStore('admin',()=>{
             loading.value = false
         }
     }
+
+    async function exportDoctors() {
+    exportLoading.value = true
+    error.value = null
+
+    try {
+        const res = await exportDoctorsApi()
+        const taskId = res.data.task_id
+
+        const interval = setInterval(async () => {
+            try {
+                const statusRes = await checkExportStatusApi(taskId)
+
+                if (statusRes.data.status === "completed") {
+                    clearInterval(interval)
+
+                    window.location.href = `http://127.0.0.1:5000/exports/${statusRes.data.filename}`
+
+                    exportLoading.value = false
+                }
+
+                if (statusRes.data.status === "failed") {
+                    clearInterval(interval)
+                    exportLoading.value = false
+                    error.value = "Export failed"
+                }
+
+            } catch (err) {
+                clearInterval(interval)
+                exportLoading.value = false
+                error.value = err
+            }
+        }, 2000)
+
+    } catch (err) {
+        exportLoading.value = false
+        error.value = err
+    }
+}
+
+async function downloadDoctorPdf(doctorId) {
+    pdfLoading.value = true
+    error.value = null
+
+    try {
+        const res = await exportDoctorProfileApi(doctorId)
+        const taskId = res.data.task_id
+
+        const interval = setInterval(async () => {
+            try {
+                const statusRes = await checkExportStatusApi(taskId)
+
+                if (statusRes.data.status === "completed") {
+                    clearInterval(interval)
+
+                    window.location.href = `http://127.0.0.1:5000/exports/${statusRes.data.filename}`
+
+                    pdfLoading.value = false
+                }
+
+                if (statusRes.data.status === "failed") {
+                    clearInterval(interval)
+                    pdfLoading.value = false
+                    error.value = "PDF generation failed"
+                }
+
+            } catch (err) {
+                clearInterval(interval)
+                pdfLoading.value = false
+                error.value = err
+            }
+        }, 2000)
+
+    } catch (err) {
+        pdfLoading.value = false
+        error.value = err
+    }
+}
+
+
     return {
         loading,
         error,
@@ -148,7 +230,12 @@ export const useAdminStore=defineStore('admin',()=>{
         adminAppointments,
         adminAppointmentsPagination,
         fetchAdminAppointments,
-        cancelAppointment
+        cancelAppointment,
+        exportDoctors,
+        downloadDoctorPdf,
+        exportLoading,
+        pdfLoading
+        
     }
 
 })

@@ -32,3 +32,20 @@ export const cancelAppointmentApi = (appointmentId,reason) => {
         reason
     })
 }
+
+
+
+
+export const exportDoctorsApi = () => {
+    return api.get("/export-doctors")
+}
+
+
+export const exportDoctorProfileApi = (id) => {
+    return api.get(`/export-doctor/${id}`)
+}
+
+
+export const checkExportStatusApi = (taskId) => {
+    return api.get(`/export-status/${taskId}`)
+}

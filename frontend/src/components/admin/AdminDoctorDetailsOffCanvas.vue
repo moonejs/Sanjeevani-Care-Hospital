@@ -2,6 +2,11 @@
     import Btn from '../common/Btn.vue';
     import { watch,onMounted } from 'vue';
     import Badge from '../common/Badge.vue';
+    import { useToastStore } from '@/stores/toast.store';
+    import { useAdminStore } from '@/stores/admin.store';
+
+    const toast = useToastStore()
+    const adminStore=useAdminStore()
     const props=defineProps({
         show:Boolean,
         doctor:Object
@@ -30,7 +35,23 @@
       }
     )
 
-   
+   async function downloadPdf(){
+      try {
+        await adminStore.downloadDoctorPdf(props.doctor.id)
+        
+        toast.addToast({
+          message: 'Pdf Report Downloaded successfully',
+          type: 'success'
+        })
+        
+      } catch (error) {
+        toast.addToast({
+          title: 'Error',
+          message: 'Failed to Download Appointment Report',
+          type: 'error'
+        })
+      }
+    }
 </script>
 
 <template>
@@ -99,7 +120,8 @@
 
 
       <div class="d-flex gap-2 mt-3">
-        <Btn label="Print" class="btn-outline-secondary btn-sm" />
+         <Btn :label="adminStore.pdfLoading ? 'Generating...' : 'Download Report'" :loader="adminStore.pdfLoading" class="btn-outline-primary btn-sm" @click="downloadPdf"/>
+
         <Btn label="Close" class="btn-outline-dark btn-sm" @click="emit('close')" />
       </div>
     </div>

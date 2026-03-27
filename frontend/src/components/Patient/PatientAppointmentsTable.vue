@@ -58,6 +58,7 @@
     <template #caption>
       <DoctorDashTableCaption title="Appointments" v-model:searchQuery="searchQuery" v-model:date-filter="dateFilter" :is-date="true" class2=" gap-12 " class1="" class3="d-flex ms-9 ps-5  gap-4 align-items-center"/>
       <Btn  label="Clear" class="btn-primary btn-sm position-absolute right-9 top-6 mt-3 me-6"  @click="searchQuery = ''; statusFilter = '' ;dateFilter=''"/>
+      
       <Btn  :label="patientStore.exportLoading? 'Exporting...' : 'Export csv'" :loader="patientStore.exportLoading" @click="exportTreatment" class="btn-outline-primary btn-sm position-absolute right-7 top-6 mt-3"/>
     </template>
     <template #head>
