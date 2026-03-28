@@ -71,14 +71,14 @@
 
       <div class="">
 
-        <div v-if="owner=='doctor'" class="d-flex gap-2">
-          <div class="text-muted ">Patient</div>
+        <div v-if="owner=='doctor' || owner=='admin'" class="d-flex gap-2">
+          <div class="text-muted small ">Patient : </div>
           <div class="fw-bold">{{ appointment?.patient.name }}</div>
         </div>
 
-        <div v-if="owner=='patient'" class="d-flex gap-2">
+        <div v-if="owner=='patient' || owner=='admin'" class="d-flex gap-2">
           <div class="text-muted small">Doctor : </div>
-          <div class="fw-bold"> {{ appointment?.doctor.name }} </div>
+          <div class="fw-bold"> Dr. {{ appointment?.doctor.name }} </div>
         </div>
 
         <div v-if="owner=='patient'" class="d-flex gap-2 align-items-center">
@@ -99,7 +99,7 @@
 
           <div class="d-flex gap-2 align-items-center mb-2">
             <div class="text-muted small">Time : </div>
-            <div class="fw-bold">{{ appointment.time }}</div>
+            <div class="fw-bold"> <mark>{{ appointment.time }} {{ appointment.start_time }}</mark></div>
           </div>
 
           <div class="d-flex gap-2 align-items-center mb-2">
@@ -172,7 +172,7 @@
     </div>
     <div class="offcanvas-footer border-top p-3 d-flex gap-2">
 
-      <Btn :label="patientStore.loadingPdf ? 'Generating...' : 'Download Report'" :loader="patientStore.loadingPdf" class="btn-outline-primary btn-sm" @click="downloadPdf"/>
+      <Btn v-if="owner != 'admin'" :label="patientStore.loadingPdf ? 'Generating...' : 'Download Report'" :loader="patientStore.loadingPdf" class="btn-outline-primary btn-sm" @click="downloadPdf"/>
 
       <Btn label="Close" class="btn-outline-dark btn-sm" @click="emit('close')" />
 

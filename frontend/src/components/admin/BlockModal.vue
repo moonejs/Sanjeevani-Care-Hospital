@@ -36,8 +36,8 @@ import Btn from '../common/Btn.vue';
                     </div>
                     <div class="modal-footer">
                         <Btn label="Close" class="btn-sm btn-primary" @click="emit('close')"/>
-                        <Btn v-if="doctor.is_blocked" label="Unblock" class="btn-sm btn-danger" @click="emit('unblock')"/>
-                        <Btn v-else label="Block" class="btn-sm btn-danger" @click="emit('block')"/>
+                        <Btn v-if="doctor.is_blocked" label="Unblock" class="btn-sm btn-outline-danger" @click="emit('unblock')"/>
+                        <Btn v-else label="Block" class="btn-sm animate-up-1 btn-danger" @click="emit('block')"/>
                         
                     </div>
                 </div>

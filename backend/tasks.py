@@ -478,3 +478,67 @@ def generate_doctor_profile_pdf(self, doctor_id):
         "status": "completed",
         "filename": filename
     }
+    
+    
+    
+@celery.task(bind=True)
+def export_all_appointments_csv(self):
+
+    appointments = Appointment.query.all()
+
+    if not appointments:
+        return {"status": "error", "message": "No appointments found"}
+
+    os.makedirs("exports", exist_ok=True)
+
+    filename = "all_appointments.csv"
+    file_path = os.path.join("exports", filename)
+
+    with open(file_path, mode="w", newline="") as file:
+        writer = csv.writer(file)
+
+        writer.writerow([
+            "Appointment ID",
+            "Date",
+            "Start Time",
+            "End Time",
+            "Status",
+            "Type",
+            "Session",
+
+            "Doctor Name",
+            "Department",
+
+            "Patient Name",
+
+            "Diagnosis",
+            "Notes",
+            "Medicines",
+            "Follow Up Date"
+        ])
+
+        for a in appointments:
+            writer.writerow([
+                a.id,
+                a.appointment_date,
+                a.start_time,
+                a.end_time,
+                a.status,
+                a.type,
+                a.session,
+
+                a.doctor.name if a.doctor else "",
+                a.doctor.department.name if a.doctor and a.doctor.department else "",
+
+                a.patient.name if a.patient else "",
+
+                a.treatment.diagnosis if a.treatment else "",
+                a.treatment.notes if a.treatment else "",
+                a.treatment.medicines if a.treatment else "",
+                a.treatment.follow_up_date if a.treatment and a.treatment.follow_up_date else ""
+            ])
+
+    return {
+        "status": "completed",
+        "filename": filename
+    }

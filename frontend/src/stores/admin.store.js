@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed ,watch} from 'vue'
-import { fetchAdminDashboardDetailsApi,fetchPatientsApi,blockDoctorApi,unblockDoctorApi,fetchAdminAppointmentsApi,cancelAppointmentApi,exportDoctorsApi, exportDoctorProfileApi, checkExportStatusApi  } from '@/api/admin'
+import { fetchAdminDashboardDetailsApi,fetchPatientsApi,blockDoctorApi,unblockDoctorApi,fetchAdminAppointmentsApi,cancelAppointmentApi,exportDoctorsApi, exportDoctorProfileApi, checkExportStatusApi ,exportAppointmentsApi } from '@/api/admin'
 import { delay } from '@/utils/comman'
 
 export const useAdminStore=defineStore('admin',()=>{
@@ -9,10 +9,9 @@ export const useAdminStore=defineStore('admin',()=>{
     const appointmentSummary = ref({pending: 0, confirmed: 0, completed: 0, cancelled: 0})
     const patientList=ref([])
     const adminAppointments = ref([])
-    const adminAppointmentsPagination = ref({ page: 1, per_page: 10, total: 0, pages: 1 })
     const exportLoading = ref(false)
     const pdfLoading = ref(false)
-
+    const exportAppointmentsLoading = ref(false)
 
     const dashboard = ref({
         stats: {},
@@ -99,13 +98,9 @@ export const useAdminStore=defineStore('admin',()=>{
 
         try {
 
-            const res = await fetchAdminAppointmentsApi({
-                page,
-                per_page: adminAppointmentsPagination.value.per_page
-            })
+            const res = await fetchAdminAppointmentsApi()
 
             adminAppointments.value = res.data.appointments
-            adminAppointmentsPagination.value = res.data.pagination
 
             console.log(res)
 
@@ -214,6 +209,44 @@ async function downloadDoctorPdf(doctorId) {
         error.value = err
     }
 }
+async function exportAppointments() {
+    exportAppointmentsLoading.value = true
+    error.value = null
+
+    try {
+        const res = await exportAppointmentsApi()
+        const taskId = res.data.task_id
+
+        const interval = setInterval(async () => {
+            try {
+                const statusRes = await checkExportStatusApi(taskId)
+
+                if (statusRes.data.status === "completed") {
+                    clearInterval(interval)
+
+                    window.location.href = `http://127.0.0.1:5000/exports/${statusRes.data.filename}`
+
+                    exportAppointmentsLoading.value = false
+                }
+
+                if (statusRes.data.status === "failed") {
+                    clearInterval(interval)
+                    exportAppointmentsLoading.value = false
+                    error.value = "Export failed"
+                }
+
+            } catch (err) {
+                clearInterval(interval)
+                exportAppointmentsLoading.value = false
+                error.value = err
+            }
+        }, 2000)
+
+    } catch (err) {
+        exportAppointmentsLoading.value = false
+        error.value = err
+    }
+}
 
 
     return {
@@ -228,13 +261,14 @@ async function downloadDoctorPdf(doctorId) {
         blockDoctor,
         unblockDoctor,
         adminAppointments,
-        adminAppointmentsPagination,
         fetchAdminAppointments,
         cancelAppointment,
         exportDoctors,
         downloadDoctorPdf,
         exportLoading,
-        pdfLoading
+        pdfLoading,
+        exportAppointments,
+        exportAppointmentsLoading
         
     }
 

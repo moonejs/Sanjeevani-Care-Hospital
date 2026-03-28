@@ -49,3 +49,7 @@ export const exportDoctorProfileApi = (id) => {
 export const checkExportStatusApi = (taskId) => {
     return api.get(`/export-status/${taskId}`)
 }
+
+export const exportAppointmentsApi = () => {
+    return api.get("/export-appointments")
+}
