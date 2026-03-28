@@ -36,7 +36,10 @@ class PatientList(Resource):
                 "blood_group":p.blood_group,
                 "emergency_contact_name":p.emergency_contact_name,
                 "emergency_contact_number":p.emergency_contact_number,
-                "profile_image":p.profile_image,
+                "profile_image": (
+                    request.host_url + "uploads/patients/profile/" + p.profile_image
+                    if p.profile_image else None
+                ),
                 "profile_completed":p.profile_completed,
                 "email":p.user.email, 
                 

@@ -50,6 +50,13 @@ def doctor_profile_image(filename):
         filename
     )
 
+@app.route("/uploads/patients/profile/<filename>")
+def patient_profile_image(filename):
+    return send_from_directory(
+        current_app.config["UPLOAD_FOLDER_PATIENT"],
+        filename
+    )
+
 @app.route("/exports/<filename>")
 def download_file(filename):
     return send_from_directory("exports", filename, as_attachment=True)

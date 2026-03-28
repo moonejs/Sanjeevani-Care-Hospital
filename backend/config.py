@@ -22,6 +22,10 @@ class Config:
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "patients", "profile")
     UPLOAD_FOLDER_DOCTOR = os.path.join(BASE_DIR, "uploads", "doctors", "profile")
 
+
+    UPLOAD_FOLDER_PATIENT = os.path.join(BASE_DIR, "uploads", "patients", "profile")
+    UPLOAD_FOLDER_DOCTOR = os.path.join(BASE_DIR, "uploads", "doctors", "profile")
+
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
     MAX_CONTENT_LENGTH = 2 * 1024 * 1024
     

@@ -55,6 +55,7 @@ export const useAdminStore=defineStore('admin',()=>{
             console.log(err);
             
         }finally{
+            await delay(1000)
             loading.value=false
         }
     }
