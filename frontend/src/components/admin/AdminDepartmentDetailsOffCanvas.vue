@@ -1,6 +1,8 @@
 <script setup>
     import Btn from '../common/Btn.vue';
-    import { watch,onMounted } from 'vue';
+    import { watch,onMounted,computed } from 'vue';
+    import { departmentIcons } from "@/utils/departmentIcons"
+    import Badge from '../common/Badge.vue';
     const props=defineProps({
         show:Boolean,
         department:Object
@@ -29,14 +31,26 @@
       }
     )
 
+    const iconComponent = computed(() => {
+        const icon = departmentIcons.find(i => i.key === props.department?.icon)
+        return icon ? icon.component : null
+    })
+
    
 </script>
 <template>
   <div class="offcanvas offcanvas-end" tabindex="-1" id="appointmentOffcanvas">
     <div class="offcanvas-header border-bottom">
-      <div>
+      <div class="d-flex gap-2 align-items-center">
+        <component :is="iconComponent" class="text-primary " style="width:40px;height:40px"/>
         <h5 class="offcanvas-title">{{ department?.name }}</h5>
-        <small class="text-muted">Department Details</small>
+
+        <div class="d-flex gap-1">
+          <Badge :label="department?.emergency_available ? 'Emergency' : 'No Emergency'" :color="department?.emergency_available ? 'success' : 'danger'"/>
+
+          <Badge :label="department?.is_active ? 'Active' : 'Not Active'" :color="department?.is_active ? 'success' : 'danger'"/>
+
+        </div>
       </div>
       <button type="button" class="btn-close" @click="emit('close')" />
     </div>
@@ -45,34 +59,18 @@
       
       
       <div class="mb-3">
-        <h6 class="fw-semibold mb-2">Basic Information</h6>
-        <div class="small text-muted mb-1">Description</div>
-        <p class="mb-2">{{ department.description || "----" }}</p>
+        <p class="mb-2 small text-italic ">{{ department.description || "----" }}</p>
 
-        <div class="d-flex flex-wrap gap-3">
-          <div>
-            <small class="text-muted">Icon</small>
-            <div class="fw-semibold">{{ department.icon }}</div>
-          </div>
-          <div>
-            <small class="text-muted">OPD Timing</small>
-            <div class="fw-semibold">{{ department.opd_timing || "—" }}</div>
-          </div>
-        </div>
       </div>
 
       <hr />
 
       
-      <div class="mb-3">
-        <h6 class="fw-semibold mb-2">Services</h6>
-        <ul class="list-group list-group-flush">
-          <li
-            v-for="(service, i) in department.services"
-            :key="i"
-            class="list-group-item px-0 py-1"
-          >
-            • {{ service }}
+      <div class="mb-3 ">
+        <h6 class="fw-semibold mb-2 text-muted">Services</h6>
+        <ul class="list-group">
+          <li v-for="(service, i) in department.services" :key="i" class="ms-3  py-1 small ">
+             {{ service }}
           </li>
           <li v-if="!department.services?.length" class="text-muted small">
             No services added
@@ -84,14 +82,10 @@
 
       
       <div class="mb-3">
-        <h6 class="fw-semibold mb-2">Facilities</h6>
-        <ul class="list-group list-group-flush">
-          <li
-            v-for="(facility, i) in department.facilities"
-            :key="i"
-            class="list-group-item px-0 py-1"
-          >
-            • {{ facility }}
+        <h6 class="fw-semibold mb-2 text-muted">Facilities</h6>
+        <ul class="list-group ">
+          <li v-for="(facility, i) in department.facilities" :key="i" class="ms-3  py-1 small">
+             {{ facility }}
           </li>
           <li v-if="!department.facilities?.length" class="text-muted small">
             No facilities added
@@ -103,57 +97,39 @@
 
       
       <div class="mb-3">
-        <h6 class="fw-semibold mb-2">Contact & Location</h6>
+        <h6 class="fw-semibold mb-2 text-muted">Contact & Location</h6>
 
         <div class="row g-2 small">
           <div class="col-6">
             <span class="text-muted">Phone</span>
-            <div class="fw-semibold">{{ department.phone || "—" }}</div>
+            <div class="fw-semibold small">+91 {{ department.phone || "—" }}</div>
           </div>
 
           <div class="col-6">
             <span class="text-muted">Email</span>
-            <div class="fw-semibold">{{ department.email || "—" }}</div>
+            <div class="fw-semibold "> <mark>{{ department.email || "—" }}</mark></div>
           </div>
 
           <div class="col-6">
             <span class="text-muted">Building</span>
-            <div class="fw-semibold">{{ department.building || "—" }}</div>
+            <div class="fw-semibold small">{{ department.building || "—" }}</div>
           </div>
 
           <div class="col-6">
             <span class="text-muted">Floor</span>
-            <div class="fw-semibold">{{ department.floor ?? "—" }}</div>
+            <div class="fw-semibold small">{{ department.floor ?? "—" }}</div>
           </div>
+          <div class="d-flex flex-wrap gap-3">
+          <div>
+            <small class="text-muted">OPD Timing</small>
+            <div class="fw-semibold small">{{ department.opd_timing || "—" }}</div>
+          </div>
+        </div>
         </div>
       </div>
 
       <hr />
-
-     
-      <div class="mb-3">
-        <h6 class="fw-semibold mb-2">Status</h6>
-
-        <div class="d-flex gap-3">
-          <span
-            class="badge"
-            :class="department.emergency_available ? 'bg-success' : 'bg-secondary'"
-          >
-            Emergency: {{ department.emergency_available ? "Available" : "Not Available" }}
-          </span>
-
-          <span
-            class="badge"
-            :class="department.is_active ? 'bg-success' : 'bg-danger'"
-          >
-            {{ department.is_active ? "Active" : "Inactive" }}
-          </span>
-        </div>
-      </div>
-
-      
       <div class="d-flex gap-2 mt-4">
-        <Btn label="Print" class="btn-outline-secondary btn-sm" />
         <Btn label="Close" class="btn-outline-dark btn-sm" @click="emit('close')" />
       </div>
     </div>

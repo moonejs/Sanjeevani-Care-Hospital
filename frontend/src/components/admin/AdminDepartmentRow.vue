@@ -1,29 +1,36 @@
 <script setup>
     import Badge from '../common/Badge.vue';
     import Btn from '../common/Btn.vue';
-    defineProps({
+    import { computed } from 'vue';
+    import { departmentIcons } from "@/utils/departmentIcons"
+    const props=defineProps({
         department:Object,
         index:Number
     })
     const emit=defineEmits(['view'])
+    const iconComponent = computed(() => {
+        const icon = departmentIcons.find(i => i.key === props.department?.icon)
+        return icon ? icon.component : null
+    })
+    
 </script>
 <template>
-    <tr>
+    <tr class="small">
         <th scope="row">{{ index+1 }}</th>
-        <td>{{ department?.icon }}</td>
+        <td>
+            <component :is="iconComponent" class="text-primary " style="width:32px;height:32px"/>
+            </td>
         <td>{{ department?.name }}</td>
         <td>{{ department?.email }}</td>
-        <td>{{ department?.phone }}</td>
+        <td class="small">{{ department?.phone }}</td>
         <td>
-            <Badge label="Available" v-if="department?.emergency_available" class="text-bg-success"/>
-            <Badge label="Unavailable" v-else class="text-bg-danger"/>
+            <Badge :label="department.emergency_available ? 'Available' : 'Unavailable'"  :color="department.emergency_available ? 'success' : 'danger'"/>
         </td>
         <td>
-            <Badge label="Active" v-if="department?.is_active" class="text-bg-success"/>
-            <Badge label="Close" v-else class="text-bg-danger"/>
+            <Badge :label="department.is_active ? 'Available' : 'Unavailable'"  :color="department.is_active ? 'success' : 'danger'"/>
         </td>
         <td>
-            <Btn label="View" class="btn-outline-primary btn-sm" @click="emit('view')" />
+            <Btn label="View" class="btn-outline-secondary btn-sm" @click="emit('view')" />
         </td>
         
     </tr>

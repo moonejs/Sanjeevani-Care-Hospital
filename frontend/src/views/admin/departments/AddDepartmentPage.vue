@@ -104,9 +104,9 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-3">
       <div class="col">
-        <BaseLabel label="Description" :required="true" />
+        <BaseLabel label="Description" :required="true" class="" />
         <BaseTextarea v-model.capitalize.trim="form.description" placeholder="Department description" :error="descriptionField.error.value " :valid="descriptionField.valid.value" :show="descriptionField.show.value"/>
       </div>
        <div class="col">
@@ -115,7 +115,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-3">
       <div class="col-6">
         <BaseLabel label="Facilities (one per line)" />
         <BaseTextarea v-model="form.facilitiesText" />
@@ -132,7 +132,7 @@
     </div>
 
 
-    <div class="row">
+    <div class="row mt-3">
       <div class="col-3">
         <BaseLabel label="Building" />
         <BaseInput v-model.trim="form.building"/>
@@ -141,9 +141,9 @@
         <BaseLabel label="Floor" />
         <BaseInput type="Number" v-model.trim="form.floor" group="Floor" :end="true" placeholder="2"/>
       </div>
-      <div class="col-3">
+      <div class="col-3 mt-5">
         <BaseCheckbox v-model="form.emergency_available" id="emergency"/>
-        <BaseLabel label="Emergency Available" for="emergency" />
+        <BaseLabel label="Emergency Available" for="emergency" class="ms-2"/>
       </div>
     </div>
     

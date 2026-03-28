@@ -6,5 +6,5 @@
     })
 </script>
 <template>
-    <label class="form-label" :for="for">{{ label }} <span v-if="required" class="text-danger">*</span></label>
+    <label class="form-label small" :for="for">{{ label }} <span v-if="required" class="text-danger">*</span></label>
 </template>
