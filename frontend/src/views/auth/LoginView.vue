@@ -2,6 +2,7 @@
     import { ref } from 'vue';
     import { useRouter } from 'vue-router';
     import { useAuthStore } from '@/stores/auth.store';
+    import { RouterLink } from 'vue-router';
 
     const email =ref("")
     const password=ref("")
@@ -34,6 +35,9 @@
             loading.value=false
         }
         
+        function register(){
+            router.push('/register')
+        }
 
         
             
@@ -43,13 +47,33 @@
 </script>
 
 <template>
-    <div class="container-fluid vh-100 p-0  d-flex">
+    <div class="container-fluid vh-100 p-0  d-flex  gap-9 overflow-hidden ">
         <div class=" w-50 h-100">
-           ddfdf 
-        </div>
-        <div class="mt-5">
-            <div class="card p-4">
-                <div class="card-header border-0 bg-white text-center pb-0">
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item ">
+                    <img src="../../assets/LoginPage-img-1.jpg" class="d-block w-100 object-fit-contain" alt="...">
+                    </div>
+                    <div class="carousel-item ">
+                    <img src="../../assets/LoginPage-img-4.webp " class="d-block w-100 object-fit-contain" alt="...">
+                    </div>
+                    <div class="carousel-item active">
+                    <img src="../../assets/LoginPage-img-3.png" class="d-block w-100 object-fit-contain" alt="...">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                </div>
+            </div>
+        <div class="mt-7 border-top border-start ">
+            <div class=" p-4">
+                <div class=" border-0  text-center pb-0">
                     <h2 class="h4 fw-bolder fs-3">Login</h2>
                 </div>
                 <div class="card-body">
@@ -97,9 +121,8 @@
                         </button>
                     </div>
                         <div class="d-block d-sm-flex justify-content-center align-items-center mt-4">
-                        <span Name="fw-normal">
-                            Not registered?
-                            
+                        <span Name="fw-normal ">
+                            Not Registerd yet ? <RouterLink to="/register" class="text-underline text-info">Register</RouterLink>                            
                         </span>
                     </div>
                 </div>
