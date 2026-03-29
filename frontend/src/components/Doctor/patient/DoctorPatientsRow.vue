@@ -1,6 +1,7 @@
 <script setup>
     import Btn from '@/components/common/Btn.vue'
     import { useRouter } from 'vue-router'
+    import Badge from '@/components/common/Badge.vue'
 
     defineProps({
         patient: Object,
@@ -22,22 +23,21 @@
 </script>
 
 <template>
-  <tr>
+  <tr class="small">
     <th scope="row">
           {{ index+1 }}
     </th>
     <td>{{ patient.name }}</td>
     <td>{{ patient.age }}</td>
-    <td>{{ patient.gender }}</td>
+    <td class="text-capitalize">{{ patient.gender }}</td>
     <td>{{ patient.last_visit || '—' }}</td>
     <td>{{ patient.total_visits }}</td>
     <td>
-      <span class="badge" :class="patient.has_active_appointment ? 'bg-success' : 'bg-secondary'">
-        {{ patient.has_active_appointment ? 'Yes' : 'No' }}
-      </span>
+      <Badge :label="patient.has_active_appointment ? 'Yes' : 'No'" :color="patient.has_active_appointment ? 'success' : 'secondary'"/>
+      
     </td>
     <td>
-      <Btn label="View" class="btn-outline-primary btn-sm" @click="openPatientProfilePage(patient.patient_id)"/>
+      <Btn label="View" class="btn-outline-secondary btn-sm" @click="openPatientProfilePage(patient.patient_id)"/>
     </td>
   </tr>
 </template>

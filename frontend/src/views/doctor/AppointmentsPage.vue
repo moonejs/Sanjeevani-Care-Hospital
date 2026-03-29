@@ -38,7 +38,7 @@
                 <Pagination :pagination="appointment.historyPagination" @change="changePage"/>
             </div>
             <h2 v-else class="text-muted text-center mt-10">No Appointment History</h2>
-            <AppointmentDetailsOffcanvas :show="showDetails" :appointment="selectedAppointment" @close="closeDetails"/>
+            <AppointmentDetailsOffcanvas :show="showDetails" :appointment="selectedAppointment" @close="closeDetails" owner="doctor"/>
         </LoadingState>
     </div>
 </template>

@@ -172,7 +172,7 @@
     </div>
     <div class="offcanvas-footer border-top p-3 d-flex gap-2">
 
-      <Btn v-if="owner != 'admin'" :label="patientStore.loadingPdf ? 'Generating...' : 'Download Report'" :loader="patientStore.loadingPdf" class="btn-outline-primary btn-sm" @click="downloadPdf"/>
+      <Btn v-if="owner == 'patient'" :label="patientStore.loadingPdf ? 'Generating...' : 'Download Report'" :loader="patientStore.loadingPdf" class="btn-outline-primary btn-sm" @click="downloadPdf"/>
 
       <Btn label="Close" class="btn-outline-dark btn-sm" @click="emit('close')" />
 

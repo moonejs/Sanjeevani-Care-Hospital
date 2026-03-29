@@ -138,8 +138,9 @@ class DoctorPatients(Resource):
         )
 
         patients = pagination.items
-        today = datetime.now().date()
-
+        now = datetime.now()
+        today = now.date()
+        current_time = now.time()
         result = []
 
         for patient in patients:
@@ -159,9 +160,16 @@ class DoctorPatients(Resource):
                 Appointment.doctor_id == doctor_id,
                 Appointment.patient_id == patient.id,
                 Appointment.status.in_(["pending", "confirmed"]),
-                Appointment.appointment_date >= today
+                (
+                    (Appointment.appointment_date > today) |
+                    (
+                        (Appointment.appointment_date == today) &
+                        (Appointment.start_time >= current_time)
+                    )
+                )
             ).first() is not None
-
+            
+            
             result.append({
                 "patient_id": patient.id,
                 "name": patient.name,
