@@ -63,6 +63,7 @@ export const useDepartmentStore = defineStore('department',()=>{
         try {
             const res =await addDepartmentApi(data)
             console.log(res);
+            return res.data
             
         } catch (err) {
             error.value=err

@@ -3,7 +3,6 @@
     import NavLink from './NavLink.vue';
     import { useRouter } from 'vue-router';
     import { computed } from 'vue';
-
     const props=defineProps({
         role:String
     })

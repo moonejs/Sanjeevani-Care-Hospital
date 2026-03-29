@@ -55,7 +55,10 @@
                 type: 'success'
             })
         } catch (error) {
-            
+            toast.addToast({
+                message: 'Some Error Occured',
+                type: 'error'
+            })
         }
 
     }

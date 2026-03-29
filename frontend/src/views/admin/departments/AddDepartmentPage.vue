@@ -12,12 +12,13 @@
     import Btn from "@/components/common/Btn.vue"
     import { departmentIcons } from "@/utils/departmentIcons"
     import { useFormValidation } from "@/reusable/useFormValidation"
+    import { useToastStore } from '@/stores/toast.store';
 
 
 
     const router = useRouter()
     const departmentStore = useDepartmentStore()
-
+    const toast = useToastStore()
     const form = reactive({
         name: "",
         description: "",
@@ -61,9 +62,21 @@
             services: form.servicesText.split("\n").map(s => s.trim()).filter(Boolean),
             facilities: form.facilitiesText.split("\n").map(f => f.trim()).filter(Boolean)
         }
+        try {
+          const res = await departmentStore.addDepartment(data)
+          router.push("/admin/departments")
+          toast.addToast({
+                message: 'Department Added Successfully.',
+                type: 'success'
+            })
+        } catch (error) {
+          toast.addToast({
+                message: 'Some Error Occured',
+                type: 'error'
+            })
+        }
 
-        await departmentStore.addDepartment(data)
-        router.push("/admin/departments")
+
     }
 
     const { isValid } = useFormValidation({fields: [nameField, descriptionField,emailField,phoneField],

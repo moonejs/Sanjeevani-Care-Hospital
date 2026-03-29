@@ -6,10 +6,6 @@
     const selectedPatientDetails=ref(null)
     
     
-
-    
-
-
     function openPatientDetails(patient){
         selectedPatientDetails.value=patient
         showModel.value=true

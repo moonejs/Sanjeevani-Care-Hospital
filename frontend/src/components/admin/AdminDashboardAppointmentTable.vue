@@ -7,9 +7,10 @@
     import { useAdminStore } from '@/stores/admin.store';
     import Loading from '../common/Loading.vue';
     import { useSearchFilter } from '@/utils/useSearchFilter';
+    import { useToastStore } from '@/stores/toast.store';
 
     const adminStore=useAdminStore()
-
+    const toast = useToastStore()
     
     const appointmentList = computed(() => 
         adminStore.dashboard.upcoming_appointments || []
@@ -37,8 +38,16 @@
         try{
             await adminStore.cancelAppointment(id)
             await adminStore.fetchAdminDashboardDetails(adminStore.selectedRange)
+            toast.addToast({
+                message: 'Appointment Cancelled Successfully',
+                type: 'success'
+            })
         }
         catch (err){
+            toast.addToast({
+                message: 'Some Error Occured',
+                type: 'error'
+            })  
 
         }
     }

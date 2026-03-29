@@ -5,6 +5,6 @@
     })
 </script>
 <template>
-    <RouterLink class="btn list-group-item " active-class="active" :to="`${route}`">{{ label}}</RouterLink>
+    <RouterLink class="btn list-group-item rounded-0 " active-class="active" :to="`${route}`">{{ label}}</RouterLink>
 
 </template>
