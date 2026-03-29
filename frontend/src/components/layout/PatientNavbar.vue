@@ -6,8 +6,8 @@
 <template>
   <nav class="navbar navbar-expand-lg custom-navbar px-3">
     <div class="container-fluid">
-      <a class="navbar-brand fw-semibold">
-        HMS
+      <a class="navbar-brand fw-semibold py-0">
+        <img src="../../../../public/logoHMS.png" alt="">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
         <span class="navbar-toggler-icon"></span>

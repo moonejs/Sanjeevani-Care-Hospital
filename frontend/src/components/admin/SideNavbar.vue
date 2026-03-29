@@ -28,8 +28,11 @@
 </script>
 <template>
     
-    <div class="collapse collapse-horizontal show" id="navbarToggleExternalContent" data-bs-theme="dark">
-        <div class="list-group list-group-flush gap-4 px-4 pt-7" style="width: 300px;">
+    <div class="collapse collapse-horizontal show position-relative" id="navbarToggleExternalContent" data-bs-theme="dark">
+        <div class="d ms-6 ps-3 position-absolute mt-3">
+            <img src="../../../../public/logoHMS.png" alt="">
+        </div>
+        <div class="list-group list-group-flush gap-4 px-4 pt-7 " style="width: 300px;">
             <NavTab v-for="(nav,i) in navs" :label="nav.label" :key="i" :route="nav.route"/>
         </div>
         <div class=" text-center mt-10">
@@ -37,3 +40,10 @@
         </div>
     </div>
 </template>
+
+<style scoped>
+.d img{
+    height: 5rem;
+    width: 5rem;
+}
+</style>
