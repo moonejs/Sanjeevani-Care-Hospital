@@ -31,7 +31,7 @@
       </div>
       <div class="col-4">
         <div class="row">
-          <Time />
+          <Time class="mt-2"/>
         </div>
         <div class="row mt-4">
           <NextAppointmentCard />

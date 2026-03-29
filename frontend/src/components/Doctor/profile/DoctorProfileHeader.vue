@@ -9,12 +9,11 @@
     <div>
       <div class="d-flex ">
         <h4 class="text-capitalize fw-bolder"> Dr. {{ doctorStore.doctorProfile?.name }}</h4> 
-        <span  v-if="doctorStore.doctorProfile?.emergency_available"> <Badge class=" ms-2" label="Emergency Available" color="danger"/></span>
       </div> 
       <small class="text-muted">{{ doctorStore.doctorProfile?.specialization }}</small>
     </div>
 
-    <Badge :label="doctorStore.doctorProfile?.profile_completed ? 'Verified & Live' : 'Pending'"  :color="doctorStore.doctorProfile?.profile_completed ? 'success' : 'warning'" />
-    
+    <Badge :label="doctorStore.doctorProfile?.profile_completed ? 'Verified & Live' : 'Pending'"  :color="doctorStore.doctorProfile?.profile_completed ? 'success' : 'warning'" class="position-absolute left-7  top-6 mt-3" />
+    <Badge  :label="doctorStore.doctorProfile?.emergency_available ? 'Emergency Available':''" color="danger" class="position-absolute left-10 ms-3 top-6 mt-3"/>
   </div>
 </template>

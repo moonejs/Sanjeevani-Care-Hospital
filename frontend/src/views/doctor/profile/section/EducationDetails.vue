@@ -77,12 +77,12 @@
 </script>
 
 <template>
-  <div class="card">
-    <div class="card-body">
+  <div class="">
+    <div class="">
 
       <h3 class="mb-3">Education and Specializations</h3>
 
-      <div v-for="(edu, index) in form.education" :key="index" class="border rounded p-3 mb-3"
+      <div v-for="(edu, index) in form.education" :key="index" class="border  p-3 mb-3"
       >
         <div class="row">
           <div class="col-4">
@@ -101,13 +101,13 @@
           </div>  
 
           <div class="col-2 d-flex align-items-end">
-            <Btn v-if="form.education.length > 1" class="btn btn-outline-danger" label="Remove" @click="removeEducation(index)"
+            <Btn v-if="form.education.length > 1" class="btn btn-outline-danger btn-sm mb-1" label="Remove" @click="removeEducation(index)"
             />
           </div>
         </div>
       </div>
 
-      <Btn class="btn btn-outline-primary mb-4" @click="addEducation" label="+ Add Education"/>
+      <Btn class="btn btn-outline-secondary btn-sm mb-4" @click="addEducation" label="+ Add Education"/>
       
       <hr>
       <div class="row">
@@ -141,7 +141,7 @@
       </div>
 
      
-      <Btn class="btn btn-primary mt-4" :disabled="!isValid" label="Save Education & Specialization" @click="save"/>
+      <Btn class="btn btn-secondary  mt-4" :disabled="!isValid" label="Save Education & Specialization" @click="save"/>
 
     </div>
   </div>

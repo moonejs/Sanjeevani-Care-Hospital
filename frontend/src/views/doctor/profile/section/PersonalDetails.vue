@@ -79,9 +79,9 @@
 </script>
 <template>
 
-<div class="card ">
+<div class="">
 
-  <div class="card-body">
+  <div class="d">
 
     <h4 class="mb-4">
       Personal Details
@@ -171,3 +171,17 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+.doctor-profile-img {
+  position: absolute;
+  top: 6rem;
+  right: 3rem;
+  width: fit-content;
+}
+.d{
+  height: 39rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+</style>

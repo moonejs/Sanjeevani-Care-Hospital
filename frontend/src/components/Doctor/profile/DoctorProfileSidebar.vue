@@ -22,11 +22,10 @@
 
 <style scoped>
 .date :hover{
-  background-color: #e8f0fe;
+  background-color: #ECECEC;
 }
 .active{
-  background:#ddeaff;
-  border-left:3px solid #1a73e8;
+  background:#ECECEC;
+  border-left:3px solid #242E4C;
 }
 </style>
-

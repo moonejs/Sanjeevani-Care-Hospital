@@ -60,8 +60,8 @@
   }
 </script>
 <template>
-  <div class="card">
-    <div class="card-body">
+  <div class="">
+    <div class="">
 
       <h3 class="mb-2">Clinic & Consultation</h3>
       <p class="text-muted mb-4">
