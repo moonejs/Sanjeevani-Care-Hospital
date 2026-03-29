@@ -3,7 +3,7 @@ from flask_security import auth_required,roles_required,roles_accepted
 from flask_login import current_user
 from extensions import db
 from flask import request
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 from models import Doctor,Appointment,Availability,Treatment
 from sqlalchemy import case,func
 
@@ -13,37 +13,51 @@ class AppointmentDetailsByDoctor(Resource):
     @auth_required("token")
     @roles_required("doctor")
     def get(self):
-        
+
         date_str = request.args.get("date")
+        range_type = request.args.get("range", "today")
+
         if not date_str:
             return {"message": "date is required"}, 400
 
-        appointment_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        today = date.today()
+
+        
+        if range_type == "week":
+            start_date = today
+            end_date = today + timedelta(days=7)
+        else:
+            start_date = today
+            end_date = today
 
         doctor_id = current_user.doctor.id
+
         
-        appointments=Appointment.query.filter(
-            Appointment.doctor_id==doctor_id,
-            Appointment.appointment_date==appointment_date
+        appointments = Appointment.query.filter(
+            Appointment.doctor_id == doctor_id,
+            Appointment.appointment_date >= start_date,
+            Appointment.appointment_date <= end_date
         ).order_by(
-                case(
-                    (Appointment.status == "pending", 1),
-                    (Appointment.status == "confirmed", 2),
-                    (Appointment.status == "completed", 3),
-                    (Appointment.status == "cancelled", 4),
-                    else_=5
-                ),
-                Appointment.start_time
-            ).all()
-        
+            case(
+                (Appointment.status == "pending", 1),
+                (Appointment.status == "confirmed", 2),
+                (Appointment.status == "completed", 3),
+                (Appointment.status == "cancelled", 4),
+                else_=5
+            ),
+            Appointment.appointment_date,
+            Appointment.start_time
+        ).all()
 
         result = []
 
         for appt in appointments:
             session = None
+
+         
             availability = Availability.query.filter_by(
                 doctor_id=doctor_id,
-                date=appointment_date
+                date=appt.appointment_date
             ).first()
 
             if availability:
@@ -56,6 +70,7 @@ class AppointmentDetailsByDoctor(Resource):
 
             result.append({
                 "appointment_id": appt.id,
+                "date": appt.appointment_date.strftime("%Y-%m-%d"),
                 "time": appt.start_time.strftime("%H:%M"),
                 "end_time": appt.end_time.strftime("%H:%M") if appt.end_time else None,
                 "patient": {
@@ -66,6 +81,8 @@ class AppointmentDetailsByDoctor(Resource):
                 "status": appt.status,
                 "session": session
             })
+
+        
         stats = (
             db.session.query(
                 Appointment.status,
@@ -73,14 +90,15 @@ class AppointmentDetailsByDoctor(Resource):
             )
             .filter(
                 Appointment.doctor_id == doctor_id,
-                Appointment.appointment_date == appointment_date
+                Appointment.appointment_date >= start_date,
+                Appointment.appointment_date <= end_date
             )
             .group_by(Appointment.status)
             .all()
         )
 
         summary = {
-            "Total":0,
+            "Total": 0,
             "completed": 0,
             "confirmed": 0,
             "pending": 0,
@@ -93,12 +111,13 @@ class AppointmentDetailsByDoctor(Resource):
         summary["Total"] = sum(summary.values())
 
         return {
-            "date": date_str,
+            "range": range_type,
+            "start_date": str(start_date),
+            "end_date": str(end_date),
             "total": len(result),
             "appointments": result,
             "summary": summary
-        }, 200
-        
+        }, 200 
 
 class UpdateAppointmentStatus(Resource):
 

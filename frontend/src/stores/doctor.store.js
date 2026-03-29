@@ -75,6 +75,7 @@ export const useDoctorStore=defineStore('doctor',()=>{
             console.log(err);
             
         }finally{
+            await delay(3000)
             loading.value=false
         }
     }

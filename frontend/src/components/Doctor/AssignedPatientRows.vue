@@ -18,13 +18,13 @@
     }
 </script>
 <template>
-    <tr>
+    <tr class="small">
         <th scope="row">{{ index+1 }}</th>
         <td>{{ patient.name }}</td>
         <td>{{ patient.last_visit || 'Never Visited' }}</td>
         <td>{{ patient.visits }}</td>
         <td>
-            <Btn label="View" class="btn-outline-tertiary btn-sm" @click="openPatientProfilePage(patient.patient_id)" />
+            <Btn label="View" class="btn-outline-secondary btn-sm" @click="openPatientProfilePage(patient.patient_id)" />
         </td>
     </tr>
 </template>

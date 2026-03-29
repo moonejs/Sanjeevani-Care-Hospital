@@ -22,6 +22,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     const activeAppointments = ref([])
     const isFirstLoad = ref(true)
     const isRefreshing = ref(false)
+    const selectedRange = ref("today")
     
 
     function formatDate(date) {
@@ -150,11 +151,13 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         }
     }
 
-    async function fetchAppointmentsByDoctor(date){
+    async function fetchAppointmentsByDoctor(date, range = "today") {
         loading.value=true
         error.value=null
         try {
-            const res=await fetchAppointmentsByDoctorApi(date)
+            selectedRange.value = range
+
+            const res=await fetchAppointmentsByDoctorApi(date,range)
             appointmentListByDoctor.value=res.data.appointments
             appointmentSummary.value=res.data.summary
             console.log(res);
@@ -164,7 +167,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             console.log(err);
             
         }finally{
-            
+            await delay(2000)
             loading.value=false
         }
     }
@@ -200,7 +203,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
     async function refreshAfterAppointmentChange(){
         const doctorStore=useDoctorStore()
         await Promise.all([
-            fetchAppointmentsByDoctor(selectedDate.value),
+            await fetchAppointmentsByDoctor(selectedDate.value, selectedRange.value),
             doctorStore.refreshDoctor()
         ])
     }
@@ -300,6 +303,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
         cancelBookedAppointment,
         isFirstLoad,
         isRefreshing,
-        activeAppointments
+        activeAppointments,
+        selectedRange
     }
 })

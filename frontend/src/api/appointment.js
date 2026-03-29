@@ -25,9 +25,12 @@ export const rescheduleAppointmentApi=(appointment_id,data)=>{
     return api.put(`api/appointments/reschedule/${appointment_id}`,data)
 }
 
-export const fetchAppointmentsByDoctorApi=(date)=>{
-    return api.get("api/doctors/appointments",{
-        params:{"date":date}
+export const fetchAppointmentsByDoctorApi = (date, range = "today") => {
+    return api.get("api/doctors/appointments", {
+        params: {
+            date: date,
+            range: range
+        }
     })
 }
 

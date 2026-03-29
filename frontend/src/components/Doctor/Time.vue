@@ -62,7 +62,7 @@ const hourDeg = computed(() => (hours.value % 12) * 30 + minutes.value * 0.5)
     <div v-if="type === 'digital'" class="time-container text-end">
         <div class="d-flex align-items-center justify-content-end gap-2">
             <span class="pulse-dot"></span>
-            <h4 class="time-display m-0">{{ formattedTime }}</h4>
+            <h3 class="time-display m-0">{{ formattedTime }}</h3>
         </div>
         <div class="date-display text-muted small fw-medium">
             {{ formattedDate }}
@@ -93,7 +93,7 @@ const hourDeg = computed(() => (hours.value % 12) * 30 + minutes.value * 0.5)
 .time-display {
     font-weight: 700;
     letter-spacing: -0.5px;
-    font-size: 1.25rem;
+    font-size: 1.4rem;
 }
 
 .date-display {

@@ -8,6 +8,7 @@
     import AssignedPatientRows from './AssignedPatientRows.vue';
     import { useSearchFilter } from '@/utils/useSearchFilter';
     import { storeToRefs } from 'pinia';
+    import LoadingState from '../common/LoadingState.vue';
 
     const appointment=useAppointmentStore()
     const doctor=useDoctorStore()
@@ -48,12 +49,14 @@
         </template>
 
         <template #body>
-            <h5 class="text-muted position-absolute ms-7 mt-2" v-if="doctor.assignedPatientsList.length ==0">No Assigned Patients</h5>
-
-            <AssignedPatientRows v-else
-            v-for="(patient,index) in filteredData" :key="patient.patient_id "
-            :patient="patient" :index="index" 
-            />
+            <LoadingState :loading="doctor.loading" class="position-absolute start-50 ms-5 top-1 ">
+                <h6 class="text-muted position-absolute ms-8 mt-2" v-if="filteredData.length ==0">No Assigned Patients</h6>
+                
+                <AssignedPatientRows v-else
+                v-for="(patient,index) in filteredData" :key="patient.patient_id "
+                :patient="patient" :index="index" 
+                />
+            </LoadingState>
         </template>
 
     </BaseTable>
