@@ -26,7 +26,7 @@
 <template>
   <div class="">
     <div class="sidebar-header">
-      <Btn @click="selectToday" label="Jump to Today" class="btn-outline-primary  w-100 fw-semibold"/>
+      <Btn @click="selectToday" label="Jump to Today" class="btn-outline-secondary  w-100 fw-semibold"/>
       <div class="sidebar-label">
         Select Date
       </div>
@@ -64,10 +64,10 @@
 }
 
 .date :hover{
-  background-color: #f1f3f5;
+  background-color: #ececec;
 }
 .active{
-  background-color: #f1f3f5;
+  background-color: #ececec;
   border-left: 3px solid #242E4C;
 }
 </style>

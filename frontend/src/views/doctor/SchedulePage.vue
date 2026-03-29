@@ -108,38 +108,10 @@
       )
     })
 
-    // const { isValid } = useFormValidation({
-    //     fields: [
-    //         startTimeField,
-    //         endTimeField,
-    //         slotDurationField
-    //     ],
-    //     requiredValues: [
-    //         computed(() => availability.value.onlineBooking)
-    //     ]
-    // })
-    
 </script>
-
-<!-- <template>
-    <div>
-        <div class="pt-5 px-8">
-            <div class="schedule-page-dates container-fluid bg-success-subtle">
-                <TableTopBox label="Today" @selected-date="onDateSelected"/>
-                
-            </div>
-            <div class="schedule-div container-fluid bg-warning">
-                <ScheduleForm  v-model="availability" />
-            </div>
-        </div>
-        <div class="schedule-page-btm bg-danger d-flex justify-content-end px-3">
-            <Btn @click="canSave" label="Save"/>
-        </div>
-    </div>
-</template>  -->
 <template>
 <div class="container-fluid">
-  <div class="bg-white container-fluid px-3">
+  <div class=" container-fluid px-3">
     <div class="d-flex justify-content-between align-items-center">
       <div>
         <h4 class="">Doctor Availability</h4>
@@ -147,13 +119,13 @@
           Configure your consulting hours for each day
         </p>
       </div>
-      <Btn label="Save" @click="canSave" class="btn-primary px-4 animate-up-2"/>
+      <Btn label="Save" @click="canSave" class="btn-outline-secondary  px-4 animate-up-2"/>
     </div>
 
   </div>
 
   <div class="d-flex flex-grow-1 overflow-hidden">
-    <div class="date-sidebar border-end bg-white">
+    <div class="date-sidebar border-end ">
       <TableTopBox @selected-date="onDateSelected"/>
 
     </div>

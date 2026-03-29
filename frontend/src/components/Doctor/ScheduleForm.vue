@@ -38,28 +38,11 @@
 
 
 </script>
-<!-- <template>
-    <form>
-        <div class="bg-danger form-check d-flex justify-content-between">
-            <div>
-                <CheckBox  v-model="form.onlineBooking" id="onlineBooking" />
-                <Label label="Enable Online Booking" for="onlineBooking"/>
-            </div>
-            <Badge :label="badgeLabel" :color="color"/>
-        </div>
-        <div class="session-div">
-            <SessionBox v-model="form.morning" session="Morning" :isOnlineBookingEnabled="isOnlineBookingEnabled" />
-            <SessionBox v-model="form.afternoon" session="Afternoon" :isOnlineBookingEnabled="isOnlineBookingEnabled"/>
-            <SessionBox v-model="form.evening" session="Evening" :isOnlineBookingEnabled="isOnlineBookingEnabled"/>
-        </div>
-    </form>
-</template> -->
-
 <template>
     <div class="">
         <div class="row mb-4">
             <div class="col-12">
-                <div class=" p-3 d-flex justify-content-between align-items-center bg-white shadow-sm border">
+                <div class=" p-3 d-flex justify-content-between align-items-center  border">
                     <div class="d-flex align-items-center gap-3">
                         <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
                             <CheckBox class="ms-2" v-model="form.onlineBooking" id="onlineBooking" />
@@ -70,7 +53,6 @@
                 </div>
             </div>
         </div>
-
        <div class="row">
         <div class="col">
             <SessionBox v-model="form.morning" session="Morning"
