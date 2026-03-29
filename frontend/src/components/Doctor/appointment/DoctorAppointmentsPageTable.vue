@@ -31,8 +31,8 @@
 <template>
     <BaseTable>
         <template #caption>
-            <DoctorDashTableCaption title="Appointment History" v-model:searchQuery="searchQuery" class1="ms-5 ps-5" class2="gap-12" :is-date="true" v-model:date-filter="dateFilter"/>
-            <Btn  label="Clear" class="btn-primary "  @click="searchQuery = ''; statusFilter = '' ;dateFilter=''"/>
+            <DoctorDashTableCaption title="Appointment History" v-model:searchQuery="searchQuery" class1="" class2="gap-12 " :is-date="true" v-model:date-filter="dateFilter" class3="d-flex ms-11 gap-4 "/>
+            <Btn  label="Clear" class="btn-secondary position-absolute top-6 right-7 me-2  mt-3 btn-sm"  @click="searchQuery = ''; statusFilter = '' ;dateFilter=''"/>
         </template>
         <template #head>
             <BaseTableHead :t-head="tHead"/>
