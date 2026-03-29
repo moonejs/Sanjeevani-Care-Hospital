@@ -4,6 +4,7 @@
     import SearchInput from '@/components/common/SearchInput.vue';
     import DateFilter from '@/components/common/DateFilter.vue';
     import FilterDropdown from '@/components/common/FilterDropdown.vue';
+    import Btn from '../common/Btn.vue';
     
     defineProps({
         title:String,

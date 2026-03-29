@@ -25,11 +25,23 @@ class PatientProfile(Resource):
             return {"message": "Unauthorized access to patient profile"}, 403
         
         patient_info = {
-            "id": patient.id,
-            "name": patient.name,
-            "age": patient.age,
-            "gender": patient.gender,
-            "contact": patient.contact,
+            "id":patient.id,
+            "name":patient.name,
+            "gender":patient.gender,
+            "age":patient.age,
+            "contact":patient.contact,
+            "address":patient.address,
+            "height_cm":patient.height_cm,
+            "weight_kg":patient.weight_kg,
+            "blood_group":patient.blood_group,
+            "emergency_contact_name":patient.emergency_contact_name,
+            "emergency_contact_number":patient.emergency_contact_number,
+            "profile_image": (
+                    request.host_url + "uploads/patients/profile/" + patient.profile_image
+                    if patient.profile_image else None
+                ),
+            "profile_completed":patient.profile_completed,
+                "email":patient.user.email,
         }
         
         total_visits = Appointment.query.filter(

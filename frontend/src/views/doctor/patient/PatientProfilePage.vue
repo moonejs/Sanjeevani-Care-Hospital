@@ -18,21 +18,20 @@
 </script>
 
 <template>
-    <div class="patient-profile-layout d-flex">
-      <div v-if="profile" class="patient-profile-left-panel bg-danger">
-        <PatientSummery  :patient="profile.patient"/>
-        <PatientStats :stats="profile.stats" /> 
-      </div >
-  
-      <div v-if="profile" class="patient-profile-right-panel bg-success-subtle">
-        <PatientTabs
-        :current-appointment="profile.current_appointment"
-        :appointments="profile.appointments"
-        :treatments="profile.treatments"
-        />  
-      
-      </div> 
+  <div class="container-fluid patient-page px-3 py-2">
+
+    <div class="row h-100">
+        <div v-if="profile" class="col-4 border-end pe-3 d-flex flex-column">
+            <PatientSummery :patient="profile.patient"/>
+            <PatientStats :stats="profile.stats"/>
+
+        </div>
+      <div v-if="profile" class="col-8 ps-3 d-flex flex-column">
+            <PatientTabs :current-appointment="profile.current_appointment" :appointments="profile.appointments" :treatments="profile.treatments"/>
+
+      </div>
+
     </div>
 
-
+  </div>
 </template>

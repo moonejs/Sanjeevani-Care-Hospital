@@ -49,7 +49,7 @@
         </template>
 
         <template #body>
-            <LoadingState :loading="doctor.loading" class="position-absolute start-50 ms-5 top-1 ">
+            <LoadingState :loading="doctor.loading" class="position-absolute end-0 me-11 top-9 ">
                 <h6 class="text-muted position-absolute ms-8 mt-2" v-if="filteredData.length ==0">No Assigned Patients</h6>
                 
                 <AssignedPatientRows v-else

@@ -5,17 +5,16 @@
 </script>
 
 <template>
-  <div class=" mt-3">
-    <h5 class="mb-2">Patient Stats</h5>
-
-    <div class="d-flex justify-content-between">
-      <span>Total Visits</span>
-      <strong>{{ stats.total_visits }}</strong>
+  <div class="row">
+    <div class="col">
+      <span>Total Visits : </span>
+      <strong class="fw-bold">{{ stats.total_visits }}</strong>
     </div>
 
-    <div class="d-flex justify-content-between">
-      <span>Last Visit</span>
-      <strong>{{ stats.last_visit || '—' }}</strong>
+    <div class="col">
+      <span>Last Visit : </span>
+      <strong> <mark>{{ stats.last_visit || '—' }}</mark></strong>
     </div>
+
   </div>
 </template>

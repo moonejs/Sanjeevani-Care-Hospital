@@ -26,7 +26,7 @@
 
 <template>
     <div class="row container-fluid justify-content-between">
-      <div class="col-7">
+      <div class="col-7 d">
          <DoctorAppointmentsTable />
       </div>
       <div class="col-4">
@@ -44,3 +44,11 @@
 
 </template>
 
+<style scoped>
+.d{
+
+  height: 40rem;
+  overflow-y: auto;
+}
+
+</style>

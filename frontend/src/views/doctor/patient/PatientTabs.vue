@@ -15,28 +15,34 @@
 </script>
 
 <template>
-  <ul class="nav nav-tabs mb-3">
+  <div class="nav nav-tabs">
     <li class="nav-item">
-      <button class="nav-link" :class="{active: activeTab==='current'}" @click="activeTab='current'">
-        Current
+      <button class="nav-link rounded-top-1" :class="{active: activeTab==='current'}" @click="activeTab='current'">
+        Current Appointments
       </button>
     </li>
     <li class="nav-item">
-      <button class="nav-link" :class="{active: activeTab==='appointments'}" @click="activeTab='appointments'">
-        Appointments
+      <button class="nav-link rounded-top-1" :class="{active: activeTab==='appointments'}" @click="activeTab='appointments'">
+        Appointments History
       </button>
     </li>
     
-  </ul>
+  </div>
+  
 
   <div v-if="activeTab==='current'">
     <CurrentAppointmentCard :appointment="currentAppointment" />
   </div>
 
-  <div v-if="activeTab==='appointments'">
+  <div v-if="activeTab==='appointments'" class="d">
     <AppointmentHistoryTable :appointments="appointments" />
   </div>
 
-
-
 </template>
+
+<style scoped>
+.d{
+  height: 36rem;
+  overflow-y: auto;
+}
+</style>
