@@ -51,14 +51,14 @@
         <div class=" w-50 h-100">
             <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item ">
-                    <img src="../../assets/LoginPage-img-1.jpg" class="d-block w-100 object-fit-contain" alt="...">
+                    <div class="carousel-item bg-warning-subtle pb-7">
+                    <img src="../../assets/images/img-8.png"  height="500rem" class="d-block w-100 object-fit-contain mt-8 " alt="...">
                     </div>
-                    <div class="carousel-item ">
-                    <img src="../../assets/LoginPage-img-4.webp " class="d-block w-100 object-fit-contain" alt="...">
+                    <div class="carousel-item bg-success-subtle pb-7 ">
+                    <img src="../../assets/images/img-7.png "  height="500rem" class="mt-8 d-block w-100 object-fit-contain" alt="...">
                     </div>
-                    <div class="carousel-item active">
-                    <img src="../../assets/LoginPage-img-3.png" class="d-block w-100 object-fit-contain" alt="...">
+                    <div class="carousel-item active bg-primary-subtle pb-7">
+                    <img src="../../assets/images/img-6.png" height="500rem" class=" mt-8 d-block w-100 object-fit-contain" alt="...">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
@@ -96,7 +96,7 @@
                             </div>
                         </div>
                         <div class="d-grid">
-                            <button type="submit"  :disabled="loading" class="btn btn-primary">
+                            <button type="submit"  :disabled="loading" class="btn btn-secondary">
                                 <span v-if="loading">
                                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                                     <span class="ml-1">Loging...</span>

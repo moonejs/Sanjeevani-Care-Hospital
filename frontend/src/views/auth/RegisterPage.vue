@@ -51,14 +51,14 @@ function canRegister(){
         <div class="w-50 h-100">
             <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="../../assets/LoginPage-img-1.jpg" class="d-block w-100 object-fit-contain" alt="...">
+                    <div class="carousel-item active bg-info-subtle pb-7">
+                        <img src="../../assets/images/img-1.png" height="500rem" class="mt-8 d-block w-100 object-fit-contain" alt="...">
                     </div>
-                    <div class="carousel-item">
-                        <img src="../../assets/LoginPage-img-4.webp" class="d-block w-100 object-fit-contain" alt="...">
+                    <div class="carousel-item bg-danger-subtle pb-7">
+                        <img src="../../assets/images/img-9.png" height="500rem" class="mt-8 d-block w-100 object-fit-contain" alt="...">
                     </div>
-                    <div class="carousel-item">
-                        <img src="../../assets/LoginPage-img-3.png" class="d-block w-100 object-fit-contain" alt="...">
+                    <div class="carousel-item bg-dark-subtle pb-7">
+                        <img src="../../assets/images/img-10.png" height="500rem" class="mt-8 d-block w-100 object-fit-contain" alt="...">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
