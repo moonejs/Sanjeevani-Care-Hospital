@@ -50,7 +50,7 @@
       try {
         const res = await doctor.addDoctor({
           ...form,
-          email:`${form.email}@hospital.com`
+          email:`${form.email}@sanjeevani.care.com`
         })
         console.log(res);
         router.push("/admin/doctors")
@@ -80,7 +80,7 @@
     <div class="row">
       <div class="col-4">
         <BaseLabel label="Email" :required="true" />
-        <BaseInput v-model.trim="form.email" :error="emailField.error.value" :valid="emailField.valid.value" :show="emailField.show.value" placeholder="doctor" group="@hospital.com" :end="true" />
+        <BaseInput v-model.trim="form.email" :error="emailField.error.value" :valid="emailField.valid.value" :show="emailField.show.value" placeholder="doctor" group="@sanjeevani.care.com" :end="true" />
       </div>
 
       <div class="col-4">

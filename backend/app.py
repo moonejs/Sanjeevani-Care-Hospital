@@ -118,9 +118,9 @@ def create_database():
             name="admin" , description= "Admin"
         )
         
-        if not user_datastore.find_user(email="admin@hospital.com"):
+        if not user_datastore.find_user(email="admin@sanjeevani.care.com"):
             user_datastore.create_user(
-                email="admin@hospital.com",
+                email="admin@sanjeevani.care.com",
                 password=hash_password("Admin@123"),
                 roles=[admin_role]
             )
