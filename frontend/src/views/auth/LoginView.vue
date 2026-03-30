@@ -17,7 +17,7 @@
                 email : email.value,
                 password : password.value
             })
-            
+            await auth.fetchMe()
             if (auth.role ==='admin'){
                 router.replace('/admin/dashboard')
             }
@@ -35,7 +35,7 @@
             loading.value=false
         }
         
-        function register(){
+    function register(){
             router.push('/register')
         }
 

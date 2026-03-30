@@ -22,7 +22,12 @@ const router = createRouter({
 router.beforeEach(async(to,from)=>{
   const auth=useAuthStore() 
 
-  if(!['login', 'register'].includes(to.name) && !auth.isAuthenticated && to.name!=='register'){
+  // if(!['login', 'register'].includes(to.name) && !auth.isAuthenticated && to.name!=='register'){
+  //   return { name: 'login' }
+  // }
+  const publicPages = ['login', 'register', 'home', 'notFound']
+
+  if (!auth.isAuthenticated && !publicPages.includes(to.name)) {
     return { name: 'login' }
   }
 

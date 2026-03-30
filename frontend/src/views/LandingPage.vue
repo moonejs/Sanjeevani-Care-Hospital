@@ -68,7 +68,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
               <RouterLink to="/register" class="btn btn-dark animate-right-2">
                 Book Appointment →
               </RouterLink>
-              <a href="tel:+911800000000" class="btn btn-outline-dark ">
+              <a  class="btn btn-outline-dark ">
                 <Phone size="1.2rem" color="red"/> Emergency Helpline
               </a>
             </div>
@@ -167,7 +167,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
               <p class="sc-emergency-sub">Our trauma and emergency department is fully equipped and staffed round-the-clock. Ambulance services available across the city with GPS tracking.</p>
             </div>
             <div class="col-lg-3 text-lg-end">
-              <a href="tel:+911800000000" class="btn btn-secondary sc-btn-primary sc-btn-lg d-block mb-2">
+              <a class="btn btn-secondary sc-btn-primary sc-btn-lg d-block mb-2">
                 <Phone size="1rem"/> Call Emergency
               </a>
               <a href="#" class="btn btn-outline-secondary sc-btn-outline sc-btn-lg d-block">

@@ -1,14 +1,13 @@
-import LandingPage from '@/views/LandingPage.vue'
 
 export default [
   {
     path: '/',
-    name: 'LandingPage',
-    component: LandingPage
+    name: 'home',
+    component: () => import('@/views/LandingPage.vue')
   },
   {
     path: '/:pathMatch(.*)*',
-    name: 'NotFound',
+    name: 'notFound',
     component: () => import('@/views/NotFoundPage.vue')
   }
 ]
