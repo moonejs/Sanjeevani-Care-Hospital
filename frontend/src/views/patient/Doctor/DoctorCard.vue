@@ -11,6 +11,17 @@
     const props=defineProps({
         doctor: Object
     })
+
+    const hasActiveBooking = computed(() => {
+      return appointment.activeAppointments.some(
+        a => a.doctor.id === props.doctor.id
+      )
+    })
+    const activeAppointment = computed(() => {
+      return appointment.activeAppointments.find(
+        a => a.doctor.id === props.doctor.id
+      ) || null
+    })
     const emit=defineEmits(['doctor-appt'])
     const parseQualifications = (qual) => {
         try {
@@ -24,7 +35,7 @@
         return props.doctor.is_bookable
     })
     async function cancelMyAppointment() {
-        if (!appointment.activeAppointment) return
+        if (!activeAppointment.value) return
         
         const confirmCancel = confirm("Are you sure you want to cancel?")
         if (!confirmCancel) {
@@ -40,12 +51,11 @@
           message: 'Appointment Cancelled successfully',
           type: 'success'
         })
-
-        await appointment.cancelBookedAppointment(appointment.activeAppointment.id,{reason:"Cancelled by patient"})
-
-
+        console.log(activeAppointment.value.id);
+        await appointment.cancelBookedAppointment(activeAppointment.value.id,{reason:"Cancelled by patient"})
         
     }
+    
 </script>
 
 <template>
@@ -82,7 +92,7 @@
                     </small>
               </div>
             </div>
-            <div v-if="(appointment.activeAppointment && appointment.activeAppointment.doctor.id == props.doctor.id)" >
+            <div v-if="hasActiveBooking" >
                 <Badge label="Active Booking" color="primary" class="d-block mb-2" style=" font-size: 11px;"/>
                 <Badge label="Reschedule Only" color="warning"  style=" font-size: 11px;"/>
                     
@@ -133,11 +143,11 @@
               </span>
             </p>
           </div>
-          <div v-if="appointment.activeAppointment && appointment.activeAppointment.doctor.id == props.doctor.id" class="d-flex ">
+          <div v-if="hasActiveBooking" class="d-flex ">
             <Btn label="Reschedule" class="btn-secondary me-2  btn-sm" @click="emit('doctor-appt')"/>
             <Btn label="Cancel Appointment" class="btn-outline-danger btn-sm" @click="cancelMyAppointment"/>
           </div >
-          <Btn v-else label="Book Appointment" class="btn-primary btn-sm" :disabled="!bookable" @click="emit('doctor-appt')" />
+          <Btn v-else label="Book Appointment" class="btn-secondary btn-sm" :disabled="!bookable" @click="emit('doctor-appt')" />
         </div>
       </div>
     </div>
@@ -156,8 +166,8 @@
   background-color: var(--hms-card-hover);
 }
 .doctor-card-badge1 {
-  bottom: 5.5rem;
-  right: 8.8rem;
+  bottom: 6.5rem;
+  right: 7.9rem;
 }
 .doctor-card-img img {
   height: 19.2rem;

@@ -2,10 +2,17 @@
     import SlotBox from '../common/SlotBox.vue';
     import Badge from '../common/Badge.vue';
     import { useAppointmentStore } from '@/stores/appointment.store';
+    import { computed } from 'vue';
     const appointment=useAppointmentStore()
+
 
     const props=defineProps({
         doctor:Object
+    })
+    const hasActiveBooking = computed(() => {
+        return appointment.activeAppointments.some(
+            a => a.doctor.id === props.doctor.doctor.id
+        )
     })
     const emit = defineEmits(['slotSelected'])
 
@@ -36,7 +43,7 @@
                         Department: <mark>{{ doctor.doctor.department }}</mark>
                     </div>
                 </div>
-                <div v-if="(appointment.activeAppointment && appointment.activeAppointment.doctor.id == props.doctor.doctor.id)" >
+                <div v-if="hasActiveBooking" >
                     <Badge label="Active Booking" color="info" class="d-block mb-2" />
                     <Badge label="Reschedule Only" color="warning"  />
                     

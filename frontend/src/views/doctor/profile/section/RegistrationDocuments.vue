@@ -18,7 +18,7 @@
     registration_number: store.doctorProfile?.registration_number
   })
 
-  const registrationField = useField(computed(() => form.registration_number),[required(),minLength(13,"Invalid Registration Number"),maxLength(13,"Invalid Registration Number"),hasAlpha("HMS","Invalid Registration Number")])
+  const registrationField = useField(computed(() => form.registration_number),[required(),minLength(10,"Invalid Registration Number"),maxLength(13,"Invalid Registration Number"),hasAlpha("SJVC","Invalid Registration Number")])
 
   const { isValid } = useFormValidation({
     fields: [registrationField],
@@ -36,7 +36,7 @@
   <div class="row ">
     <div class="col-4">
       <h6><BaseLabel label=" Medical Registration Number" :required="true"/></h6>
-      <BaseInput  v-model.trim="form.registration_number" :error="registrationField.error.value" :valid="registrationField.valid.value" :show="registrationField.show.value" placeholder="HMS123456..." />
+      <BaseInput  v-model.trim="form.registration_number" :error="registrationField.error.value" :valid="registrationField.valid.value" :show="registrationField.show.value" placeholder="SJVC.." />
       <Btn class="btn btn-outline-secondary px-4 mt-3" label="Save" :disabled="!isValid" @click="save" />
     </div>
   </div>
