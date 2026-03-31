@@ -16,35 +16,6 @@
         if (slot.status === "full") return "danger"
         if (slot.status === "past") return "secondary"
     }
-    // function generateSlots(startTime,endTime,slotDuration){
-    //     const slots=[]
-    //     const start=new Date()
-    //     const end=new Date()
-    //     const [sh,sm]=startTime.split(":").map(Number)
-    //     const [eh,em]=endTime.split(":").map(Number)
-
-    //     start.setHours(sh,sm,0,0)
-    //     end.setHours(eh,em,0,0)
-
-    //     while(start.getTime() + Number(slotDuration) *60000<=end.getTime()){
-    //         slots.push(
-    //             start.toLocaleTimeString("en-US", {
-    //                 hour: "numeric",
-    //                 minute: "2-digit",
-    //                 hour12: true,
-    //             })
-    //         )
-    //         start.setMinutes(start.getMinutes() + slotDuration);
-    //     }
-    //     return slots; 
-    // }
-    // watch(()=>props.sessionInfo,(info)=>{
-    //      if (!info || !info.enabled) {
-    //         slots.value = []
-    //         return
-    //     }
-    //     slots.value=generateSlots(info.startTime,info.endTime,info.slotDuration)
-    // },{ immediate: true })
     function selectSlot(slot) {
         if (slot.status == 'past' ||slot.status=='full'){
             return  

@@ -56,17 +56,6 @@ export default [
         name:'book-appointments',
         component:()=> import('@/views/patient/Appointment/BookAppointmentsPage.vue')
       },
-      {
-        path:'medical-records/history',
-        name:'medical-history',
-        component:()=> import('@/views/patient/MedicalHistoryPage.vue')
-      },
-      {
-        path:'medical-records/billing',
-        name:'medical-bills',
-        component:()=> import('@/views/patient/BillingPage.vue')
-      },
-      
     ]
   }
 ]

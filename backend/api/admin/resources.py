@@ -77,13 +77,6 @@ class AdminDashboard(Resource):
         for status, count in status_counts:
             status_summary[status] = count
         
-        # recent = Appointment.query.order_by(Appointment.created_at.desc()).limit(5).all()
-        
-        # recent_activity = [{
-        #     "message": f"{a.patient.name} booked appointment with {a.doctor.name}",
-        #     "time": a.created_at.strftime("%Y-%m-%d %H:%M")
-        # } for a in recent]
-        
         result = {
             "stats": {
                 "doctors": doctors_count,

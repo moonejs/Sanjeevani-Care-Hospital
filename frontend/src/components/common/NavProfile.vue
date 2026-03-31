@@ -33,24 +33,6 @@
     
 </script>
 
-<!-- <template>
-    <div class="dropstart">
-        <a class="d-flex align-items-center gap-2 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <h3>{{ name }}</h3>
-            <i class="fa-solid fa-circle-user fs-4 mb-1"></i>
-        </a>
-        <ul class="dropdown-menu">
-            <li>
-                <NavLink label="Profile" :route="`/${role}/profile`"/>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <a class="dropdown-item" @click="logout">Logout</a>
-            </li>
-        </ul>
-    </div>
-</template> -->
-
 <template>
   <div class="dropdown">
     <div class="profile-trigger d-flex align-items-center gap-2"data-bs-toggle="dropdown">

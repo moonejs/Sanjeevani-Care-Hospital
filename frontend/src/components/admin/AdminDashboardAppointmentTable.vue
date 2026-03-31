@@ -26,7 +26,7 @@
 
     async function showTodayOrWeek(range){
         await adminStore.fetchAdminDashboardDetails(range)
-        // stats.value=adminStore.dashboard.stats        
+                
     }
     const tableStatsArr=computed(()=>{
         return [adminStore.appointmentSummary]

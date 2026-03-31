@@ -11,11 +11,6 @@ class PatientDoctorsAvailability(Resource):
 
     @auth_required("token")
     @roles_accepted("patient")
-    @cache.cached(
-    timeout=30,
-    query_string=True,
-    key_prefix=lambda: f"availability_{current_user.id}"
-)
     def get(self):
         date_str = request.args.get("date")
         IST = pytz.timezone('Asia/Kolkata')

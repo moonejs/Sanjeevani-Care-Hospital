@@ -89,70 +89,7 @@
         showModal.value = true
         slotSession.value=slot.session
     }
-//     async function confirmBooking(){
-//     try {
-//       await appointment.fetchMyActiveAppointment()
-      
-//       if (existingAppointment.value) {
-//         try {
-//           await appointment.rescheduleAppointment({
-//             appointment_id: existingAppointment.value.id,
-//             date: appointment.selectedDate,
-//             start_time: selectedSlot.value.time
-//           })
-//           toast.addToast({
-//             message: 'Appointment Rescheduled successfully',
-//             type: 'success'
-//           })
-//         } catch (error) {
-//           toast.addToast({
-//             title: 'Error',
-//             message: 'Failed to book appointment',
-//             type: 'error'
-//           })
-//         }
-        
-//       } else {
-//         try {
-//           await appointment.bookAppointment({
-//             doctor_id: selectedDoctor.value.doctor.id,
-//             date: appointment.selectedDate,
-//             start_time: selectedSlot.value.time,
-//             type: appointmentType.value
-//           })
-//           toast.addToast({
-//             message: 'Appointment booked successfully',
-//             type: 'success'
-//           })
-//         } catch (error) {
-//           toast.addToast({
-//             title: 'Error',
-//             message: 'Failed to book appointment',
-//             type: 'error'
-//           })
-//         }
-        
-//       }
 
-
-//     await appointment.fetchMyActiveAppointment()
-
-//     showModal.value = false
-//     selectedDoctor.value = null
-//     selectedSlot.value = null
-//     slotSession.value = ""
-//     appointmentType.value = "opd"
-
-//     await appointment.fetchAllDoctorsAvailability(appointment.selectedDate)
-
-//   } catch (error) {
-//     toast.addToast({
-//       title: 'Error',
-//       message: 'Failed to book appointment',
-//       type: 'error'
-//     })
-//   }
-// }
 
 async function confirmBooking() {
   try {

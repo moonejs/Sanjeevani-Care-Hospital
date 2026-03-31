@@ -53,7 +53,7 @@ router.beforeEach(async(to,from)=>{
   }
 
 
-  // patients
+
 
   if(auth.role=='patient' && !auth.profileCompleted){
 
