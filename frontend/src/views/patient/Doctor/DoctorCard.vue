@@ -170,7 +170,7 @@
   right: 7.9rem;
 }
 .doctor-card-img img {
-  height: 19.2rem;
+  height: 20.4rem;
   width: 100%;
   object-fit: cover;
 }
