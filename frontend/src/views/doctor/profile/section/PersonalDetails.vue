@@ -165,7 +165,7 @@
 
       
       <div class="mt-4">
-        <Btn class="btn btn-primary mt-4" :disabled="!isValid" @click="submitForm" label="Update Profile" />
+        <Btn class="btn btn-secondary mt-4" :disabled="!isValid" @click="submitForm" label="Update Profile" />
       </div>
 
     </div>

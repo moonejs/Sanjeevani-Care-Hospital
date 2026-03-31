@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask_security import auth_required , roles_required,roles_accepted
-from extensions import db
+from extensions import db,cache
 from models import Patient,Appointment  
 from flask import request,current_app,send_from_directory
 from flask_login import current_user
@@ -20,9 +20,10 @@ from celery_app import celery
 class PatientList(Resource):
     @auth_required("token")
     @roles_accepted("admin")
+    @cache.cached(timeout=60, key_prefix="patients_list")
     def get(self):
         patients=Patient.query.all()
-        
+        print("Fetching from DB...")
         return[
             {
                 "id":p.id,

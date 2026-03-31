@@ -103,9 +103,9 @@
                 Appointment Confirmed
               </div>
               <Btn  v-else-if="isMySlot && !isConfirmed" label="Cancel Appointment" class="btn-sm btn-danger" @click="emit('cancel-appointment', myAppointmentId)"/>
-              <Btn  v-else-if="isReschedule" label="Reschedule" class="btn btn-primary btn-sm" @click="emit('confirm')" />
+              <Btn  v-else-if="isReschedule" label="Reschedule" class="btn btn-secondary btn-sm" @click="emit('confirm')" />
 
-              <Btn  v-else label="Confirm Booking" class="btn btn-outline-primary btn-sm" @click="emit('confirm')"/>
+              <Btn  v-else label="Confirm Booking" class="btn btn-outline-secondary btn-sm" @click="emit('confirm')"/>
 
             </div>      
           </div>

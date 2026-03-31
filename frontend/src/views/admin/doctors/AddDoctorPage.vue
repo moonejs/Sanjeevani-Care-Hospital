@@ -128,7 +128,7 @@
       </div>
     </div>
 
-    <Btn class="btn btn-primary mt-4"
+    <Btn class="btn btn-secondary mt-4"
       :disabled="!isValid"
       @click="submitForm"
       label="Add Doctor" />

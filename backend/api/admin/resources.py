@@ -5,11 +5,16 @@ from flask import request
 from datetime import date, timedelta, datetime
 from models import Doctor, Patient, Appointment,Department
 from sqlalchemy import func
-from extensions import db
+from extensions import db,cache
 class AdminDashboard(Resource):
     @auth_required("token")
     @roles_required("admin")
     def get(self):
+        cache_key = "admin_dashboard"
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return cached_data, 200
+        
         range_type = request.args.get("range", "today")
         today = date.today()
         if range_type == "week":
@@ -79,7 +84,7 @@ class AdminDashboard(Resource):
         #     "time": a.created_at.strftime("%Y-%m-%d %H:%M")
         # } for a in recent]
         
-        return {
+        result = {
             "stats": {
                 "doctors": doctors_count,
                 "patients": patients_count,
@@ -89,9 +94,13 @@ class AdminDashboard(Resource):
                 "pending_appointments": pending_appointments
             },
             "upcoming_appointments": upcoming_data,
-            "status_summary": status_summary,
-            # "recent_activity": recent_activity
-        }, 200
+            "status_summary": status_summary
+        }
+
+        
+        cache.set(cache_key, result, timeout=60)
+
+        return result, 200
         
         
     
@@ -136,6 +145,7 @@ class BlockDoctor(Resource):
         doctor.user.fs_token_uniquifier = None
         
         db.session.commit()
+        cache.delete("admin_dashboard")
 
         return {
             "message": "Doctor blocked successfully",
@@ -161,6 +171,7 @@ class UnblockDoctor(Resource):
         doctor.user.active = True
         
         db.session.commit()
+        cache.delete("admin_dashboard")
 
         return {
             "message": "Doctor unblocked successfully"
@@ -245,6 +256,7 @@ class AdminCancelAppointment(Resource):
         appointment.cancel_reason = reason
 
         db.session.commit()
+        cache.delete("admin_dashboard")
 
         return {
             "message": "Appointment cancelled by admin"

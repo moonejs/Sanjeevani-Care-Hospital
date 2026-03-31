@@ -77,7 +77,7 @@
         </template>
         <template #body class="">
             <LoadingState :loading="doctorStore.loading" class="position-absolute start-50 ms-5 top-1 " >
-                <h2 v-if="doctorStore.doctorsList.length == 0" class="text-muted d-flex justify-content-center mt-10">No Registered Doctors Found</h2>
+                <h4 v-if="filteredData.length == 0" class="text-muted d-flex position-absolute left-50 ms-12 top-2 justify-content-center mt-10">No Registered Doctors Found</h4>
                 <AdminDoctorsRow  v-else v-for="(doctor,index) in filteredData" :key="index" :index=" 
             index" :doctor="doctor" @view="emit('view',doctor)" @block="emit('block',doctor)" @unblock="emit('unblock',doctor)"/>
             </LoadingState>

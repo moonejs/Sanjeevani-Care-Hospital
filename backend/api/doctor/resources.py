@@ -4,7 +4,7 @@ from models import Doctor,Department,Appointment,Availability
 from flask_security.utils import hash_password
 from flask import request
 import extensions
-from extensions import db
+from extensions import db,cache
 from datetime import datetime, timedelta,date
 from flask_login import current_user
 from utils.comman import is_doctor_bookable
@@ -13,6 +13,7 @@ from utils.comman import is_doctor_bookable
 class DoctorDetails(Resource):
     @auth_required("token")
     @roles_accepted("admin","patient")
+    @cache.cached(timeout=60, key_prefix="doctors_list")
     def get(self):
         doctors = Doctor.query.all()
         today = date.today()
@@ -100,6 +101,7 @@ class DoctorDetails(Resource):
         )
         db.session.add(doctor)
         db.session.commit()
+        cache.delete("doctors_list")
         
         return {
             "message":"Doctor created successfully",
@@ -110,6 +112,10 @@ class DoctorDetails(Resource):
 class DoctorResource(Resource):
     @auth_required("token")
     @roles_accepted("admin","patient")
+    @cache.cached(
+        timeout=60,
+        key_prefix=lambda *args, **kwargs: f"doctor_{kwargs.get('id')}"
+    )
     def get(self,id):
         doctor=Doctor.query.get(id)
         

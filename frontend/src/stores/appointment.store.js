@@ -127,7 +127,7 @@ export const useAppointmentStore=defineStore('appointment',()=>{
             return
         }finally{
             if (isFirstLoad.value) {
-                await delay(4000)
+                await delay(3000)
                 isFirstLoad.value = false
                 loading.value = false
             } else {

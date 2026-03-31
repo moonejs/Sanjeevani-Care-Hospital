@@ -45,8 +45,8 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 
 
       <div class="d-flex gap-2 align-items-center">
-        <RouterLink to="/login"    class="btn btn-outline-secondary btn-sm px-4">Login</RouterLink>
-        <RouterLink to="/register" class="btn btn-secondary btn-sm px-3">Book Appointment</RouterLink>
+        <RouterLink to="/login"    class="btn btn-outline-secondary btn-sm px-4 py-2">Login</RouterLink>
+        <RouterLink to="/register" class="btn btn-secondary btn-sm px-3 py-2">Book Appointment</RouterLink>
       </div>
 
     </div>

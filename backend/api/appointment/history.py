@@ -3,7 +3,7 @@ from flask_security import auth_required, roles_required
 from flask_login import current_user
 from datetime import datetime
 from flask import request
-
+from extensions import cache
 from models import  Appointment
 
 
@@ -11,6 +11,11 @@ class DoctorAppointmentsHistory(Resource):
 
     @auth_required("token")
     @roles_required("doctor")
+    @cache.cached(
+    timeout=30,
+    query_string=True,
+    key_prefix=lambda: f"doctor_history_{current_user.id}"
+)
     def get(self):
 
         doctor_id = current_user.doctor.id

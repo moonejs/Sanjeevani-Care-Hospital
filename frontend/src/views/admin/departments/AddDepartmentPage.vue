@@ -54,7 +54,7 @@
             description: form.description,
             icon:form.icon,
             phone: form.phone,
-            email: `${form.email}@hospital.com`,
+            email: `${form.email}@sanjeevani.care.com`,
             building: form.building,
             floor: form.floor,
             opd_timing: form.opd_timing,
@@ -139,7 +139,7 @@
       </div>
       <div class="col-3">
         <BaseLabel label="Email" />
-        <BaseInput  group="@hospital.com" :end="true" v-model.trim="form.email" placeholder="Department"
+        <BaseInput  group="@sanjeevani.care.com" :end="true" v-model.trim="form.email" placeholder="Department"
         :error=" emailField.error.value" :valid="emailField.valid.value" :show="emailField.show.value" />
       </div>
     </div>

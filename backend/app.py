@@ -1,6 +1,6 @@
 from flask import Flask,send_from_directory,current_app
 from config import Config
-from extensions import db , security 
+from extensions import db , security ,cache
 
 from flask_security.utils import hash_password
 from flask_restful import Api
@@ -18,7 +18,7 @@ app=Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
-
+cache.init_app(app)
 init_celery(app)
 
 CORS(app,origins=["http://127.0.0.1:5000","http://localhost:5173"],supports_credentials=True,
@@ -105,8 +105,7 @@ def export_appointments():
 
 
 def create_database():
-    with app.app_context():
-            
+    with app.app_context():  
         db.create_all()
         patient_role = user_datastore.find_or_create_role(
             name="patient" , description= "Patient"

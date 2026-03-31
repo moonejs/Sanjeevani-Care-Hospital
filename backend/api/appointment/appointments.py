@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask_security import auth_required,roles_required,roles_accepted
 from flask_login import current_user
-from extensions import db
+from extensions import db,cache
 from flask import request
 from datetime import datetime, timedelta
 from models import Doctor,Appointment,Availability
@@ -11,6 +11,11 @@ class PatientDoctorsAvailability(Resource):
 
     @auth_required("token")
     @roles_accepted("patient")
+    @cache.cached(
+    timeout=30,
+    query_string=True,
+    key_prefix=lambda: f"availability_{current_user.id}"
+)
     def get(self):
         date_str = request.args.get("date")
         IST = pytz.timezone('Asia/Kolkata')
@@ -328,6 +333,7 @@ class PatientAppointmentBooking(Resource):
 
         db.session.add(appointment)
         db.session.commit()
+        cache.delete("admin_dashboard")
         print("BOOKING DOCTOR:", doctor_id) 
         return {
             "message": "Appointment booked successfully",
@@ -402,6 +408,7 @@ class PatientCancelAppointment(Resource):
         appointment.cancel_reason = reason
 
         db.session.commit()
+        cache.delete("admin_dashboard")
 
         return {
             "message": "Appointment cancelled successfully",

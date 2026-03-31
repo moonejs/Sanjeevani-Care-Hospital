@@ -4,13 +4,14 @@ from models import Department,Doctor
 
 from flask import request
 
-from extensions import db
+from extensions import db,cache
 
 from utils.comman import is_doctor_bookable
 
 class DepartmentDetails(Resource):
     @auth_required("token")
     @roles_accepted("admin","patient")
+    @cache.cached(timeout=120, key_prefix="departments_list")
     def get(self):
         departments=Department.query.all()
         
@@ -66,13 +67,14 @@ class DepartmentDetails(Resource):
         
         db.session.add(department)
         db.session.commit()
-        
+        cache.delete("departments_list")
         return {"message":f"{data["name"]} Department added Successfully "}
     
 
 class DepartmentResource(Resource):
     @auth_required("token")
     @roles_accepted("admin","patient")
+    @cache.cached(timeout=120)
     def get(self,id):
         department=Department.query.get(id)
         
@@ -98,6 +100,7 @@ class DoctorsByDepartment(Resource):
 
     @auth_required("token")
     @roles_accepted("admin", "patient")
+    @cache.cached(timeout=30)
     def get(self, department_id):
 
         doctors = Doctor.query.filter(

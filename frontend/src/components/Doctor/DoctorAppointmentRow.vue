@@ -29,14 +29,14 @@
     <td v-if="aptStore.selectedRange==='week'" class="fw-bold"> {{ appointment.date }}</td>
     <td class="text-uppercase text-muted">{{ appointment.session }}</td>
     <td>{{ appointment.patient.name }}</td>
-    <td class="text-muted small text-uppercase">{{ appointment.type }}</td>
+    <td class="text-muted small text-uppercase" :class="appointment.type === 'emergency' ? 'text-danger' : ''">{{ appointment.type }}</td>
     <td>
       <Badge :label="appointment.status" 
         :color="
           appointment.status === 'confirmed' ? 'success' :
           appointment.status === 'pending' ? 'warning' :
           appointment.status === 'cancelled' ? 'danger' :
-          appointment.status === 'completed' ? 'primary' : 'tertiory'
+          appointment.status === 'completed' ? 'primary' : 'secondary'
         "
       />
       

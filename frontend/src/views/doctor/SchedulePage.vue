@@ -5,9 +5,10 @@
     import { useAppointmentStore } from '@/stores/appointment.store';
     import { useFormValidation } from '@/reusable/useFormValidation';
     import { ref,onMounted, watch,computed } from 'vue';
+    import { useToastStore } from '@/stores/toast.store';
 
  
-
+    const toast = useToastStore()
     function getToday() {
     return new Date().toISOString().split('T')[0]
     }
@@ -51,6 +52,10 @@
     async function save(){
          console.log(availability.value);
          await appointment.saveDoctorAvailability(availability.value)
+         toast.addToast({
+          message: 'Appointment Scheduled Successfully.',
+          type: 'success'
+        })
          
     }
     function validateSession(session) {

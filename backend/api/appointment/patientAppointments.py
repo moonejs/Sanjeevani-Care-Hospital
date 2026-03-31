@@ -3,16 +3,22 @@ from flask_security import auth_required, roles_required
 from flask_login import current_user
 from models import Appointment
 from flask import request
+from extensions import cache
 
 class PatientAppointmentsHistory(Resource):
 
     @auth_required("token")
     @roles_required("patient")
+    @cache.cached(
+    timeout=30,
+    query_string=True,
+    key_prefix=lambda: f"patient_history_{current_user.id}"
+)
     def get(self):
 
         page = int(request.args.get("page", 1))
         per_page = int(request.args.get("per_page", 10))
-
+        print("fetchinng from DBBB....")
         patient_id = current_user.patient.id
 
         query = (Appointment.query.filter(Appointment.patient_id == patient_id)

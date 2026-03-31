@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <tr>
+  <tr class="small">
     <th scope="row">{{ index+1 }}</th>
     <td>{{ appointment.date }}</td>
     <td>{{ appointment.time }}</td>

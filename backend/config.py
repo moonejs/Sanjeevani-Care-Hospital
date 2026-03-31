@@ -36,3 +36,8 @@ class Config:
     MAIL_USERNAME = None
     MAIL_PASSWORD = None
     MAIL_DEFAULT_SENDER = "hospital@hms.com"
+    
+    
+    CACHE_TYPE = "RedisCache"
+    CACHE_REDIS_URL = "redis://localhost:6379/0"
+    CACHE_DEFAULT_TIMEOUT = 60
