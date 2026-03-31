@@ -329,6 +329,7 @@ class PatientAppointmentBooking(Resource):
         db.session.add(appointment)
         db.session.commit()
         cache.delete("admin_dashboard")
+        cache.delete("doctors_list")
         print("BOOKING DOCTOR:", doctor_id) 
         return {
             "message": "Appointment booked successfully",
@@ -404,6 +405,7 @@ class PatientCancelAppointment(Resource):
 
         db.session.commit()
         cache.delete("admin_dashboard")
+        cache.delete("doctors_list")
 
         return {
             "message": "Appointment cancelled successfully",

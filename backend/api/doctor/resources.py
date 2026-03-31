@@ -23,7 +23,7 @@ class DoctorDetails(Resource):
 
             confirmed_exists = Appointment.query.filter(
                 Appointment.doctor_id == d.id,
-                Appointment.status == "confirmed",
+                Appointment.status.in_(["pending", "confirmed"]),
                 Appointment.appointment_date >= today
             ).first()
 

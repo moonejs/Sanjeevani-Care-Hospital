@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask_security import auth_required,roles_required,roles_accepted
 from flask_login import current_user
-from extensions import db
+from extensions import db,cache
 from flask import request
 from datetime import datetime, timedelta,date
 from models import Doctor,Appointment,Availability,Treatment
@@ -149,7 +149,8 @@ class UpdateAppointmentStatus(Resource):
 
         appointment.status = new_status
         db.session.commit()
-
+        cache.delete("admin_dashboard")
+        cache.delete("doctors_list") 
         return {
             "message": f"Appointment {new_status}",
             "appointment_id": appointment.id,
@@ -204,7 +205,8 @@ class CompleteAppointment(Resource):
 
         db.session.add(treatment)
         db.session.commit()
-
+        cache.delete("admin_dashboard")
+        cache.delete("doctors_list")
         return {
             "message": "Visit completed successfully",
             "appointment_id": appointment.id

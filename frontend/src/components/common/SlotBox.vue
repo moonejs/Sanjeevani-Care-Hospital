@@ -33,7 +33,7 @@
             No slots available
         </div>
         <div class="d-flex gap-2 flex-wrap">
-            <Badge v-for="slot in sessionInfo" :key="slot.time" :label="slot.time" :color="getColor(slot)" class="booking-badge" @click="selectSlot(slot)" :class="{ disabled:  slot.status == 'full' ||slot.status=='past'  ,'opacity-50': slot.status === 'past'}" />
+            <Badge v-for="slot in sessionInfo" :key="slot.time" :label="slot.time" :color="getColor(slot)" class="booking-badge pointer" @click="selectSlot(slot)" :class="{ disabled:  slot.status == 'full' ||slot.status=='past'  ,'opacity-50': slot.status === 'past'}"  />
         </div>
   </div>
 </template>

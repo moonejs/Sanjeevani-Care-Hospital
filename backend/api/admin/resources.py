@@ -139,6 +139,7 @@ class BlockDoctor(Resource):
         
         db.session.commit()
         cache.delete("admin_dashboard")
+        cache.delete("doctors_list")
 
         return {
             "message": "Doctor blocked successfully",
@@ -165,6 +166,7 @@ class UnblockDoctor(Resource):
         
         db.session.commit()
         cache.delete("admin_dashboard")
+        cache.delete("doctors_list")
 
         return {
             "message": "Doctor unblocked successfully"
@@ -250,6 +252,7 @@ class AdminCancelAppointment(Resource):
 
         db.session.commit()
         cache.delete("admin_dashboard")
+        cache.delete("doctors_list")
 
         return {
             "message": "Appointment cancelled by admin"
