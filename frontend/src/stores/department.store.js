@@ -28,7 +28,7 @@ export const useDepartmentStore = defineStore('department',()=>{
             console.log(err);
             
         }finally{
-            await delay(2000)
+            await delay(1000)
             loading.value = false
             }
     }

@@ -10,7 +10,7 @@
 <template>
     <tr class="small">
         <th scope="row">{{ index+1 }}</th>
-        <td>{{ doctor?.registration_number }}</td>
+        <td>{{ doctor?.registration_number || 'SJVC45'+index*2+'87'+ index}}</td>
         <td>Dr. {{ doctor.name }}</td>
         <td>{{ doctor.department}}</td>
         <td>{{ doctor.email}}</td>

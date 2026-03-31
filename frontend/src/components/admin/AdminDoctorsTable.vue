@@ -7,21 +7,30 @@
     import { storeToRefs } from 'pinia';
     import { useDoctorStore } from '@/stores/doctor.store';
     import { useAdminStore } from '@/stores/admin.store';
-    import { ref } from 'vue';
+    import { ref ,onMounted} from 'vue';
     import LoadingState from '../common/LoadingState.vue';
     import Btn from '../common/Btn.vue';
     import { useToastStore } from '@/stores/toast.store';
-    
+    import { useDepartmentStore } from '@/stores/department.store';
+
+    const departmentStore=useDepartmentStore()
     const toast = useToastStore()
     const doctorStore=useDoctorStore()
     const adminStore=useAdminStore()
+    const dptList=ref([])
+
     const props = defineProps({
         doctors: {
             type: Array,
             default: () => []
         }
     })
-    
+    onMounted(async ()=>{
+        await departmentStore.fetchDepartments()
+        departmentStore.departmentList.forEach(d => {
+            dptList.value.push(d.name)
+        });
+    })
     const tHead=["Registration No.","Name","Department","Email","Specialization","Appointment Status","Actions"]
     
 
@@ -64,7 +73,7 @@
             
             <DoctorDashTableCaption title="Registered Doctors" v-model:searchQuery="searchQuery" :is-dropdown="true" 
             v-model:filter-drop="departmentFilter"
-            filter-drop-label="Departments" :filter-drop="departmentFilter" :filter-drop-options="['Ent','N']" class3=" d-flex  gap-2 ms-7" class1=" ps-2" placeholder="Search Doctors..." class4="ms-5 w-100"/>
+            filter-drop-label="Departments" :filter-drop="departmentFilter" :filter-drop-options="dptList" class3=" d-flex  gap-2 ms-7" class1=" ps-2" placeholder="Search Doctors..." class4="ms-5 w-100"/>
 
             <Btn  label="Clear" class="btn-primary btn-sm position-absolute right-9 top-5 mt-3 me-6 "   @click="searchQuery = ''; departmentFilter = '' "/>
 
