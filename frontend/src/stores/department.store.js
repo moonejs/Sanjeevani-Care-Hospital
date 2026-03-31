@@ -13,7 +13,6 @@ export const useDepartmentStore = defineStore('department',()=>{
 
 
     async function fetchDepartments(){
-        if(departmentList.value.length) return
         loading.value=true
         error.value=null
 

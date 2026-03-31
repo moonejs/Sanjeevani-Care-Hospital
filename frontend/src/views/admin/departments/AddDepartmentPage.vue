@@ -65,6 +65,7 @@
         try {
           const res = await departmentStore.addDepartment(data)
           router.push("/admin/departments")
+          await departmentStore.fetchDepartments()
           toast.addToast({
                 message: 'Department Added Successfully.',
                 type: 'success'
@@ -161,7 +162,7 @@
     </div>
     
 
-    <Btn class="btn btn-primary mt-3" :disabled="!isValid" @click="submitForm" label="Save Department"
+    <Btn class="btn btn-secondary mt-3" :disabled="!isValid" @click="submitForm" label="Save Department"
     />
       
   </div>
