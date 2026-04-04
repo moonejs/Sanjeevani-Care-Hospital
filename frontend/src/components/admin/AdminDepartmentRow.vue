@@ -22,7 +22,7 @@
             </td>
         <td>{{ department?.name }}</td>
         <td>{{ department?.email }}</td>
-        <td class="small">{{ department?.phone }}</td>
+        <td class="small">{{ department?.phone || '9856458320'}}</td>
         <td>
             <Badge :label="department.emergency_available ? 'Available' : 'Unavailable'"  :color="department.emergency_available ? 'success' : 'danger'"/>
         </td>

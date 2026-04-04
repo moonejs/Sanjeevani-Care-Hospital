@@ -10,11 +10,6 @@ class AdminDashboard(Resource):
     @auth_required("token")
     @roles_required("admin")
     def get(self):
-        cache_key = "admin_dashboard"
-        cached_data = cache.get(cache_key)
-        if cached_data:
-            return cached_data, 200
-        
         range_type = request.args.get("range", "today")
         today = date.today()
         if range_type == "week":
@@ -90,8 +85,6 @@ class AdminDashboard(Resource):
             "status_summary": status_summary
         }
 
-        
-        cache.set(cache_key, result, timeout=60)
 
         return result, 200
         
@@ -138,7 +131,6 @@ class BlockDoctor(Resource):
         doctor.user.fs_token_uniquifier = None
         
         db.session.commit()
-        cache.delete("admin_dashboard")
         cache.delete("doctors_list")
 
         return {
@@ -165,7 +157,6 @@ class UnblockDoctor(Resource):
         doctor.user.active = True
         
         db.session.commit()
-        cache.delete("admin_dashboard")
         cache.delete("doctors_list")
 
         return {
@@ -251,7 +242,6 @@ class AdminCancelAppointment(Resource):
         appointment.cancel_reason = reason
 
         db.session.commit()
-        cache.delete("admin_dashboard")
         cache.delete("doctors_list")
 
         return {

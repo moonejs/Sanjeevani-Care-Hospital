@@ -2,12 +2,14 @@
     import { ref,computed } from 'vue';
     import { useRouter } from 'vue-router';
     import { registerApi } from '@/api/auth';
+    import { useToastStore } from '@/stores/toast.store';
 
     const email =ref("")
     const password=ref("")
     const confirmPassword=ref("")
     const loading=ref(false)
     const router = useRouter()
+    const toast = useToastStore()
     
     async function handleRegister(){
         loading.value=true
@@ -16,11 +18,18 @@
                 email : email.value,
                 password : password.value
             })
-
+            toast.addToast({
+                message: 'Registerd Succesfully',
+                type: 'success'
+            })
             router.push('/login')
         } 
         catch (err) {
             console.log(err);
+            toast.addToast({
+                message: 'Some Error Occurred',
+                type: 'error'
+            })
         }finally{
             loading.value=false
         }

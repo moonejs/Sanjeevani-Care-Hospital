@@ -202,7 +202,7 @@ async function confirmBooking() {
             </template>
             <DoctorAppointCard  v-for="doc in filteredData" :key="doc.doctor.id + '-' + appointment.selectedDate" :doctor="doc" @slot-selected="openBookingModal"/>
             <div v-if="!filteredData.length" >
-              <h2 class="text-muted mt-6 text-center">No Appointments found</h2>
+              <h4 class="text-muted mt-6 text-center">No Appointments found</h4>
             </div>
           </LoadingState>
         </div>

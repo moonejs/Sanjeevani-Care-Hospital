@@ -3,12 +3,14 @@
     import { useRouter } from 'vue-router';
     import { useAuthStore } from '@/stores/auth.store';
     import { RouterLink } from 'vue-router';
+    import { useToastStore } from '@/stores/toast.store';
 
     const email =ref("")
     const password=ref("")
     const loading=ref(false)
     const router = useRouter()
     const auth = useAuthStore()
+    const toast = useToastStore()
 
     async function handleLogin(){
         loading.value=true
@@ -18,6 +20,10 @@
                 password : password.value
             })
             await auth.fetchMe()
+            toast.addToast({
+                message: 'Login Succesfully',
+                type: 'success'
+            })
             if (auth.role ==='admin'){
                 router.replace('/admin/dashboard')
             }
@@ -30,6 +36,11 @@
             
         } 
         catch (err) {
+            toast.addToast({
+                title: 'Error',
+                message: err.response.data.response.errors[0],
+                type: 'error'
+            })
             console.log(err.response.data.response.errors[0]);
         }finally{
             loading.value=false

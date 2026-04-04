@@ -12,6 +12,7 @@ export const useAdminStore=defineStore('admin',()=>{
     const exportLoading = ref(false)
     const pdfLoading = ref(false)
     const exportAppointmentsLoading = ref(false)
+    
 
     const dashboard = ref({
         stats: {},
@@ -21,6 +22,7 @@ export const useAdminStore=defineStore('admin',()=>{
     })
 
     const selectedRange = ref("today")
+    
     async function fetchAdminDashboardDetails(range = "today") {
         loading.value = true
         error.value = null

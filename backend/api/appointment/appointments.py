@@ -58,7 +58,7 @@ class PatientDoctorsAvailability(Resource):
                         request.host_url + "uploads/doctors/profile/" + doctor.profile_image
                         if doctor.profile_image else None
                     ),
-                    "is_bookable": is_doctor_bookable(doctor),
+                    "is_bookable": is_doctor_bookable(doctor,date),
                     "is_blocked": doctor.is_blocked,
                     "department": doctor.department.name if doctor.department else None
                 },

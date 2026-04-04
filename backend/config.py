@@ -27,7 +27,7 @@ class Config:
     UPLOAD_FOLDER_DOCTOR = os.path.join(BASE_DIR, "uploads", "doctors", "profile")
 
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
-    MAX_CONTENT_LENGTH = 2 * 1024 * 1024
+    MAX_CONTENT_LENGTH = 50 * 1024 * 1024
     
     MAIL_SERVER = "localhost"
     MAIL_PORT = 1025
@@ -35,7 +35,7 @@ class Config:
     MAIL_USE_SSL = False
     MAIL_USERNAME = None
     MAIL_PASSWORD = None
-    MAIL_DEFAULT_SENDER = "hospital@hms.com"
+    MAIL_DEFAULT_SENDER = "support@sanjeevani.care.com"
     
     
     CACHE_TYPE = "RedisCache"

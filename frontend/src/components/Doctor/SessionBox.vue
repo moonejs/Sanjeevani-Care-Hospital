@@ -38,7 +38,7 @@
     const SESSION_RULES = {
         Morning: { min: "05:00", max: "11:59" },
         Afternoon: { min: "12:00", max: "16:59" },
-        Evening: { min: "17:00", max: "22:00" }
+        Evening: { min: "00:00", max: "24:00" }
     }
 
     const rules = SESSION_RULES[props.session]
