@@ -41,12 +41,13 @@ patients, doctors, appointments, treatments, schedules, billing, and automated r
   - [Running Redis & Celery](#running-redis--celery)
   - [Default Credentials](#default-credentials)
 - [Environment Variables](#environment-variables)
-- [Screenshots](#screenshots)
 - [Contributing](#contributing)
 
 ---
 
 ## Overview
+
+[Watch Demo Video](https://drive.google.com/file/d/1QXVLO0cqv95cjyV8YygWxzV4FrYTnQuW/view?usp=drive_link)
 
 **Sanjeevani HMS** is a production-ready Hospital Management System built for **Sanjeevani Care Hospital** (Est. 2005, NABH Accredited). It digitalises the complete hospital workflow — from patient registration and doctor scheduling to appointment booking, clinical treatment records, PDF billing, and automated email reminders.
 
@@ -584,20 +585,6 @@ The app reads configuration from `backend/config.py`. For production, set these 
 | `MAIL_DEFAULT_SENDER` | `support@sanjeevani.care.com` | From address for all emails |
 
 
-
----
-
-## Screenshots
-
-> Add screenshots here by dropping images into a `docs/screenshots/` folder and updating the paths below.
-
-| Landing Page | Patient Dashboard | Doctor Schedule |
-|---|---|---|
-| ![Landing](docs/screenshots/landing.png) | ![Patient](docs/screenshots/patient-dashboard.png) | ![Schedule](docs/screenshots/doctor-schedule.png) |
-
-| Admin Dashboard | Appointment Bill PDF | Monthly Report Email |
-|---|---|---|
-| ![Admin](docs/screenshots/admin.png) | ![Bill](docs/screenshots/bill-pdf.png) | ![Email](docs/screenshots/email-report.png) |
 
 ---
 
