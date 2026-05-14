@@ -573,8 +573,8 @@ The app reads configuration from `backend/config.py`. For production, set these 
 
 | Variable | Default | Description |
 |---|---|---|
-| `SECRET_KEY` | `moon-security` | Flask session secret key |
-| `SECURITY_PASSWORD_SALT` | `moon-password-salt` | Password hashing salt |
+| `SECRET_KEY` | `********` | Flask session secret key |
+| `SECURITY_PASSWORD_SALT` | `************` | Password hashing salt |
 | `SQLALCHEMY_DATABASE_URI` | `sqlite:///hms.db` | Database URI (swap for PostgreSQL in prod) |
 | `CACHE_REDIS_URL` | `redis://localhost:6379/0` | Redis URL for cache |
 | `CELERY_BROKER_URL` | `redis://localhost:6379/0` | Redis URL for Celery broker |
@@ -583,7 +583,7 @@ The app reads configuration from `backend/config.py`. For production, set these 
 | `MAIL_PORT` | `1025` | SMTP port |
 | `MAIL_DEFAULT_SENDER` | `support@sanjeevani.care.com` | From address for all emails |
 
-> ⚠️ **Always change `SECRET_KEY` and `SECURITY_PASSWORD_SALT` before deploying to production.**
+
 
 ---
 
