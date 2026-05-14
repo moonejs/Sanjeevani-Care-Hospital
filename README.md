@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/public/logoHMS.png" alt="Sanjeevani Logo" width="90"/>
+<img src="frontend/public/iconH.png" alt="Sanjeevani Logo" width="90"/>
 
 # Sanjeevani Care Hospital 
 
