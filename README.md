@@ -4,7 +4,7 @@
 
 # Sanjeevani Care Hospital 
 
-### Hospital Management System
+### Hospital Management System [Watch Demo Video](https://drive.google.com/file/d/1QXVLO0cqv95cjyV8YygWxzV4FrYTnQuW/view?usp=drive_link)
 
 **A full-stack web application for managing hospital operations end-to-end —**  
 patients, doctors, appointments, treatments, schedules, billing, and automated reports.
